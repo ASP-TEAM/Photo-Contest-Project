@@ -7,12 +7,13 @@ namespace PhotoContest.Data
 
     using Microsoft.AspNet.Identity.EntityFramework;
 
+    using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Migrations;
     using PhotoContest.Models;
 
     #endregion
 
-    public class PhotoContestDbContext : IdentityDbContext<User>
+    public class PhotoContestDbContext : IdentityDbContext<User>, IPhotoContestDbContext
     {
         public PhotoContestDbContext()
             : base("PhotoContestDbContext")
