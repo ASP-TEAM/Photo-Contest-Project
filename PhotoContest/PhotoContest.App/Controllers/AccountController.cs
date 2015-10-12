@@ -12,7 +12,7 @@
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security;
 
-    using PhotoContest.App.Models;
+    using PhotoContest.App.Models.ViewModels;
     using PhotoContest.Models;
 
     #endregion

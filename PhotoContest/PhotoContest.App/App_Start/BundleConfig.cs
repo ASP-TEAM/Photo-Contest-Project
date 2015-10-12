@@ -13,7 +13,9 @@
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js",
-                "~/Script/jquery.unobtrusive-ajax.js"));
+                "~/Script/jquery.unobtrusive-ajax.js", 
+                "~/Scripts/jquery.form.js",
+                "~/Scripts/Custom/ajaxHelper.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/Scripts/jquery.validate*"));
 

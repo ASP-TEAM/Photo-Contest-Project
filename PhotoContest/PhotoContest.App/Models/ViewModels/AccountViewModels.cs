@@ -1,4 +1,4 @@
-﻿namespace PhotoContest.App.Models
+﻿namespace PhotoContest.App.Models.ViewModels
 {
     #region
 
