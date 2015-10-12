@@ -20,12 +20,7 @@
             var percentVal = '100%';
             bar.width(percentVal);
             percent.html(percentVal);
-            $('.pictures').append(
-                '<div class="picture">'+
-                '<img src="data:image/jpg;base64,'+picture.Url+'"/>'+
-                '<p>Uploader:' +picture.User+'</p>' +
-                '</div>'
-                );
+            $('.pictures').append(picture);
         },
         error: function (xhr) {
             bar.width('0%');

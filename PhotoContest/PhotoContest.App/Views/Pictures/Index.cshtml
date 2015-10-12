@@ -6,7 +6,10 @@
 <div id="upload-picture">
     <h2>Upload New Picture</h2>
 
-    @using (Ajax.BeginForm("Upload", "Pictures", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data", name = "upload-picture-form" }))
+    @using (Ajax.BeginForm("Upload", "Pictures", new AjaxOptions()
+    {
+        HttpMethod = "POST",
+    }, new { enctype = "multipart/form-data", name = "upload-picture-form" }))
     {
         @Html.AntiForgeryToken()
         <input type="file" name="files"><br>
@@ -18,13 +21,13 @@
     <div id="status"></div>
 </div>
 
-<div class="pictures">
+<div class="pictures" id="pictures">
     <h2>Uploaded Images</h2>
 
     @foreach (var picture in Model)
     {
         <div class="picture">
-            <img src="data:image/jpg;base64,@picture.Url"/>
+            <img src="data:image/jpg;base64,@picture.Url" />
             <p>Uploader: @picture.User</p>
         </div>
     }

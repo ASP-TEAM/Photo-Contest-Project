@@ -66,7 +66,7 @@ namespace PhotoContest.Data.Migrations
                                   Description = "TestDescription",
                                   IsActive = true,
                                   StartDate = DateTime.Parse("12-12-12"),
-                                  EndDate = DateTime.Parse("13-12-12"),
+                                  EndDate = DateTime.Parse("12-12-12"),
                                   RewardStrategyId = rwStrategy.Id,
                                   VotingStrategyId = vStrategy.Id,
                                   ParticipationStrategyId = plStrategy.Id,

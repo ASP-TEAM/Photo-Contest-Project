@@ -1,10 +1,7 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Web;
     using System.Web.Mvc;
 
@@ -77,7 +74,7 @@
             var pictureView = new PictureViewModel { Url = picture.Url, User = userName };
             this.Response.StatusCode = 200;
 
-            return this.Json(pictureView);
+            return PartialView("_PicturePartial", pictureView);
         }
     }
 }
