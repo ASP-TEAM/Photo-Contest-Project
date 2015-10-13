@@ -94,6 +94,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GenericEfRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Strategies\DeadlineStrategy\ByEndTimeStrategy.cs" />
+    <Compile Include="Strategies\DeadlineStrategy\ByNumberOfParticipantsStrategy.cs" />
+    <Compile Include="Strategies\DeadlineStrategy\Deadline.cs" />
     <Compile Include="Strategies\DeadlineStrategy\IDeadlineStrategy.cs" />
     <Compile Include="Strategies\ParticipationStrategy\IParticipationStrategy.cs" />
     <Compile Include="Strategies\RewardStrategy\IRewardStrategy.cs" />

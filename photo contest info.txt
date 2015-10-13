@@ -9,3 +9,5 @@ Participation strategy(closed) - Organizator must invite participants(private co
 Deadline strategy(By number of participants) - Contest has participants capacity and end date(Organizator must set them).
 
 Deadline strategy(By time) - Contest doesn't have participation capacity
+
+if is not active the winners are not set = sets the winners

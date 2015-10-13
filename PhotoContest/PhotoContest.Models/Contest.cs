@@ -5,6 +5,9 @@
 
     public class Contest
     {
+        private const int DefaultParticipantsLimit = -1;
+        private const bool DefaultContestState = true;
+
         private ICollection<User> participants;
 
         private ICollection<Picture> pictures;
@@ -16,7 +19,8 @@
             this.participants = new HashSet<User>();
             this.committee = new HashSet<User>();
             this.pictures = new HashSet<Picture>();
-            this.IsActive = true;
+            this.IsActive = DefaultContestState;
+            this.ParticipantsLimit = DefaultParticipantsLimit;
         }
 
         public int Id { get; set; }
@@ -24,6 +28,8 @@
         public string Title { get; set; }
 
         public string Description { get; set; }
+
+        public int ParticipantsLimit { get; set; }
 
         public bool IsActive { get; set; }
 

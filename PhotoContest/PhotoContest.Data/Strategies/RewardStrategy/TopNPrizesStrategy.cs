@@ -14,19 +14,19 @@
             this.topNPrizes = topNPrizes;
         }
 
-        public void Reward(IPhotoContestData data, int contestId)
+        public void Reward(IPhotoContestData data, Contest contest)
         {
-            var winners = data.Contests.Find(contestId)
-                .Participants
-                .OrderByDescending(u => u.Pictures.Where(p => p.ContestId == contestId).Select(p => p.Votes.Count))
-                .ThenByDescending(u => u.UserName) // todo better order
-                .Take(this.topNPrizes);
+            var winners = contest
+                        .Participants
+                        .OrderByDescending(u => u.Pictures.Where(p => p.ContestId == contest.Id).Select(p => p.Votes.Count))
+                        .ThenByDescending(u => u.UserName) // todo better order
+                        .Take(this.topNPrizes);
 
             for (int i = 0; i < winners.Count(); i++)
             {
                 data.ContestWinners.Add(new ContestWinners()
                 {
-                    ContestId = contestId,
+                    ContestId = contest.Id,
                     Place = i + 1,
                     WinnerId = winners.ElementAt(i).Id
                 });
