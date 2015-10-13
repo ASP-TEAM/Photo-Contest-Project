@@ -2,7 +2,7 @@
 {
     using PhotoContest.Models.Enums;
 
-    public class DeadlineStrategy
+    public class DeadlineStrategy : AbstractStrategy
     {
         public int Id { get; set; }
 
