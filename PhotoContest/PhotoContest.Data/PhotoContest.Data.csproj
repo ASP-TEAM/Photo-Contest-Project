@@ -99,6 +99,7 @@
     <Compile Include="Strategies\RewardStrategy\IRewardStrategy.cs" />
     <Compile Include="Strategies\RewardStrategy\SingleWinnerStrategy.cs" />
     <Compile Include="Strategies\RewardStrategy\TopNPrizesStrategy.cs" />
+    <Compile Include="Strategies\StrategyFactory.cs" />
     <Compile Include="Strategies\VotingStrategy\IVotingStrategy.cs" />
     <Compile Include="UnitOfWork\PhotoContestData.cs" />
   </ItemGroup>
