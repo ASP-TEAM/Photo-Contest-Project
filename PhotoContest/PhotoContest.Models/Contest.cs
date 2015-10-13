@@ -9,9 +9,12 @@
 
         private ICollection<Picture> pictures;
 
+        private ICollection<User> committee; 
+
         public Contest()
         {
             this.participants = new HashSet<User>();
+            this.committee = new HashSet<User>();
             this.pictures = new HashSet<Picture>();
             this.IsActive = true;
         }
@@ -57,6 +60,18 @@
             set
             {
                 this.participants = value;
+            }
+        }
+
+        public virtual ICollection<User> Committee
+        {
+            get
+            {
+                return this.committee;
+            }
+            set
+            {
+                this.committee = value;
             }
         }
 

@@ -22,10 +22,13 @@
 
         private ICollection<Contest> organizedContests;
 
+        private ICollection<Contest> committeeInContests; 
+
         public User()
         {
             this.organizedContests = new HashSet<Contest>();
             this.inContests = new HashSet<Contest>();
+            this.committeeInContests = new HashSet<Contest>();
             this.votes = new HashSet<Vote>();
             this.pictures = new HashSet<Picture>();
         }
@@ -57,6 +60,19 @@
             set
             {
                 this.inContests = value;
+            }
+        }
+
+
+        public virtual ICollection<Contest> CommitteeInContests
+        {
+            get
+            {
+                return this.committeeInContests;
+            }
+            set
+            {
+                this.committeeInContests = value;
             }
         }
 

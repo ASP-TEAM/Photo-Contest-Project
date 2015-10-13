@@ -54,6 +54,9 @@ namespace PhotoContest.Data
                         m.ToTable("UserInContests");
                     });
 
+            modelBuilder.Entity<Contest>()
+                .HasMany(c => c.Committee)
+                .WithMany(u => u.CommitteeInContests);
             
             base.OnModelCreating(modelBuilder);
         }
