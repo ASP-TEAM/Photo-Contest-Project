@@ -10,5 +10,11 @@
             : base(data)
         {
         }
+
+        [HttpGet]
+        public ActionResult Contest(int id)
+        {
+            return null;
+        }
     }
 }
