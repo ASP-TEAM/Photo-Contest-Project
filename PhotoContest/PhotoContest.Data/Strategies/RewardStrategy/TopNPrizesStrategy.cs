@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using PhotoContest.Models;
-
-namespace PhotoContest.Data.Strategies.RewardStrategy
+﻿namespace PhotoContest.Data.Strategies.RewardStrategy
 {
+    using System.Linq;
+    using PhotoContest.Models;
+
     using PhotoContest.Data.Interfaces;
 
     public class TopNPrizesStrategy : IRewardStrategy

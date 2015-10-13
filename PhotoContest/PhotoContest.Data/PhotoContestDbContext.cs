@@ -56,7 +56,13 @@ namespace PhotoContest.Data
 
             modelBuilder.Entity<Contest>()
                 .HasMany(c => c.Committee)
-                .WithMany(u => u.CommitteeInContests);
+                .WithMany(u => u.CommitteeInContests)
+                .Map(m =>
+                {
+                    m.MapLeftKey("ContestId");
+                    m.MapRightKey("UserId");
+                    m.ToTable("ContestCommittees");
+                });
             
             base.OnModelCreating(modelBuilder);
         }

@@ -1,0 +1,11 @@
+Voting strategy(closed) - Organizator must invite users (committee)
+
+Voting strategy(open) - Everyone can vote the pictures inside the contest except the participants(image uploaders)
+
+Participation strategy(open) - Anyone can join the contest
+
+Participation strategy(closed) - Organizator must invite participants(private contest)
+
+Deadline strategy(By number of participants) - Contest has participants capacity and end date(Organizator must set them).
+
+Deadline strategy(By time) - Contest doesn't have participation capacity
