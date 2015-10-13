@@ -26,9 +26,6 @@
 
     @foreach (var picture in Model)
     {
-        <div class="picture">
-            <img src="data:image/jpg;base64,@picture.Url" />
-            <p>Uploader: @picture.User</p>
-        </div>
+        Html.RenderPartial("_PicturePartial", picture);
     }
 </div>
