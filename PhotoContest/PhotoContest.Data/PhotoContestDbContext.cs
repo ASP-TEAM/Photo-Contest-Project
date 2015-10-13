@@ -18,7 +18,6 @@ namespace PhotoContest.Data
         public PhotoContestDbContext()
             : base("PhotoContestDbContext")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<PhotoContestDbContext, Configuration>());
         }
 
         public virtual IDbSet<RewardStrategy> RewardStrategies { get; set; }

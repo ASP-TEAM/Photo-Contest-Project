@@ -14,7 +14,7 @@ namespace PhotoContest.Data.Migrations
 
     #endregion
 
-    internal sealed class Configuration : DbMigrationsConfiguration<PhotoContestDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<PhotoContestDbContext>
     {
         public Configuration()
         {
