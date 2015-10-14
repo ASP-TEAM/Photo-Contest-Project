@@ -1,9 +1,9 @@
 ﻿namespace PhotoContest.Data.Strategies.RewardStrategy
 {
     using System.Linq;
-    using PhotoContest.Models;
 
     using PhotoContest.Data.Interfaces;
+    using PhotoContest.Models;
 
     public class TopNPrizesStrategy : IRewardStrategy
     {

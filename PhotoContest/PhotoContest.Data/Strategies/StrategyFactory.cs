@@ -1,12 +1,12 @@
 ﻿namespace PhotoContest.Data.Strategies
 {
     using System;
-    using PhotoContest.Data.Strategies.RewardStrategy;
-    using PhotoContest.Models.Enums;
 
     using PhotoContest.Data.Strategies.DeadlineStrategy;
     using PhotoContest.Data.Strategies.ParticipationStrategy;
+    using PhotoContest.Data.Strategies.RewardStrategy;
     using PhotoContest.Data.Strategies.VotingStrategy;
+    using PhotoContest.Models.Enums;
 
     public class StrategyFactory
     {
@@ -28,9 +28,9 @@
             switch (votingStrategy)
             {
                 case VotingStrategyType.Open:
-                    return null; 
+                    return new OpenVotingStrategy(); 
                 case VotingStrategyType.Closed:
-                    return null;
+                    return new ClosedVotingStrategy();
                 default:
                     throw new InvalidOperationException("Strategy not found");
             }
@@ -41,9 +41,9 @@
             switch (participationStrategyType)
             {
                 case ParticipationStrategyType.Open:
-                    return null;
+                    return new OpenParticipationStrategy();
                 case ParticipationStrategyType.Closed:
-                    return null;
+                    return new ClosedParticipationStrategy();
                 default:
                     throw new InvalidOperationException("Strategy not found");
             }
@@ -54,9 +54,9 @@
             switch (deadlineStrategyType)
             {
                 case DeadlineStrategyType.ByTime:
-                    return null;
+                    return new ByEndTimeStrategy();
                 case DeadlineStrategyType.ByNumberOfParticipants:
-                    return null;
+                    return new ByNumberOfParticipantsStrategy();
                 default:
                     throw new InvalidOperationException("Strategy not found");
             }

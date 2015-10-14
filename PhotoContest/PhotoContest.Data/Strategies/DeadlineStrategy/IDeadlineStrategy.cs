@@ -7,5 +7,7 @@
     public interface IDeadlineStrategy
     {
         void ApplyDeadlineStrategy(IPhotoContestData data, Contest contest, IRewardStrategy rewardStrategy);
+
+        bool ParticipantsLimitReached(Contest contest);
     }
 }

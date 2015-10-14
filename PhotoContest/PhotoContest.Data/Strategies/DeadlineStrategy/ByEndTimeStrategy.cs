@@ -1,16 +1,18 @@
-﻿using System.Linq;
-using PhotoContest.Models;
-
-namespace PhotoContest.Data.Strategies.DeadlineStrategy
+﻿namespace PhotoContest.Data.Strategies.DeadlineStrategy
 {
-    using PhotoContest.Data.Interfaces;
-    using PhotoContest.Data.Strategies.RewardStrategy;
+    using System;
+    using System.Linq;
 
-    public class ByEndTimeStrategy : Deadline
+    using PhotoContest.Data.Interfaces;
+
+    using PhotoContest.Data.Strategies.RewardStrategy;
+    using PhotoContest.Models;
+
+    public class ByEndTimeStrategy : IDeadlineStrategy
     {
-        public override void ApplyDeadlineStrategy(IPhotoContestData data, Contest contest, IRewardStrategy rewardStrategy)
+        public void ApplyDeadlineStrategy(IPhotoContestData data, Contest contest, IRewardStrategy rewardStrategy)
         {
-            if (CheckDeadline(contest.EndDate))
+            if (this.CheckDeadline(contest.EndDate))
             {
                 contest.IsActive = false;
 
@@ -19,6 +21,21 @@ namespace PhotoContest.Data.Strategies.DeadlineStrategy
                     rewardStrategy.Reward(data, contest);
                 }
             }
+        }
+
+        public virtual bool ParticipantsLimitReached(Contest contest)
+        {
+            return false;
+        }
+
+        private bool CheckDeadline(DateTime deadlineDate)
+        {
+            if (deadlineDate > DateTime.Now)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

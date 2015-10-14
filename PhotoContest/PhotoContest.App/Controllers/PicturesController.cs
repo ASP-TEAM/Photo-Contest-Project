@@ -35,6 +35,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Upload()
         {
+            
             if (this.Request.Files.Count < 1)
             {
                 this.Response.StatusCode = 400;
@@ -48,7 +49,7 @@
                 this.Response.StatusCode = 400;
                 return this.Json(new { ErrorMessage = "The file is not a picture" });
             }
-
+            
             if (file.ContentLength > 1000000)
             {
                 this.Response.StatusCode = 400;

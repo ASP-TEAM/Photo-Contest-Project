@@ -1,14 +1,21 @@
 ﻿namespace PhotoContest.Data.Strategies.DeadlineStrategy
 {
+    using System.Linq;
+
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Strategies.RewardStrategy;
     using PhotoContest.Models;
 
-    public class ByNumberOfParticipantsStrategy : Deadline
+    public class ByNumberOfParticipantsStrategy : ByEndTimeStrategy
     {
-        public override void ApplyDeadlineStrategy(IPhotoContestData data, Contest contest, IRewardStrategy rewardStrategy)
+        public override bool ParticipantsLimitReached(Contest contest)
         {
-            
+            if (contest.ParticipantsLimit == contest.Participants.Count)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

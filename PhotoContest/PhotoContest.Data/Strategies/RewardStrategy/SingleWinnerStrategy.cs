@@ -1,6 +1,5 @@
 ﻿namespace PhotoContest.Data.Strategies.RewardStrategy
 {
-    using System.Web.Mvc;
     using System.Linq;
 
     using PhotoContest.Data.Interfaces;
