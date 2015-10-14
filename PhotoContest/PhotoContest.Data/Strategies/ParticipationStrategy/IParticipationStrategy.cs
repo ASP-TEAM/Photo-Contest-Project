@@ -5,6 +5,6 @@
 
     public interface IParticipationStrategy
     {
-        void SubmitPicture(Picture picture, IPhotoContestData data, User user, Contest contest);
+        void Participate(IPhotoContestData data, User user, Contest contest);
     }
 }

@@ -1,21 +1,25 @@
 ﻿namespace PhotoContest.Data.Strategies.DeadlineStrategy
 {
-    using System.Linq;
-
+    using System;
     using PhotoContest.Data.Interfaces;
-    using PhotoContest.Data.Strategies.RewardStrategy;
+
     using PhotoContest.Models;
 
-    public class ByNumberOfParticipantsStrategy : ByEndTimeStrategy
+    public class ByNumberOfParticipantsStrategy : IDeadlineStrategy
     {
-        public override bool ParticipantsLimitReached(Contest contest)
+        public void Deadline(IPhotoContestData data, Contest contest, User user)
         {
-            if (contest.ParticipantsLimit == contest.Participants.Count)
+            if (contest.Participants.Count >= contest.ParticipantsLimit)
             {
-                return true;
-            }
+                if (contest.isOpenForSubmissions == false)
+                {
+                    contest.isOpenForSubmissions = true;
+                    data.Contests.Update(contest);
+                    data.SaveChanges();
+                }
 
-            return false;
+                throw new Exception("The contest is closed for submissions");
+            }
         }
     }
 }

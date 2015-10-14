@@ -16,5 +16,11 @@
         {
             return null;
         }
+
+        public ActionResult Join(int id)
+        {
+
+            return null;
+        }
     }
 }

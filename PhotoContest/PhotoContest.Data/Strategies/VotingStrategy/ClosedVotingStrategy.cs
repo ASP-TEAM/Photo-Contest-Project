@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace PhotoContest.Data.Strategies.VotingStrategy
+﻿namespace PhotoContest.Data.Strategies.VotingStrategy
 {
+    using System;
+
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
 
@@ -16,7 +16,7 @@ namespace PhotoContest.Data.Strategies.VotingStrategy
             }
             else
             {
-                throw new ArgumentException("User is not  in the voting committee.");
+                throw new ArgumentException("User is not in the voting committee.");
             }
         }
     }

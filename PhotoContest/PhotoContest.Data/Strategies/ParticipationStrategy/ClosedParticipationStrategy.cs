@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PhotoContest.Data.Strategies.ParticipationStrategy
+﻿namespace PhotoContest.Data.Strategies.ParticipationStrategy
 {
+    using System;
+
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
 
     public class ClosedParticipationStrategy : IParticipationStrategy
     {
-        public void SubmitPicture(Picture picture, IPhotoContestData data, User user, Contest contest)
+        public void Participate(IPhotoContestData data, User user, Contest contest)
         {
-            if (contest.Participants.Contains(user))
-            {
-                contest.Pictures.Add(picture);
-                data.SaveChanges();
-            }
-            else
+            if (!contest.InvitedUsers.Contains(user))
             {
                 throw new ArgumentException("The user is not selected to participate.");
             }
+          
+            if (contest.Participants.Contains(user))
+            {
+                throw new ArgumentException("You already participate in this contest");
+            }
+
+            contest.Participants.Add(user);
+
+            data.Contests.Update(contest);
+
+            data.SaveChanges();
         }
     }
 }

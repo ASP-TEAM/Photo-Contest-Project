@@ -22,7 +22,9 @@
 
         private ICollection<Contest> organizedContests;
 
-        private ICollection<Contest> committeeInContests; 
+        private ICollection<Contest> committeeInContests;
+
+        private ICollection<Invitation> invitations;
 
         public User()
         {
@@ -31,6 +33,8 @@
             this.committeeInContests = new HashSet<Contest>();
             this.votes = new HashSet<Vote>();
             this.pictures = new HashSet<Picture>();
+
+            this.invitations = new HashSet<Invitation>();
         }
 
         public string FullName { get; set; }
@@ -85,6 +89,18 @@
             set
             {
                 this.votes = value;
+            }
+        }
+
+        public virtual ICollection<Invitation> Invitations
+        {
+            get
+            {
+                return this.invitations;
+            }
+            set
+            {
+                this.invitations = value;
             }
         }
 

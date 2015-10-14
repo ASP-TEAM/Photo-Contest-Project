@@ -60,9 +60,12 @@
     <Compile Include="Contest.cs" />
     <Compile Include="DeadlineStrategy.cs" />
     <Compile Include="Enums\DeadlineStrategyType.cs" />
+    <Compile Include="Enums\InvitationStatus.cs" />
+    <Compile Include="Enums\InvitationType.cs" />
     <Compile Include="Enums\ParticipationStrategyType.cs" />
     <Compile Include="Enums\RewardStrategyType.cs" />
     <Compile Include="Enums\VotingStrategyType.cs" />
+    <Compile Include="Invitation.cs" />
     <Compile Include="ParticipationStrategy.cs" />
     <Compile Include="Picture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

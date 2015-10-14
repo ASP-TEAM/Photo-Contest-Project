@@ -12,12 +12,15 @@
 
         private ICollection<Picture> pictures;
 
-        private ICollection<User> committee; 
+        private ICollection<User> committee;
+
+        private ICollection<User> invitedUsers;
 
         public Contest()
         {
             this.participants = new HashSet<User>();
             this.committee = new HashSet<User>();
+            this.invitedUsers = new HashSet<User>();
             this.pictures = new HashSet<Picture>();
             this.IsActive = DefaultContestState;
             this.ParticipantsLimit = DefaultParticipantsLimit;
@@ -33,9 +36,13 @@
 
         public bool IsActive { get; set; }
 
+        public bool isOpenForSubmissions { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+
+        public DateTime SubmissionDate { get; set; }
 
         public int RewardStrategyId { get; set; }
 
@@ -78,6 +85,18 @@
             set
             {
                 this.committee = value;
+            }
+        }
+
+        public virtual ICollection<User> InvitedUsers
+        {
+            get
+            {
+                return this.invitedUsers;
+            }
+            set
+            {
+                this.invitedUsers = value;
             }
         }
 
