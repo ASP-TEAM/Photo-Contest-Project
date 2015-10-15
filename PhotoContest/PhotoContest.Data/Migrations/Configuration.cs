@@ -66,7 +66,7 @@ namespace PhotoContest.Data.Migrations
                 var manager = new UserManager<User>(store);
                 var user = new User() { UserName = "admin", RegisteredAt = DateTime.Now };
 
-                manager.Create(user, "admin");
+                manager.Create(user, "123456");
                 manager.AddToRole(user.Id, GlobalConstants.AdminRole);
             }
             context.SaveChanges();
@@ -88,9 +88,17 @@ namespace PhotoContest.Data.Migrations
 
         private void SeedDefaultApplicationRoles(PhotoContestDbContext context)
         {
-            context.Roles.AddOrUpdate(new IdentityRole(GlobalConstants.AdminRole));
-            context.Roles.AddOrUpdate(new IdentityRole(GlobalConstants.UserRole));
-            context.SaveChanges();
+            if (!context.Roles.Any())
+            {
+                var store = new RoleStore<IdentityRole>(context);
+                var manager = new RoleManager<IdentityRole>(store);
+
+                var adminRole = new IdentityRole { Name = GlobalConstants.AdminRole };
+                var userRole = new IdentityRole { Name = GlobalConstants.UserRole };
+
+                manager.Create(adminRole);
+                manager.Create(userRole);
+            }
         }
     }
 }
