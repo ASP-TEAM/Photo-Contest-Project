@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using System.Net;
+
+namespace PhotoContest.App.Controllers
 {
     using System;
     using System.Linq;
@@ -14,6 +16,8 @@
 
     public class PicturesController : BaseController
     {
+        private const int MaxImageSize = 1000000;
+
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
@@ -36,7 +40,6 @@
         [ValidateAntiForgeryToken]
         public ActionResult Upload()
         {
-            
             if (this.Request.Files.Count < 1)
             {
                 this.Response.StatusCode = 400;
@@ -45,18 +48,13 @@
             
             HttpPostedFileBase file = this.Request.Files[0];
 
-            if (!file.ContentType.Contains("image"))
+            var result = this.ValidateImageData(file);
+
+            if (result != null)
             {
-                this.Response.StatusCode = 400;
-                return this.Json(new { ErrorMessage = "The file is not a picture" });
+                return result;
             }
             
-            if (file.ContentLength > 1000000)
-            {
-                this.Response.StatusCode = 400;
-                return this.Json(new { ErrorMessage = "Picture size must be in range [1 - 1024 kb]" });
-            }
-
             var userId = this.User.Identity.GetUserId();
             var userName = this.User.Identity.GetUserName();
 
@@ -103,6 +101,23 @@
             this.Data.Votes.Add(vote);
             this.Data.SaveChanges();
             
+            return null;
+        }
+
+        private ActionResult ValidateImageData(HttpPostedFileBase file)
+        {
+            if (!file.ContentType.Contains("image"))
+            {
+                this.Response.StatusCode = 400;
+                return this.Json(new { ErrorMessage = "The file is not a picture" });
+            }
+
+            if (file.ContentLength > MaxImageSize)
+            {
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "Picture size must be in range [1 - 1024 kb]" });
+            }
+
             return null;
         }
     }
