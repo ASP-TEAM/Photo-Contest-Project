@@ -24,10 +24,10 @@
             var pictures =
                 this.Data.Pictures.All()
                 .Select(p => new PictureViewModel
-                                {
-                                    Url = p.Url,
-                                    User = p.User.UserName
-                                });
+                {
+                    Url = p.Url,
+                    User = p.User.UserName
+                });
 
             return this.View(pictures);
         }

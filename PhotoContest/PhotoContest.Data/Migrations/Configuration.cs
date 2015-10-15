@@ -9,6 +9,7 @@ namespace PhotoContest.Data.Migrations
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
 
+    using PhotoContest.Common;
     using PhotoContest.Models;
     using PhotoContest.Models.Enums;
 
@@ -25,57 +26,70 @@ namespace PhotoContest.Data.Migrations
         protected override void Seed(PhotoContestDbContext context)
         {
             // Add strategies
+            this.SeedStrategies(context);
+
+            // Add roles
+            this.SeedDefaultApplicationRoles(context);
+
+            // Add User
+            this.SeedAdminUser(context);
+            
+            // Add Contest
+            this.SeedContest(context);
+        }
+
+        private void SeedContest(PhotoContestDbContext context)
+        {
+            var testContest = new Contest
+            {
+                Title = "TestContest",
+                Description = "TestDescription",
+                IsActive = true,
+                StartDate = new DateTime(2015, 10, 10),
+                SubmissionDate = DateTime.Now,
+                EndDate = new DateTime(2015, 10, 15),
+                RewardStrategyId = context.RewardStrategies.FirstOrDefault().Id,
+                VotingStrategyId = context.VotingStrategies.FirstOrDefault().Id,
+                ParticipationStrategyId = context.ParticipationStrategies.FirstOrDefault().Id,
+                DeadlineStrategyId = context.DeadlineStrategies.FirstOrDefault().Id,
+                OrganizatorId = context.Users.FirstOrDefault().Id
+            };
+            context.Contests.AddOrUpdate(testContest);
+            context.SaveChanges();
+        }
+
+        private void SeedAdminUser(PhotoContestDbContext context)
+        {
+            if (!context.Users.Any(u => u.UserName == "admin"))
+            {
+                var store = new UserStore<User>(context);
+                var manager = new UserManager<User>(store);
+                var user = new User() { UserName = "admin", RegisteredAt = DateTime.Now };
+
+                manager.Create(user, "admin");
+                manager.AddToRole(user.Id, GlobalConstants.AdminRole);
+            }
+            context.SaveChanges();
+        }
+
+        private void SeedStrategies(PhotoContestDbContext context)
+        {
             var dlStrategy = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByNumberOfParticipants };
             var rwStrategy = new RewardStrategy { RewardStrategyType = RewardStrategyType.SingleWinner };
             var vStrategy = new VotingStrategy { VotingStrategyType = VotingStrategyType.Closed };
             var plStrategy = new ParticipationStrategy { ParticipationStrategyType = ParticipationStrategyType.Closed };
 
             context.DeadlineStrategies.AddOrUpdate(dlStrategy);
-
             context.RewardStrategies.AddOrUpdate(rwStrategy);
-
             context.VotingStrategies.AddOrUpdate(vStrategy);
-
             context.ParticipationStrategies.AddOrUpdate(plStrategy);
-
-            // Add User
-            if (!context.Roles.Any(r => r.Name == "TestRole"))
-            {
-                var store = new RoleStore<IdentityRole>(context);
-                var manager = new RoleManager<IdentityRole>(store);
-                var role = new IdentityRole { Name = "TestRole" };
-
-                manager.Create(role);
-            }
-
-            if (!context.Users.Any(u => u.UserName == "TestUser"))
-            {
-                var store = new UserStore<User>(context);
-                var manager = new UserManager<User>(store);
-                var user = new User() { UserName = "TestUser", RegisteredAt = DateTime.Now};
-
-                manager.Create(user, "ChangeItAsap!");
-                manager.AddToRole(user.Id, "TestRole");
-            }
             context.SaveChanges();
+        }
 
-            // Add Contest
-            var testContest = new Contest
-                              {
-                                  Title = "TestContest",
-                                  Description = "TestDescription",
-                                  IsActive = true,
-                                  StartDate = new DateTime(2015, 10, 10),
-                                  SubmissionDate = DateTime.Now,
-                                  EndDate = new DateTime(2015, 10, 15),
-                                  RewardStrategyId = rwStrategy.Id,
-                                  VotingStrategyId = vStrategy.Id,
-                                  ParticipationStrategyId = plStrategy.Id,
-                                  DeadlineStrategyId = dlStrategy.Id,
-                                  OrganizatorId = context.Users.FirstOrDefault().Id
-                              };
-            context.Contests.AddOrUpdate(testContest);
-
+        private void SeedDefaultApplicationRoles(PhotoContestDbContext context)
+        {
+            context.Roles.AddOrUpdate(new IdentityRole(GlobalConstants.AdminRole));
+            context.Roles.AddOrUpdate(new IdentityRole(GlobalConstants.UserRole));
             context.SaveChanges();
         }
     }
