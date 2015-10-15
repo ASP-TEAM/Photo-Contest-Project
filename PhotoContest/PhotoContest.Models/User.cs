@@ -66,8 +66,7 @@
                 this.inContests = value;
             }
         }
-
-
+        
         public virtual ICollection<Contest> CommitteeInContests
         {
             get

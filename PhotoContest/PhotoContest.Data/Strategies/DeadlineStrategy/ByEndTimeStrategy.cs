@@ -12,9 +12,9 @@
         {
             if (this.CheckDeadline(contest.EndDate))
             {
-                if (contest.isOpenForSubmissions == false)
+                if (contest.IsOpenForSubmissions == false)
                 {
-                    contest.isOpenForSubmissions = true;
+                    contest.IsOpenForSubmissions = true;
                     data.Contests.Update(contest);
                     data.SaveChanges();
                 }

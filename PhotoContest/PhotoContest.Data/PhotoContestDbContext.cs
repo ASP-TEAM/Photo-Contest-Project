@@ -64,15 +64,6 @@ namespace PhotoContest.Data
                     m.ToTable("ContestCommittees");
                 });
 
-            modelBuilder.Entity<Contest>()
-                .HasMany(c => c.InvitedUsers)
-                .WithMany(u => u.InContests)
-                .Map(m =>
-                {
-                    m.MapLeftKey("ContestId");
-                    m.MapRightKey("UserId");
-                    m.ToTable("ContestInvitedUsers");
-                });
             
             base.OnModelCreating(modelBuilder);
         }

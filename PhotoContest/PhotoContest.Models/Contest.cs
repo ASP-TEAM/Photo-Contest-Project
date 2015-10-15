@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     public class Contest
     {
@@ -28,21 +30,25 @@
 
         public int Id { get; set; }
 
+        [Required]
+        [StringLength(200, MinimumLength = 3)]
         public string Title { get; set; }
 
+        [Required]
+        [StringLength(200, MinimumLength = 3)]
         public string Description { get; set; }
 
         public int ParticipantsLimit { get; set; }
 
         public bool IsActive { get; set; }
 
-        public bool isOpenForSubmissions { get; set; }
+        public bool IsOpenForSubmissions { get; set; }
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
-        public DateTime SubmissionDate { get; set; }
+        public DateTime? SubmissionDate { get; set; }
 
         public int RewardStrategyId { get; set; }
 

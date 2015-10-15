@@ -1,0 +1,12 @@
+﻿@model string
+<div class="row">
+    <div class="col-md-6">
+        @Html.LabelFor(m => m)
+    </div>
+    <div class="col-md-6">
+        @Html.EditorFor(m => m)
+    </div>
+    <div>
+        @Html.ValidationMessageFor(m => m)
+    </div>
+</div>

@@ -7,14 +7,9 @@
 
     public class ClosedVotingStrategy : IVotingStrategy
     {
-        public void Vote(Vote vote, IPhotoContestData data, User user, Contest contest)
+        public void Vote(IPhotoContestData data, User user, Contest contest)
         {
-            if (contest.Committee.Contains(user))
-            {
-                data.Votes.Add(vote);
-                data.SaveChanges();
-            }
-            else
+            if (!contest.Committee.Contains(user))
             {
                 throw new ArgumentException("User is not in the voting committee.");
             }

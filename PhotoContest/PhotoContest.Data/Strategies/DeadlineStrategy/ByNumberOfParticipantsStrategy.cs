@@ -11,9 +11,9 @@
         {
             if (contest.Participants.Count >= contest.ParticipantsLimit)
             {
-                if (contest.isOpenForSubmissions == false)
+                if (contest.IsOpenForSubmissions)
                 {
-                    contest.isOpenForSubmissions = true;
+                    contest.IsOpenForSubmissions = false;
                     data.Contests.Update(contest);
                     data.SaveChanges();
                 }

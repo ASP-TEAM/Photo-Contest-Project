@@ -12,7 +12,8 @@
         {
             var winner = contest
                         .Participants
-                        .OrderByDescending(u => u.Pictures.Where(p => p.ContestId == contest.Id).Select(p => p.Votes.Count))
+                        .OrderByDescending(u => u.Pictures.Where(p => p.ContestId == contest.Id)
+                        .Select(p => p.Votes.Count))
                         .FirstOrDefault();
               
             data.ContestWinners.Add(new ContestWinners()
