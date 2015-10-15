@@ -13,15 +13,6 @@
             {
                 throw new InvalidOperationException("The contest registration is closed.");
             }
-
-            if (contest.Participants.Contains(user))
-            {
-                throw new ArgumentException("You already participate in this contest");
-            }
-
-            contest.Participants.Add(user);
-            data.Contests.Update(contest);
-            data.SaveChanges();
         }
     }
 }

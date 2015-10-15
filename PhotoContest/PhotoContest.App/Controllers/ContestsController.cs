@@ -1,5 +1,7 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System;
+
     using System.Web.Mvc;
 
     using Microsoft.AspNet.Identity;
@@ -41,9 +43,24 @@
             var currentUser = this.User.Identity.GetUserId();
             var user = this.Data.Users.Find(currentUser);
             var contest = this.Data.Contests.Find(id);
+
+            this.DeadlineStrategy = StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
+
+            this.DeadlineStrategy.Deadline(this.Data, contest, user);
+
             this.ParticipationStrategy =
                 StrategyFactory.GetParticipationStrategy(contest.ParticipationStrategy.ParticipationStrategyType);
+
             this.ParticipationStrategy.Participate(this.Data, user, contest);
+
+            if (contest.Participants.Contains(user))
+            {
+                throw new ArgumentException("You already participate in this contest");
+            }
+
+            contest.Participants.Add(user);
+            this.Data.Contests.Update(contest);
+            this.Data.SaveChanges();
 
             return null;
         }

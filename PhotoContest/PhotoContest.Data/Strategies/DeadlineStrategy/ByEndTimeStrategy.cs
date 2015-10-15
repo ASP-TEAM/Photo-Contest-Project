@@ -10,7 +10,7 @@
     {
         public void Deadline(IPhotoContestData data, Contest contest, User user)
         {
-            if (this.CheckDeadline(contest.EndDate))
+            if (contest.SubmissionDate < DateTime.Now)
             {
                 if (contest.IsOpenForSubmissions == false)
                 {
@@ -19,18 +19,8 @@
                     data.SaveChanges();
                 }
 
-                throw new Exception("The contest is closed for submissions");
+                throw new Exception("The contest is closed for submissions/registrations");
             }
-        }
-
-        private bool CheckDeadline(DateTime deadlineDate)
-        {
-            if (deadlineDate > DateTime.Now)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }
