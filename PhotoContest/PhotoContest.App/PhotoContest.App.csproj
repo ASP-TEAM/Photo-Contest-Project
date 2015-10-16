@@ -261,7 +261,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Pictures\Index.cshtml" />
-    <Content Include="Views\Pictures\_PicturePartial.cshtml" />
     <Content Include="Views\Contests\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\NumberField.cshtml" />
