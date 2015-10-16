@@ -2,7 +2,6 @@
 {
     #region
 
-    using System.Configuration;
     using System.Data.Entity;
     using System.Web;
     using System.Web.Mvc;
@@ -20,6 +19,7 @@
         protected void Application_Start()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<PhotoContestDbContext, Configuration>());
+            AutoMapperConfig.Execute();
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

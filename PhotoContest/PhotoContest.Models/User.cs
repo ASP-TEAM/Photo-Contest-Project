@@ -24,17 +24,22 @@
 
         private ICollection<Contest> committeeInContests;
 
-        private ICollection<Invitation> invitations;
+        private ICollection<Invitation> pendingInvitations;
+
+        private ICollection<Invitation> sendedInvitations; 
 
         public User()
         {
             this.organizedContests = new HashSet<Contest>();
             this.inContests = new HashSet<Contest>();
             this.committeeInContests = new HashSet<Contest>();
+
             this.votes = new HashSet<Vote>();
+
             this.pictures = new HashSet<Picture>();
 
-            this.invitations = new HashSet<Invitation>();
+            this.sendedInvitations = new HashSet<Invitation>();
+            this.pendingInvitations = new HashSet<Invitation>();
         }
 
         public string FullName { get; set; }
@@ -91,15 +96,27 @@
             }
         }
 
-        public virtual ICollection<Invitation> Invitations
+        public virtual ICollection<Invitation> SendedInvitations
         {
             get
             {
-                return this.invitations;
+                return this.sendedInvitations;
             }
             set
             {
-                this.invitations = value;
+                this.sendedInvitations = value;
+            }
+        }
+
+        public virtual ICollection<Invitation> PendingInvitations
+        {
+            get
+            {
+                return this.pendingInvitations;
+            }
+            set
+            {
+                this.pendingInvitations = value;
             }
         }
 

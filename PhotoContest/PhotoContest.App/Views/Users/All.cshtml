@@ -1,0 +1,17 @@
+﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.User.FullUserViewModel>
+@{
+    ViewBag.Title = "All users";
+}
+
+<h2>All</h2>
+
+@foreach (var user in @Model)
+{
+    <h2>@user.UserName</h2>
+    <h2>@user.Email</h2>
+    foreach (var invitation in user.PendingInvitations)
+    {
+        <p>@invitation.Invited.UserName</p>
+        <p>@invitation.DateOfInvitation</p>
+    }
+}

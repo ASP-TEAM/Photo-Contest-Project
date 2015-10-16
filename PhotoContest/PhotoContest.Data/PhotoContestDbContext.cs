@@ -64,7 +64,9 @@ namespace PhotoContest.Data
                     m.ToTable("ContestCommittees");
                 });
 
-            
+            modelBuilder.Entity<Invitation>().HasRequired(x => x.Invited).WithMany(x => x.PendingInvitations);
+            modelBuilder.Entity<Invitation>().HasRequired(x => x.Inviter).WithMany(x => x.SendedInvitations);
+
             base.OnModelCreating(modelBuilder);
         }
     }

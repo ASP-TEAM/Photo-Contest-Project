@@ -12,11 +12,11 @@
 
         public int Id { get; set; } 
         
-        public int InviterId { get; set; }
+        public string InviterId { get; set; }
 
         public virtual User Inviter { get; set; }
 
-        public int InvitedId { get; set; }
+        public string InvitedId { get; set; }
 
         public virtual User Invited { get; set; }
 
