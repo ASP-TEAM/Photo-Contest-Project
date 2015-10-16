@@ -18,7 +18,7 @@
                     data.SaveChanges();
                 }
 
-                throw new Exception("The contest is closed for submissions/registrations");
+                throw new InvalidOperationException("The contest is closed for submissions/registrations");
             }
         }
     }

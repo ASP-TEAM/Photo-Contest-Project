@@ -11,7 +11,7 @@
         {
             if (!contest.Committee.Contains(user))
             {
-                throw new ArgumentException("User is not in the voting committee.");
+                throw new InvalidOperationException("User is not in the voting committee.");
             }
         }
     }

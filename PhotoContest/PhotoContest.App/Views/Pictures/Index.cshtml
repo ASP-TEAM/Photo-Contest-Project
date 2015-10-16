@@ -6,7 +6,7 @@
 <div id="upload-picture">
     <h2>Upload New Picture</h2>
 
-    @using (Ajax.BeginForm("Upload", "Pictures", new AjaxOptions()
+    @using (Ajax.BeginForm("Upload", "Contests", new { id = 1 }, new AjaxOptions()
     {
         HttpMethod = "POST",
     }, new { enctype = "multipart/form-data", name = "upload-picture-form" }))
