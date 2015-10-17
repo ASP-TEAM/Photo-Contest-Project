@@ -1,0 +1,41 @@
+Project work plan
+
+Project Skeleton + Strategies (done)
+
+Design
+	-Select a bootstrap theme to be used by all developers
+	-Design/graph web page layout ( headers/ footers/ asides/ body ...)
+
+Contests
+	-Create a contest
+	-List active contests
+	-List not active contests
+	-Update a contest (if they are the owners)
+	-Dismiss a contest – stop the contest and select no winners
+	-Finalize a contest – initialize the end of the contest and choose a winner / winners in accordance with its voting strategy
+	-Show contest results (winners/votes)
+	
+Users
+	-Register for a contest
+	-Invite user for a contest (send notification) (SignalR??)
+	-Accept/Reject invitation for a contest  (SignalR??)
+	-Invite user to a voting committee
+
+Pictures
+	-Upload Picture in contest
+	-Delete Picture from contest
+	-Vote for a picture
+
+Administration
+	-All above
+	-Delete picture from 
+	-Manage other users profiles (excluding their own profile, and excluding usernames)
+	
+Unit testing
+	-Controllers
+	-Repositories
+	-......
+
+Timing
+
+ProjectSkeleton -> Design -> Contests -> Users -> Pictures -> Administration -> UnitTesting
