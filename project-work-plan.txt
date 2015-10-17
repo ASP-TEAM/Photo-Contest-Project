@@ -28,7 +28,7 @@ Pictures
 
 Administration
 	-All above
-	-Delete picture from 
+	-Delete picture from contest
 	-Manage other users profiles (excluding their own profile, and excluding usernames)
 	
 Unit testing
