@@ -1,0 +1,16 @@
+﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.Contest.ContestViewModel>
+@{
+    ViewBag.Title = "My Contests";
+}
+
+
+<div class="contests">
+    <h2>My Contests</h2>
+
+    @foreach (var contest in Model)
+    {
+        Html.RenderPartial("_MyContest", contest);
+    }
+</div>
+
+<a href="@Url.Action("ActiveContests", "Contests")" class="btn btn-primary">All contests</a>

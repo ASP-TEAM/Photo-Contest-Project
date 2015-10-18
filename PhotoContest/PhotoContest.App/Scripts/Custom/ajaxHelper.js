@@ -1,4 +1,4 @@
-﻿(function () {
+﻿var ajaxHelper = (function () {
 
     var bar = $('.progress-bar');
     var percent = $('.progress-bar');
@@ -28,5 +28,18 @@
             status.html(xhr.responseText);
         }
     });
+
+    function onContestCreated() {
+        notificationHelper.showSuccessMessage("Contest created");
+    }
+
+    function onContestNotCreated() {
+        notificationHelper.showSuccessMessage('Please fill correctly all required fields');
+    }
+
+    return {
+        onContestCreated: onContestCreated,
+        onContestNotCreated: onContestNotCreated
+    }
 
 })();

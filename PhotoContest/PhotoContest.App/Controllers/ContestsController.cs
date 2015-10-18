@@ -15,6 +15,11 @@
     using PhotoContest.Data.Strategies;
 
     using System.Collections.Generic;
+    using System.Linq;
+
+    using AutoMapper.QueryableExtensions;
+
+    using PhotoContest.App.Models.ViewModels.Contest;
 
     public class ContestsController : BaseController
     {
@@ -32,17 +37,77 @@
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult ActiveContests()
         {
-            return this.View();
+            var activeContests = this.Data.Contests.All()
+                .Where(c => c.IsActive)
+                .Project()
+                .To<ContestViewModel>()
+                .ToList();
+
+            return this.View(activeContests);
+        }
+
+        [HttpGet]
+        public ActionResult MyContests()
+        {
+            var loggedUserId = this.User.Identity.GetUserId();
+
+            var myContests = this.Data.Contests.All()
+                .Where(c => c.OrganizatorId == loggedUserId)
+                .Project()
+                .To<ContestViewModel>()
+                .ToList();
+
+
+            return this.View(myContests);
+        }
+
+        [HttpGet]
+        public ActionResult NewContest()
+        {
+            return this.View("NewContestForm");
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateContestBindingModel contestModel)
+        public ActionResult CreateContest(CreateContestBindingModel model)
         {
-            return null;
+            if (model == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Missing Data");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                this.Response.StatusCode = 400;
+                return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+
+            var contest = new Contest
+                              {
+                                  Title = model.Title,
+                                  Description = model.Description,
+                                  IsActive = true,
+                                  RewardStrategyId = model.RewardStrategyId,
+                                  VotingStrategyId = model.VotingStrategyId,
+                                  ParticipationStrategyId = model.ParticipationStrategyId,
+                                  DeadlineStrategyId = model.DeadlineStrategyId,
+                                  ParticipantsLimit = model.ParticipantsLimit,
+                                  IsOpenForSubmissions = model.IsOpenForSubmissions,
+                                  StartDate = DateTime.Now,
+                                  EndDate = model.EndDate,
+                                  OrganizatorId = loggedUserId,
+                              };
+
+            this.Data.Contests.Add(contest);
+            this.Data.SaveChanges();
+
+            return new HttpStatusCodeResult(200);
         }
 
         [HttpGet]

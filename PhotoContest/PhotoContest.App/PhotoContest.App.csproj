@@ -231,11 +231,15 @@
     <Content Include="Scripts\jquery.form.min.js" />
     <Content Include="Scripts\jquery.form.min.js.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.noty.packaged.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Custom\notificationHelper.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -272,12 +276,16 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Pictures\Index.cshtml" />
-    <Content Include="Views\Contests\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\NumberField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Contests\_PicturePartial.cshtml" />
     <Content Include="Views\Users\All.cshtml" />
+    <Content Include="Views\Contests\ActiveContests.cshtml" />
+    <Content Include="Views\Contests\_ActiveContest.cshtml" />
+    <Content Include="Views\Contests\MyContests.cshtml" />
+    <Content Include="Views\Contests\_MyContest.cshtml" />
+    <Content Include="Views\Contests\NewContestForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />

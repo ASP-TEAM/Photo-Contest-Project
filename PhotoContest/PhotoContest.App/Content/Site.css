@@ -23,6 +23,9 @@ textarea {
     max-width: 280px;
 }
 
+a:hover {
+    text-decoration: none
+}
 
 #upload-picture {
     width: 30%;
@@ -35,4 +38,16 @@ textarea {
 .picture > img {
     width: 150px;
     height: 150px;
+}
+
+.contests {
+    display: block;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.contest {
+    display: inline-block;
+    min-width: 30%;
+    margin: 5px;
 }
