@@ -34,7 +34,7 @@
     }
 
     function onContestNotCreated() {
-        notificationHelper.showSuccessMessage('Please fill correctly all required fields');
+        notificationHelper.showErrorMessage('Please fill correctly all required fields');
     }
 
     return {
