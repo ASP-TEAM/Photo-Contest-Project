@@ -1,9 +1,15 @@
 ﻿@model PhotoContest.App.Models.ViewModels.Contest.ContestViewModel
 
-<div class="panel panel-default contest">
-    <div class="panel-heading">@Model.Title</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>
+           @Html.ActionLink(@Model.Title, "PreviewContest", "Contests", new { id = @Model.Id }, null)
+        </h4>
+    </div>
     <div class="panel-body">
         @Model.Description
     </div>
-    <span class="btn btn-link">Participate</span>
+    <div >
+        @Html.ActionLink("Participate", "Join", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })
+    </div>
 </div>

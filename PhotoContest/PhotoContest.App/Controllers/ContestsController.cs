@@ -17,9 +17,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using PhotoContest.App.Models.ViewModels.Contest;
+    using PhotoContest.App.Models.ViewModels.Picture;
 
     public class ContestsController : BaseController
     {
@@ -218,6 +220,29 @@
 
             this.Response.StatusCode = 400;
             return this.Json(new { ErrorMessage = this.TempData["message"]});
+        }
+
+        [HttpGet]
+        public ActionResult PreviewContest(int id)
+        {
+            var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                return this.HttpNotFound("The selected contest no longer exists");
+            }
+            var currentUserId = this.User.Identity.GetUserId();
+            var isInContest = contest.Participants.Any(p => p.Id == currentUserId) ||
+                                contest.OrganizatorId == currentUserId;
+            this.ViewBag.IsRegisterForContest = isInContest;
+            this.ViewBag.ContestId = contest.Id;
+
+            var contestViewModel =
+                contest.Pictures.AsQueryable()
+                       .Project()
+                       .To<FullPictureViewModel>()
+                       .ToList();
+
+            return this.View(contestViewModel);
         }
 
         private ActionResult ValidateImageData(HttpPostedFileBase file)

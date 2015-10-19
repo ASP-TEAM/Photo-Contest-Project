@@ -1,8 +1,12 @@
 ﻿@model PhotoContest.App.Models.ViewModels.Contest.ContestViewModel
 
-<a href="" class="panel panel-default contest">
-    <div class="panel-heading">@Model.Title</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>
+            @Html.ActionLink(@Model.Title, "PreviewContest", "Contests", new { id = @Model.Id }, null)
+        </h4>
+    </div>
     <div class="panel-body">
         @Model.Description
     </div>
-</a>
+</div>

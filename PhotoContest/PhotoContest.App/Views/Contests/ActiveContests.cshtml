@@ -6,9 +6,12 @@
 
 <div class="contests">
     <h2>Active Contests</h2>
-
-    @foreach (var contest in Model)
-    {
-        Html.RenderPartial("_ActiveContest", contest);
-    }
+    <div class="row">
+        @foreach (var contest in Model)
+        {
+            <div class="col-md-4">
+                @Html.Partial("_ActiveContest", contest);
+            </div>
+        }
+    </div>
 </div>
