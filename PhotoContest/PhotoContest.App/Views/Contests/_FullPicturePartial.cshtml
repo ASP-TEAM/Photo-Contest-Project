@@ -1,7 +1,7 @@
 ﻿@model PhotoContest.App.Models.ViewModels.Picture.FullPictureViewModel
 
 <div class="picture">
-    <img src="data:image/jpg;base64,@Model.Url" class="img-thumbnail" />
-    <p>Uploader: @Model.UserName</p>
-    <span class="badge">@Model.Votes</span>
+    <img src="@Model.Url" class="img-thumbnail" />
+    <p><strong>Uploader: </strong> @Model.UserName</p>
+    <span class="badge">Votes @Model.Votes</span>
 </div>
