@@ -17,7 +17,8 @@
                 "~/Scripts/jquery.form.js",
                 "~/Scripts/jquery.noty.packaged.js",
                 "~/Scripts/Custom/notificationHelper.js",
-                "~/Scripts/Custom/ajaxHelper.js"));
+                "~/Scripts/Custom/ajaxHelper.js",
+                "~/Scripts/Custom/picturesUpload.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/Scripts/jquery.validate*"));
 

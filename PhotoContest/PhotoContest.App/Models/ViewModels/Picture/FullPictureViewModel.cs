@@ -1,13 +1,9 @@
 ﻿namespace PhotoContest.App.Models.ViewModels.Picture
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using AutoMapper;
 
     using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.App.Models.ViewModels.Contest;
-    using PhotoContest.App.Models.ViewModels.Vote;
     using PhotoContest.Models;
 
     public class FullPictureViewModel : IMapFrom<Picture>, IHaveCustomMappings

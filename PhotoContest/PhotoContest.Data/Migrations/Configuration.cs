@@ -45,6 +45,7 @@ namespace PhotoContest.Data.Migrations
                 Title = "TestContest",
                 Description = "TestDescription",
                 IsActive = true,
+                IsOpenForSubmissions = true,
                 StartDate = new DateTime(2015, 10, 10),
                 SubmissionDate = DateTime.Now,
                 EndDate = new DateTime(2015, 10, 15),
@@ -54,7 +55,8 @@ namespace PhotoContest.Data.Migrations
                 DeadlineStrategyId = context.DeadlineStrategies.FirstOrDefault().Id,
                 OrganizatorId = context.Users.FirstOrDefault().Id
             };
-            context.Contests.AddOrUpdate(testContest);
+
+            context.Contests.AddOrUpdate(c => c.Title, testContest);
             context.SaveChanges();
         }
 
@@ -79,10 +81,10 @@ namespace PhotoContest.Data.Migrations
             var vStrategy = new VotingStrategy { VotingStrategyType = VotingStrategyType.Closed };
             var plStrategy = new ParticipationStrategy { ParticipationStrategyType = ParticipationStrategyType.Closed };
 
-            context.DeadlineStrategies.AddOrUpdate(dlStrategy);
-            context.RewardStrategies.AddOrUpdate(rwStrategy);
-            context.VotingStrategies.AddOrUpdate(vStrategy);
-            context.ParticipationStrategies.AddOrUpdate(plStrategy);
+            context.DeadlineStrategies.AddOrUpdate(dl => dl.DeadlineStrategyType, dlStrategy);
+            context.RewardStrategies.AddOrUpdate(rw => rw.RewardStrategyType, rwStrategy);
+            context.VotingStrategies.AddOrUpdate(v => v.VotingStrategyType, vStrategy);
+            context.ParticipationStrategies.AddOrUpdate(pl => pl.ParticipationStrategyType, plStrategy);
             context.SaveChanges();
         }
 

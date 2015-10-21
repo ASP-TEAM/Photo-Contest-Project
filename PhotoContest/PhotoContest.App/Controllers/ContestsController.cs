@@ -166,14 +166,19 @@
                 this.Response.StatusCode = 400;
                 return this.Json(new { ErrorMessage = "No file data" });
             }
-            
-            HttpPostedFileBase file = this.Request.Files[0];
 
-            var result = this.ValidateImageData(file);
+            var files = new List<HttpPostedFileBase>();
 
-            if (result != null)
+            for (int i = 0; i < this.Request.Files.Count; i++)
             {
-                return result;
+                var result = this.ValidateImageData(this.Request.Files[i]);
+
+                if (result != null)
+                {
+                    return result;
+                }
+
+                files.Add(this.Request.Files[i]);
             }
 
             var contest = this.Data.Contests.Find(id);
@@ -191,27 +196,31 @@
 
                 this.DeadlineStrategy.Deadline(this.Data, contest, user);
 
-                var base64PictureString = GetBase64String(file);
-
-                Picture picture = new Picture
+                foreach(var file in files)
                 {
-                    UserId = user.Id,
-                    Url = base64PictureString,
-                    ContestId = contest.Id
-                };
+                    var base64PictureString = GetBase64String(file);
 
-                this.Data.Pictures.Add(picture);
+                    Picture picture = new Picture
+                    {
+                        UserId = user.Id,
+                        Url = base64PictureString,
+                        ContestId = contest.Id
+                    };
+
+                    this.Data.Pictures.Add(picture);
+                }
+                
                 this.Data.SaveChanges();
 
-                var viewModel = new PictureViewModel()
-                {
-                    User = user.UserName,
-                    Url = picture.Url
-                };
+                //var viewModel = new PictureViewModel()
+                //{
+                //    User = user.UserName,
+                //    Url = picture.Url
+                //};
 
                 this.Response.StatusCode = 200;
 
-                return PartialView("_PicturePartial", viewModel);
+                return null;
             }
             catch (InvalidOperationException e)
             {
@@ -233,14 +242,11 @@
             var currentUserId = this.User.Identity.GetUserId();
             var isInContest = contest.Participants.Any(p => p.Id == currentUserId) ||
                                 contest.OrganizatorId == currentUserId;
+
             this.ViewBag.IsRegisterForContest = isInContest;
             this.ViewBag.ContestId = contest.Id;
 
-            var contestViewModel =
-                contest.Pictures.AsQueryable()
-                       .Project()
-                       .To<FullPictureViewModel>()
-                       .ToList();
+            var contestViewModel = Mapper.Map<PreviewContestViewModel>(contest);
 
             return this.View(contestViewModel);
         }
@@ -267,7 +273,9 @@
             byte[] fileBuffer = new byte[file.ContentLength];
             file.InputStream.Read(fileBuffer, 0, file.ContentLength);
 
-            return Convert.ToBase64String(fileBuffer);
+            string type = "data:image/" + file.ContentType + ";base64,";
+
+            return type + Convert.ToBase64String(fileBuffer);
         }
     }
 }

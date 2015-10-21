@@ -1,15 +1,30 @@
-﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.Picture.FullPictureViewModel>
+﻿@model PhotoContest.App.Models.ViewModels.Contest.PreviewContestViewModel
 @{
     ViewBag.Title = "PreviewContest";
 }
 
+@if (Model.IsOpenForSubmissions)
+{
+    <div class="row">
+        @using (Html.BeginForm("Upload", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="file" multiple name="files[]" id="uploadPictureInput" />
+            <input type='submit' id='upload-files' value='Upload'/>
+            <div class="container" id="contestUploadPicturesContainer">
+
+            </div>
+        }
+    </div>
+}
+
 @if (!ViewBag.IsRegisterForContest)
 {
-    @Html.ActionLink("Participate", "Join", new {id = ViewBag.ContestId }, new {@class="btn btn-success"})
+    @Html.ActionLink("Participate", "Join", new { id = ViewBag.ContestId }, new { @class = "btn btn-success" })
 }
 
 <div class="row">
-    @foreach (var picture in Model)
+    @foreach (var picture in Model.Pictures)
     {
         <div class="col-md-4">
             @Html.Partial("_FullPicturePartial", picture)

@@ -51,3 +51,7 @@ a:hover {
     min-width: 30%;
     margin: 5px;
 }
+
+.picturePreview {
+    height: 200px;
+}
