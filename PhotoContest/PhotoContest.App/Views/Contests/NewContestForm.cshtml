@@ -8,8 +8,8 @@
     new AjaxOptions
     {
         HttpMethod = "POST",
-        OnSuccess = "ajaxHelper.onContestCreated()",
-        OnFailure = "ajaxHelper.onContestNotCreated()"
+        OnSuccess = "ajaxHelper.onSuccess()",
+        OnFailure = "ajaxHelper.onError()"
     }, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
@@ -83,17 +83,8 @@
 
             </div>
         </div>
-        
-        <div class="form-group">
-            @Html.LabelFor(c => c.IsOpenForSubmissions, new { @class = "col-lg-2 control-label" })
-            <div class="col-lg-10">
-                @Html.EditorFor(c => c.IsOpenForSubmissions,
-                new { @class = "form-control"})
-            </div>
-        </div>
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">Cancel</button>
                 <input type="submit" class="btn btn-primary" value="Create" />
             </div>
         </div>

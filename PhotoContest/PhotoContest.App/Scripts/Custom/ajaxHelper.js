@@ -29,17 +29,17 @@
         }
     });
 
-    function onContestCreated() {
-        notificationHelper.showSuccessMessage("Contest created");
+    function onSuccess() {
+        notificationHelper.showSuccessMessage("Operation successfull");
     }
 
-    function onContestNotCreated() {
-        notificationHelper.showErrorMessage('Please fill correctly all required fields');
+    function onError() {
+        notificationHelper.showErrorMessage('Error occured');
     }
 
     return {
-        onContestCreated: onContestCreated,
-        onContestNotCreated: onContestNotCreated
+        onSuccess: onSuccess,
+        onError: onError
     }
 
 })();

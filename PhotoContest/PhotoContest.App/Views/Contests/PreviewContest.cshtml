@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.Picture.FullPictureViewModel>
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<PhotoContest.App.Models.ViewModels.Picture.FullPictureViewModel>
 @{
     ViewBag.Title = "PreviewContest";
 }
@@ -6,6 +7,11 @@
 @if (!ViewBag.IsRegisterForContest)
 {
     @Html.ActionLink("Participate", "Join", new {id = ViewBag.ContestId }, new {@class="btn btn-success"})
+}
+<br />
+@if (ViewBag.isOrganizator)
+{
+    @Html.ActionLink("Manage", "ManageContest", new { id = ViewBag.ContestId }, new { @class = "btn btn-primary" })
 }
 
 <div class="row">

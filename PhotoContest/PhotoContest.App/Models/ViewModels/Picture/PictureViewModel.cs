@@ -1,4 +1,4 @@
-﻿namespace PhotoContest.App.Models.ViewModels
+﻿namespace PhotoContest.App.Models.ViewModels.Picture
 {
     public class PictureViewModel
     {

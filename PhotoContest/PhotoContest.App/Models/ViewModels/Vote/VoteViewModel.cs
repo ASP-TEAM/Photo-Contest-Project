@@ -3,6 +3,7 @@
     using AutoMapper;
 
     using PhotoContest.App.Infrastructure.Mapping;
+    using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Models;
 
     public class VoteViewModel : IMapFrom<Vote>, IHaveCustomMappings

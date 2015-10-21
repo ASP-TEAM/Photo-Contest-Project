@@ -16,6 +16,7 @@
 
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
@@ -100,7 +101,7 @@
                                   ParticipationStrategyId = model.ParticipationStrategyId,
                                   DeadlineStrategyId = model.DeadlineStrategyId,
                                   ParticipantsLimit = model.ParticipantsLimit,
-                                  IsOpenForSubmissions = model.IsOpenForSubmissions,
+                                  IsOpenForSubmissions = true,
                                   StartDate = DateTime.Now,
                                   EndDate = model.EndDate,
                                   OrganizatorId = loggedUserId,
@@ -230,11 +231,13 @@
             {
                 return this.HttpNotFound("The selected contest no longer exists");
             }
+
             var currentUserId = this.User.Identity.GetUserId();
             var isInContest = contest.Participants.Any(p => p.Id == currentUserId) ||
                                 contest.OrganizatorId == currentUserId;
             this.ViewBag.IsRegisterForContest = isInContest;
             this.ViewBag.ContestId = contest.Id;
+            this.ViewBag.isOrganizator = contest.OrganizatorId == currentUserId;
 
             var contestViewModel =
                 contest.Pictures.AsQueryable()
@@ -243,6 +246,88 @@
                        .ToList();
 
             return this.View(contestViewModel);
+        }
+
+        [HttpGet]
+        public ActionResult ManageContest(int id)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                return this.HttpNotFound("The selected contest does not exist");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+
+            if (contest.OrganizatorId != loggedUserId)
+            {
+                this.Response.StatusCode = 401;
+                return this.Content("Logged user is not the contest organizator");
+            }
+
+            var contestBindingModel = new UpdateContestBindingModel
+            {
+                Id = id,
+                Title = contest.Title,
+                Description = contest.Description,
+                EndDate = contest.EndDate
+            };
+
+            return this.View("ManageContestForm", contestBindingModel);
+        }
+
+        [HttpPatch]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateContest(UpdateContestBindingModel model)
+        {
+            if (model == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Missing Data");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                this.Response.StatusCode = 400;
+                return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
+
+            var contest = this.Data.Contests.Find(model.Id);
+
+            if (contest == null)
+            {
+                return this.HttpNotFound("The selected contest does not exist");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+
+            if (contest.OrganizatorId != loggedUserId)
+            {
+                this.Response.StatusCode = 401;
+                return this.Content("Logged user is not the contest organizator");
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Title))
+            {
+                contest.Title = model.Title;
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Description))
+            {
+                contest.Description = model.Description;
+            }
+
+            if (model.EndDate != default(DateTime))
+            {
+                contest.EndDate = model.EndDate;
+            }
+
+            this.Data.Contests.Update(contest);
+            this.Data.SaveChanges();
+
+            this.Response.StatusCode = 200;
+            return this.Content("Contest created successfully");
         }
 
         private ActionResult ValidateImageData(HttpPostedFileBase file)

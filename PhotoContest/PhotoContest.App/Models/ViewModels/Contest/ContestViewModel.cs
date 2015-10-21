@@ -13,6 +13,8 @@
 
         public string Description { get; set; }
 
+        public string OrganizatorId { get; set; }
+
         public int ParticipantsLimit { get; set; }
 
         public bool IsActive { get; set; }

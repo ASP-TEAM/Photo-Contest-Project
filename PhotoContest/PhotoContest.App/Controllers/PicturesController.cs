@@ -7,6 +7,7 @@
     using Microsoft.AspNet.Identity;
 
     using PhotoContest.App.Models.ViewModels;
+    using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Strategies;
     using PhotoContest.Models;
