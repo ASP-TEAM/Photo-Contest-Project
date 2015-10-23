@@ -55,3 +55,18 @@ a:hover {
 .picturePreview {
     height: 200px;
 }
+
+#suggestions {
+    margin-left: 1%;
+    width: 30%;
+}
+#suggestions > li {
+    padding: 5px;
+}
+#suggestions>li:hover {
+    background-color: rgb(237, 238, 255);
+    cursor: pointer;
+}
+#invite-user-username {
+    display: inline-block;
+}

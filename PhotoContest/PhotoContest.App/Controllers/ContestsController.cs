@@ -23,6 +23,7 @@
 
     using PhotoContest.App.Models.ViewModels.Contest;
     using PhotoContest.App.Models.ViewModels.Picture;
+    using PhotoContest.Models.Enums;
 
     public class ContestsController : BaseController
     {
@@ -229,7 +230,7 @@
             }
 
             this.Response.StatusCode = 400;
-            return this.Json(new { ErrorMessage = this.TempData["message"]});
+            return this.Json(new { ErrorMessage = this.TempData["message"] });
         }
 
         [HttpGet]
@@ -246,7 +247,6 @@
                                 contest.OrganizatorId == currentUserId;
 
             this.ViewBag.IsRegisterForContest = isInContest;
-            this.ViewBag.ContestId = contest.Id;
             this.ViewBag.isOrganizator = contest.OrganizatorId == currentUserId;
 
             var contestViewModel = Mapper.Map<PreviewContestViewModel>(contest);
@@ -272,13 +272,7 @@
                 return this.Content("Logged user is not the contest organizator");
             }
 
-            var contestBindingModel = new UpdateContestBindingModel
-            {
-                Id = id,
-                Title = contest.Title,
-                Description = contest.Description,
-                EndDate = contest.EndDate
-            };
+            var contestBindingModel = Mapper.Map<UpdateContestBindingModel>(contest);
 
             return this.View("ManageContestForm", contestBindingModel);
         }
@@ -333,7 +327,57 @@
             this.Data.SaveChanges();
 
             this.Response.StatusCode = 200;
-            return this.Content("Contest created successfully");
+            return this.Content("Contest updated successfully");
+        }
+
+        [HttpPost]
+        public ActionResult InviteUser(string username, int contestId, InvitationType type)
+        {
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+            var userToInvite = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (userToInvite == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("User with username {0} not found", username));
+            }
+
+            if (!this.Data.Contests.All().Any(c => c.Id == contestId))
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("Contest with id {0} not found", contestId));
+            }
+
+            if (userToInvite.UserName == loggedUser.UserName)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Users cannot invite themselves.");
+            }
+
+            if (userToInvite.PendingInvitations.Any(i => i.ContestId == contestId && type == i.Type))
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("User is already invited and has not confirmed.");
+            }
+
+            var invitation = new Invitation
+                                 {
+                                     ContestId = contestId,
+                                     InviterId = loggedUser.Id,
+                                     InvitedId = userToInvite.Id,
+                                     DateOfInvitation = DateTime.Now,
+                                     Type = type,
+                                     Status = InvitationStatus.Neutral
+            };
+
+            userToInvite.PendingInvitations.Add(invitation);
+            this.Data.SaveChanges();
+
+            loggedUser.SendedInvitations.Add(invitation);
+            this.Data.SaveChanges();
+
+            this.Response.StatusCode = 200;
+            return this.Content(string.Format("User with username {0} successfully invited", username));
         }
 
         private ActionResult ValidateImageData(HttpPostedFileBase file)

@@ -294,6 +294,8 @@
     <Content Include="Views\Contests\PreviewContest.cshtml" />
     <Content Include="Views\Contests\_FullPicturePartial.cshtml" />
     <Content Include="Views\Contests\ManageContestForm.cshtml" />
+    <Content Include="Views\Contests\_UpdateContestDataForm.cshtml" />
+    <Content Include="Views\Contests\_InviteUsersForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />

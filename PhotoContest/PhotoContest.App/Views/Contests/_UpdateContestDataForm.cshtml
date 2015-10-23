@@ -1,0 +1,41 @@
+﻿@model PhotoContest.App.Models.BindingModels.Contest.UpdateContestBindingModel
+
+@using (Ajax.BeginForm("UpdateContest", "Contests", null,
+                            new AjaxOptions
+                            {
+                                HttpMethod = "PATCH",
+                                OnSuccess = "ajaxHelper.onSuccess()",
+                                OnFailure = "ajaxHelper.onError()"
+                            }, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Update contest data</legend>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Title, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10">
+                @Html.TextBoxFor(c => c.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(c => c.Title, string.Empty, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Description, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10">
+                @Html.TextAreaFor(c => c.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(c => c.Description, string.Empty, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.EndDate, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10">
+                @Html.TextBoxFor(c => c.EndDate, new { @class = "form-control", type = "datepicker", value = Model.EndDate })
+            </div>
+        </div>
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <input type="submit" class="btn btn-primary" value="Update" />
+            </div>
+        </div>
+    </fieldset>
+}

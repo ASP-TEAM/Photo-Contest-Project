@@ -1,0 +1,48 @@
+﻿@using PhotoContest.Models.Enums
+@model PhotoContest.App.Models.BindingModels.Contest.UpdateContestBindingModel
+
+<div class="invite-voters">
+    @using (Ajax.BeginForm("InviteUser", "Contests", null,
+                        new AjaxOptions
+                        {
+                            HttpMethod = "POST",
+                            OnSuccess = "ajaxHelper.onSuccess()",
+                            OnFailure = "ajaxHelper.onError()"
+                        },
+                        new { @class = "form-horizontal", name = "invite-voter" }))
+    {
+        @Html.AntiForgeryToken()
+        <fieldset>
+            <legend>Invite User</legend>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Invite for</label>
+                <div class="col-lg-10">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="type" id="optionsRadios1" value="@InvitationType.Committee" checked="">
+                            <span>Voting Committe</span>
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="type" id="optionsRadios2" value="@InvitationType.ClosedContest">
+                            <span>Contest Participant</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="invite-user-username" class="col-lg-2 control-label">Username</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" name="username" id="invite-user-username" placeholder="Username" />
+                    <ul class="dropdown-menu" id="suggestions"></ul>
+                    <input type="submit" class="btn btn-primary" value="Invite" />
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="contestId" value="@Model.Id" />
+            </div>
+
+        </fieldset>
+    }
+</div>

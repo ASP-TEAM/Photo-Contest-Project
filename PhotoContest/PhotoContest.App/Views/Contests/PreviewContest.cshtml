@@ -4,7 +4,7 @@
 }
 @if (ViewBag.isOrganizator)
 {
-    @Html.ActionLink("Manage", "ManageContest", new { id = ViewBag.ContestId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
 }
 
 @if (Model.IsOpenForSubmissions)
@@ -24,7 +24,7 @@
 
 @if (!ViewBag.IsRegisterForContest)
 {
-    @Html.ActionLink("Participate", "Join", new { id = ViewBag.ContestId }, new { @class = "btn btn-success" })
+    @Html.ActionLink("Participate", "Join", new { id = Model.Id }, new { @class = "btn btn-success" })
 }
 
 <div class="row">
