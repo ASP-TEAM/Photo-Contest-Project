@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Models.ViewModels
+﻿using System.Web.Mvc;
+
+namespace PhotoContest.App.Models.ViewModels
 {
     #region
 
@@ -78,6 +80,7 @@
 
         [Required]
         [Display(Name = "Username")]
+        [Remote("IsUsernameAvailable", "Users")]
         public string Username { get; set; }
 
         [Required]
