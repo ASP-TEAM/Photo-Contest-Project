@@ -13,7 +13,7 @@
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js",
-                "~/Script/jquery.unobtrusive-ajax.js",
+                "~/Scripts/jquery.unobtrusive-ajax.js",
                 "~/Scripts/jquery.form.js",
                 "~/Scripts/jquery.noty.packaged.js",
                 "~/Scripts/Custom/notificationHelper.js",

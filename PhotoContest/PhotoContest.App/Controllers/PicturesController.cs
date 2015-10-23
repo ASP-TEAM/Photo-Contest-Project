@@ -69,7 +69,7 @@
                 this.TempData["message"] = e.Message;
             }
 
-            return null;
+            return this.Json(picture.Votes.Select(p => p.Id).Count().ToString(), JsonRequestBehavior.AllowGet);
         }
     }
 }
