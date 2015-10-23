@@ -329,6 +329,7 @@
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult InviteUser(string username, int contestId, InvitationType type)
         {
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
@@ -369,8 +370,6 @@
             };
 
             userToInvite.PendingInvitations.Add(invitation);
-            this.Data.SaveChanges();
-
             loggedUser.SendedInvitations.Add(invitation);
             this.Data.SaveChanges();
 
