@@ -9,7 +9,7 @@
                             OnSuccess = "ajaxHelper.onSuccess()",
                             OnFailure = "ajaxHelper.onError()"
                         },
-                        new { @class = "form-horizontal", name = "invite-voter" }))
+                        new { @class = "form-horizontal", name = "invite-user" }))
     {
         @Html.AntiForgeryToken()
         <fieldset>
@@ -32,6 +32,9 @@
                 </div>
             </div>
             <div class="form-group">
+                <input type="hidden" name="contestId" value="@Model.Id" />
+            </div>
+            <div class="form-group">
                 <label for="invite-user-username" class="col-lg-2 control-label">Username</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" name="username" id="invite-user-username" placeholder="Username" />
@@ -39,10 +42,6 @@
                     <input type="submit" class="btn btn-primary" value="Invite" />
                 </div>
             </div>
-            <div class="form-group">
-                <input type="hidden" name="contestId" value="@Model.Id" />
-            </div>
-
         </fieldset>
     }
 </div>
