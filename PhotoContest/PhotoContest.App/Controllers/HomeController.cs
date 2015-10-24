@@ -2,15 +2,28 @@
 {
     #region
 
+    using System.Linq;
     using System.Web.Mvc;
+
+    using Microsoft.AspNet.Identity;
+
+    using PhotoContest.App.Models.ViewModels.Invitation;
+    using PhotoContest.Data.Interfaces;
 
     #endregion
 
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+
+        public HomeController(IPhotoContestData data)
+            : base(data)
+        {
+        }
+
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
+
     }
 }

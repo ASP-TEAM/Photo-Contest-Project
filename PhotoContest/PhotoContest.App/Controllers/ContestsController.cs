@@ -14,12 +14,17 @@
     using PhotoContest.Data.Strategies;
 
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
+    using Microsoft.AspNet.SignalR;
+
+    using PhotoContest.App.Hubs;
     using PhotoContest.App.Models.ViewModels.Contest;
+    using PhotoContest.App.Models.ViewModels.Invitation;
     using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Models.Enums;
 
@@ -72,7 +77,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult CreateContest(CreateContestBindingModel model)
         {
@@ -158,7 +163,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         public ActionResult Upload(int id)
         {
             if (this.Request.Files.Count < 1)
@@ -373,7 +378,16 @@
             loggedUser.SendedInvitations.Add(invitation);
             this.Data.SaveChanges();
 
+            var notifiction = new NotificationViewModel
+                                  {
+                                      Sender = loggedUser.UserName,
+                                      Type = type.ToString()
+                                  };
+
+            this.HubContext.Clients.User(username).notificationReceived(this.RenderViewToString("_Notification", notifiction));
+
             this.Response.StatusCode = 200;
+
             return this.Content(string.Format("User with username {0} successfully invited", username));
         }
 
@@ -402,6 +416,20 @@
             string type = "data:image/" + file.ContentType + ";base64,";
 
             return type + Convert.ToBase64String(fileBuffer);
+        }
+
+        public string RenderViewToString(string viewName, object model)
+        {
+            this.ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(this.ControllerContext,
+                                                                         viewName);
+                var viewContext = new ViewContext(this.ControllerContext, viewResult.View, this.ViewData, this.TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(this.ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
     }
 }

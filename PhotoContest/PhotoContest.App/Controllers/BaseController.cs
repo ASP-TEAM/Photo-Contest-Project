@@ -2,6 +2,9 @@
 {
     using System.Web.Mvc;
 
+    using Microsoft.AspNet.SignalR;
+
+    using PhotoContest.App.Hubs;
     using PhotoContest.Data.Interfaces;
 
     using PhotoContest.Data.Strategies.DeadlineStrategy;
@@ -16,12 +19,14 @@
         protected BaseController(IPhotoContestData data)
         {
             this.Data = data;
+            this.HubContext = GlobalHost.ConnectionManager.GetHubContext<PhotoContestHub>();
         }
 
         protected IRewardStrategy RewardStrategy { get; set; }
         protected IVotingStrategy VotingStrategy { get; set; }
         protected IParticipationStrategy ParticipationStrategy { get; set; }
         protected IDeadlineStrategy DeadlineStrategy { get; set; }
+        protected IHubContext HubContext { get; }
 
         protected IPhotoContestData Data
         {

@@ -1,0 +1,8 @@
+﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.Invitation.NotificationViewModel>
+
+@{
+    foreach (var notification in @Model)
+    {
+        @Html.Partial("_Notification", notification)
+    }
+}

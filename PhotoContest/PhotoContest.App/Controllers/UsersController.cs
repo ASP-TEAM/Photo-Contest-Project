@@ -7,7 +7,9 @@
     using AutoMapper.QueryableExtensions;
 
     using Microsoft.Ajax.Utilities;
+    using Microsoft.AspNet.Identity;
 
+    using PhotoContest.App.Models.ViewModels.Invitation;
     using PhotoContest.App.Models.ViewModels.User;
     using PhotoContest.Common;
     using PhotoContest.Data.Interfaces;
@@ -20,7 +22,7 @@
         }
 
         [HttpGet]
-        [Authorize(Roles = GlobalConstants.AdminRole)]
+        [System.Web.Mvc.Authorize(Roles = GlobalConstants.AdminRole)]
         public ActionResult All()
         {
             var allUsers =
@@ -63,6 +65,21 @@
             }
 
             return this.Json("Username '" + username + "' is taken!", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetNotifications()
+        {
+            var loggedUserId = this.User.Identity.GetUserId();
+
+            var loggedUser = this.Data.Users.Find(loggedUserId);
+
+            var notifications =
+                loggedUser.PendingInvitations.Select(
+                    n => new NotificationViewModel
+                    { Sender = n.Inviter.UserName, Type = n.Type.ToString() });
+
+            return this.PartialView("_Notifications", notifications);
         }
     }
 }

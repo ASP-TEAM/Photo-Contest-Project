@@ -16,6 +16,7 @@
                 "~/Scripts/jquery.unobtrusive-ajax.js",
                 "~/Scripts/jquery.form.js",
                 "~/Scripts/jquery.noty.packaged.js",
+                "~/Scripts/jquery.signalR*",
                 "~/Scripts/Custom/notificationHelper.js",
                 "~/Scripts/Custom/ajaxHelper.js",
                 "~/Scripts/Custom/picturesUpload.js"));
