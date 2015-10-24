@@ -28,6 +28,13 @@
                 HttpMethod = "GET",
                 InsertionMode = InsertionMode.Replace
             }, new { @class = "list-group-item" })
+        @Ajax.ActionLink("All contests", "AllContests", "Contests", null,
+            new AjaxOptions()
+            {
+                UpdateTargetId = "contestsContainer",
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace
+            }, new { @class = "list-group-item" })
     </div>
     <div class="col-md-9">
         <div id="contestsContainer"></div>

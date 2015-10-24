@@ -41,8 +41,14 @@
 
         public ActionResult AllContests()
         {
-            // TODO 
-            throw new NotImplementedException();
+            var allContests =
+                this.Data.Contests.All()
+                    .OrderByDescending(c => c.StartDate)
+                    .Project()
+                    .To<ContestViewModel>()
+                    .ToList();
+
+            return this.PartialView("_AllContestsPartial", allContests);
         }
 
         [HttpGet]
@@ -180,6 +186,7 @@
             catch (InvalidOperationException e)
             {
                 messages.Add(e.Message);
+                return this.Content(e.Message);
             }
 
             this.TempData["Messages"] = messages;
@@ -264,6 +271,11 @@
             if (contest == null)
             {
                 return this.HttpNotFound("The selected contest no longer exists");
+            }
+            if (!contest.IsActive)
+            {
+                //TODO show reward's given for this contest
+                throw new NotImplementedException("This contest is not active");
             }
 
             var currentUserId = this.User.Identity.GetUserId();

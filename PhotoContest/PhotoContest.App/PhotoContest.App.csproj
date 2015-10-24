@@ -314,6 +314,8 @@
     <Content Include="Views\Contests\_InactiveContestsPartial.cshtml" />
     <Content Include="Views\Contests\Contests.cshtml" />
     <Content Include="Views\Contests\_InactiveContestPartial.cshtml" />
+    <Content Include="Views\Contests\_AllContestsPartial.cshtml" />
+    <Content Include="Views\Contests\_AllContestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />

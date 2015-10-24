@@ -9,7 +9,10 @@
     <div class="panel-body">
         @Model.Description
     </div>
-    <div >
-        @Html.ActionLink("Participate", "Join", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })
-    </div>
+    @if (Model.IsActive)
+    {
+        <div>
+            @Html.ActionLink("Participate", "Join", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })
+        </div>
+    }
 </div>

@@ -77,3 +77,8 @@ a:hover {
 .alert {
     margin-bottom: 2px;
 }
+
+.contest-panel {
+    height: 142px;
+    max-height: 150px;
+}
