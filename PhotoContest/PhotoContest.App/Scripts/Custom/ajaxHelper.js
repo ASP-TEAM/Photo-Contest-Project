@@ -56,7 +56,9 @@
 
         if ($(input.target).val().length > 0) {
             $.get("/Users/IsUsernameAvailable/?username=" + $(input.target).val(), function (result) {
-                $("#usernameCheckResult").html(result);
+                if (result !== true) {
+                    $("#usernameCheckResult").html(result);
+                }
             });
         }
     });
