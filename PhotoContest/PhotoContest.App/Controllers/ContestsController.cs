@@ -1,5 +1,6 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    #region
     using System;
     using System.Net;
     using System.Web;
@@ -27,6 +28,7 @@
     using PhotoContest.App.Models.ViewModels.Invitation;
     using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Models.Enums;
+    #endregion
 
     public class ContestsController : BaseController
     {
@@ -35,6 +37,18 @@
         public ContestsController(IPhotoContestData data)
             : base(data)
         {
+        }
+
+        public ActionResult AllContests()
+        {
+            // TODO 
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public ActionResult Contests()
+        {
+            return this.View();
         }
 
         [HttpGet]
@@ -52,7 +66,19 @@
                 .To<ContestViewModel>()
                 .ToList();
 
-            return this.View(activeContests);
+            return this.PartialView(activeContests);
+        }
+
+        [HttpGet]
+        public ActionResult InactiveContests()
+        {
+            var activeContests = this.Data.Contests.All()
+                  .Where(c => c.IsActive == false)
+                  .Project()
+                  .To<ContestViewModel>()
+                  .ToList();
+
+            return this.PartialView("_InactiveContestsPartial", activeContests);
         }
 
         [HttpGet]
@@ -67,7 +93,7 @@
                 .ToList();
 
 
-            return this.View(myContests);
+            return this.PartialView(myContests);
         }
 
         [HttpGet]
@@ -96,20 +122,20 @@
             var loggedUserId = this.User.Identity.GetUserId();
 
             var contest = new Contest
-                              {
-                                  Title = model.Title,
-                                  Description = model.Description,
-                                  IsActive = true,
-                                  RewardStrategyId = model.RewardStrategyId,
-                                  VotingStrategyId = model.VotingStrategyId,
-                                  ParticipationStrategyId = model.ParticipationStrategyId,
-                                  DeadlineStrategyId = model.DeadlineStrategyId,
-                                  ParticipantsLimit = model.ParticipantsLimit,
-                                  IsOpenForSubmissions = true,
-                                  StartDate = DateTime.Now,
-                                  EndDate = model.EndDate,
-                                  OrganizatorId = loggedUserId,
-                              };
+            {
+                Title = model.Title,
+                Description = model.Description,
+                IsActive = true,
+                RewardStrategyId = model.RewardStrategyId,
+                VotingStrategyId = model.VotingStrategyId,
+                ParticipationStrategyId = model.ParticipationStrategyId,
+                DeadlineStrategyId = model.DeadlineStrategyId,
+                ParticipantsLimit = model.ParticipantsLimit,
+                IsOpenForSubmissions = true,
+                StartDate = DateTime.Now,
+                EndDate = model.EndDate,
+                OrganizatorId = loggedUserId,
+            };
 
             this.Data.Contests.Add(contest);
             this.Data.SaveChanges();
@@ -201,7 +227,7 @@
 
                 this.DeadlineStrategy.Deadline(this.Data, contest, user);
 
-                foreach(var file in files)
+                foreach (var file in files)
                 {
                     var base64PictureString = GetBase64String(file);
 
@@ -214,14 +240,8 @@
 
                     this.Data.Pictures.Add(picture);
                 }
-                
-                this.Data.SaveChanges();
 
-                //var viewModel = new PictureViewModel()
-                //{
-                //    User = user.UserName,
-                //    Url = picture.Url
-                //};
+                this.Data.SaveChanges();
 
                 this.Response.StatusCode = 200;
 
@@ -239,6 +259,7 @@
         [HttpGet]
         public ActionResult PreviewContest(int id)
         {
+            // TODO Change login based on is contest active or not!
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
@@ -365,13 +386,13 @@
             }
 
             var invitation = new Invitation
-                                 {
-                                     ContestId = contestId,
-                                     InviterId = loggedUser.Id,
-                                     InvitedId = userToInvite.Id,
-                                     DateOfInvitation = DateTime.Now,
-                                     Type = type,
-                                     Status = InvitationStatus.Neutral
+            {
+                ContestId = contestId,
+                InviterId = loggedUser.Id,
+                InvitedId = userToInvite.Id,
+                DateOfInvitation = DateTime.Now,
+                Type = type,
+                Status = InvitationStatus.Neutral
             };
 
             userToInvite.PendingInvitations.Add(invitation);

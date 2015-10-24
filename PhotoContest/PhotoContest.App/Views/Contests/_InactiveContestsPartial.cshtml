@@ -1,15 +1,12 @@
 ﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.Contest.ContestViewModel>
-@{
-    ViewBag.Title = "Active Contests";
-}
 
-
-<h2>Active Contests</h2>
 <div class="row">
+    <h2>Inactive Contests</h2>
+    
     @foreach (var contest in Model)
     {
         <div class="col-md-4">
-            @Html.Partial("_ActiveContest", contest);
+            @Html.Partial("_InactiveContestPartial", contest)
         </div>
     }
 </div>

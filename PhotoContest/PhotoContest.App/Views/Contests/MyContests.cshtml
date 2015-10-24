@@ -3,15 +3,13 @@
     ViewBag.Title = "My Contests";
 }
 
-
-<div class="contests">
-    <h2>My Contests</h2>
-    <div class="row">
-        @foreach (var contest in Model)
-        {
-            <div class="col-md-4">@Html.Partial("_MyContest", contest)</div>
-        }
-    </div>
+<h2>My Contests</h2>
+<div class="row">
+    @foreach (var contest in Model)
+    {
+        <div class="col-md-4">@Html.Partial("_MyContest", contest)</div>
+    }
 </div>
 
-<a href="@Url.Action("ActiveContests", "Contests")" class="btn btn-primary">All contests</a>
+
+

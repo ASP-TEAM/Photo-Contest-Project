@@ -311,6 +311,9 @@
     <Content Include="Views\Contests\_InviteUsersForm.cshtml" />
     <Content Include="Views\Shared\_Notification.cshtml" />
     <Content Include="Views\Shared\_Notifications.cshtml" />
+    <Content Include="Views\Contests\_InactiveContestsPartial.cshtml" />
+    <Content Include="Views\Contests\Contests.cshtml" />
+    <Content Include="Views\Contests\_InactiveContestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />
