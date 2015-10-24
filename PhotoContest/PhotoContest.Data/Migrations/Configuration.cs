@@ -79,15 +79,32 @@ namespace PhotoContest.Data.Migrations
 
         private void SeedStrategies(PhotoContestDbContext context)
         {
-            var dlStrategy = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByNumberOfParticipants };
-            var rwStrategy = new RewardStrategy { RewardStrategyType = RewardStrategyType.SingleWinner };
-            var vStrategy = new VotingStrategy { VotingStrategyType = VotingStrategyType.Closed };
-            var plStrategy = new ParticipationStrategy { ParticipationStrategyType = ParticipationStrategyType.Closed };
+            var dlStrategyByNumber = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByNumberOfParticipants, Name = "ByNumberOfParticipants" };
+            var dlStrategyByTime = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByTime, Name = "ByTime" };
 
-            context.DeadlineStrategies.AddOrUpdate(dl => dl.DeadlineStrategyType, dlStrategy);
-            context.RewardStrategies.AddOrUpdate(rw => rw.RewardStrategyType, rwStrategy);
-            context.VotingStrategies.AddOrUpdate(v => v.VotingStrategyType, vStrategy);
-            context.ParticipationStrategies.AddOrUpdate(pl => pl.ParticipationStrategyType, plStrategy);
+            var rwStrategySingle = new RewardStrategy { RewardStrategyType = RewardStrategyType.SingleWinner, Name = "SingleWinner" };
+            var rwStrategyTopN = new RewardStrategy { RewardStrategyType = RewardStrategyType.TopNPrizes, Name = "TopNPrizes" };
+
+            var vStrategyOpen = new VotingStrategy { VotingStrategyType = VotingStrategyType.Open, Name  = "Open" };
+            var vStrategyClosed = new VotingStrategy { VotingStrategyType = VotingStrategyType.Closed, Name = "Closed" };
+
+            var plStrategyOpen = new ParticipationStrategy { ParticipationStrategyType = ParticipationStrategyType.Open, Name = "Open" };
+            var plStrategyClosed = new ParticipationStrategy { ParticipationStrategyType = ParticipationStrategyType.Closed, Name = "Closed" };
+
+            context.DeadlineStrategies.AddOrUpdate(dl => dl.DeadlineStrategyType, dlStrategyByNumber);
+            context.DeadlineStrategies.AddOrUpdate(dl => dl.DeadlineStrategyType, dlStrategyByTime);
+
+            context.RewardStrategies.AddOrUpdate(rw => rw.RewardStrategyType, rwStrategySingle);
+            context.RewardStrategies.AddOrUpdate(rw => rw.RewardStrategyType, rwStrategyTopN);
+
+            context.VotingStrategies.AddOrUpdate(v => v.VotingStrategyType, vStrategyOpen);
+
+            context.VotingStrategies.AddOrUpdate(v => v.VotingStrategyType, vStrategyClosed);
+            context.VotingStrategies.AddOrUpdate(v => v.VotingStrategyType, vStrategyClosed);
+
+            context.ParticipationStrategies.AddOrUpdate(pl => pl.ParticipationStrategyType, plStrategyOpen);
+            context.ParticipationStrategies.AddOrUpdate(pl => pl.ParticipationStrategyType, plStrategyClosed);
+
             context.SaveChanges();
         }
 

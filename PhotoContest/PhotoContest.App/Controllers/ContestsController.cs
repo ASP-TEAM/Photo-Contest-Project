@@ -386,14 +386,14 @@
             }
 
             var invitation = new Invitation
-            {
-                ContestId = contestId,
-                InviterId = loggedUser.Id,
-                InvitedId = userToInvite.Id,
-                DateOfInvitation = DateTime.Now,
-                Type = type,
-                Status = InvitationStatus.Neutral
-            };
+                                    {
+                                        ContestId = contestId,
+                                        InviterId = loggedUser.Id,
+                                        InvitedId = userToInvite.Id,
+                                        DateOfInvitation = DateTime.Now,
+                                        Type = type,
+                                        Status = InvitationStatus.Neutral
+                                    };
 
             userToInvite.PendingInvitations.Add(invitation);
             loggedUser.SendedInvitations.Add(invitation);
