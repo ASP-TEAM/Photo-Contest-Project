@@ -51,7 +51,7 @@
         });
     });
 
-    $("#Username").keyup(function (input) {
+    $("#registerForm #Username").keyup(function (input) {
         $("#usernameCheckResult").html("");
 
         if ($(input.target).val().length > 0) {

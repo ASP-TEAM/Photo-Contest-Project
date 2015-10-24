@@ -8,8 +8,8 @@ namespace PhotoContest.Data
     using Microsoft.AspNet.Identity.EntityFramework;
 
     using PhotoContest.Data.Interfaces;
-    using PhotoContest.Data.Migrations;
     using PhotoContest.Models;
+    using PhotoContest.Data.Migrations;
 
     #endregion
 
@@ -18,6 +18,8 @@ namespace PhotoContest.Data
         public PhotoContestDbContext()
             : base("PhotoContestDbContext")
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<PhotoContestDbContext, Configuration>());
+
         }
 
         public virtual IDbSet<RewardStrategy> RewardStrategies { get; set; }

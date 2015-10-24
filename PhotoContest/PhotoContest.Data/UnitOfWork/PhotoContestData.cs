@@ -19,7 +19,6 @@
             this.repositories = new Dictionary<Type, object>();
         }
 
-
         public IRepository<User> Users
         {
             get
