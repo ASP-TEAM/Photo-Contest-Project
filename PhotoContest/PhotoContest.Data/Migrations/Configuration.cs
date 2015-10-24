@@ -40,24 +40,27 @@ namespace PhotoContest.Data.Migrations
 
         private void SeedContest(PhotoContestDbContext context)
         {
-            var testContest = new Contest
+            if (!context.Contests.Any())
             {
-                Title = "TestContest",
-                Description = "TestDescription",
-                IsActive = true,
-                IsOpenForSubmissions = true,
-                StartDate = new DateTime(2015, 10, 10),
-                SubmissionDate = DateTime.Now,
-                EndDate = new DateTime(2015, 10, 15),
-                RewardStrategyId = context.RewardStrategies.FirstOrDefault().Id,
-                VotingStrategyId = context.VotingStrategies.FirstOrDefault().Id,
-                ParticipationStrategyId = context.ParticipationStrategies.FirstOrDefault().Id,
-                DeadlineStrategyId = context.DeadlineStrategies.FirstOrDefault().Id,
-                OrganizatorId = context.Users.FirstOrDefault().Id
-            };
+                var testContest = new Contest
+                {
+                    Title = "TestContest",
+                    Description = "TestDescription",
+                    IsActive = true,
+                    IsOpenForSubmissions = true,
+                    StartDate = new DateTime(2015, 10, 10),
+                    SubmissionDate = DateTime.Now,
+                    EndDate = new DateTime(2015, 10, 15),
+                    RewardStrategyId = context.RewardStrategies.FirstOrDefault().Id,
+                    VotingStrategyId = context.VotingStrategies.FirstOrDefault().Id,
+                    ParticipationStrategyId = context.ParticipationStrategies.FirstOrDefault().Id,
+                    DeadlineStrategyId = context.DeadlineStrategies.FirstOrDefault().Id,
+                    OrganizatorId = context.Users.FirstOrDefault().Id
+                };
 
-            context.Contests.AddOrUpdate(c => c.Title, testContest);
-            context.SaveChanges();
+                context.Contests.AddOrUpdate(c => c.Title, testContest);
+                context.SaveChanges();
+            }
         }
 
         private void SeedAdminUser(PhotoContestDbContext context)

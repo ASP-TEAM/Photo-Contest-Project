@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Contests";
+}
+
+<h2>Contests</h2>
+
+<div class="row">
+    <div class="list-group col-md-3">
+        @Ajax.ActionLink("Active contests", "ActiveContests", "Contests", null,
+            new AjaxOptions()
+            {
+                UpdateTargetId = "contestsContainer",
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace
+            }, new { @class = "list-group-item" })
+        @Ajax.ActionLink("Non active contests", "InactiveContests", "Contests", null,
+            new AjaxOptions()
+            {
+                UpdateTargetId = "contestsContainer",
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace
+            }, new { @class = "list-group-item" })
+        @Ajax.ActionLink("My contests", "MyContests", "Contests", null,
+            new AjaxOptions()
+            {
+                UpdateTargetId = "contestsContainer",
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace
+            }, new { @class = "list-group-item" })
+    </div>
+    <div class="col-md-9">
+        <div id="contestsContainer"></div>
+    </div>
+</div>

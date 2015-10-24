@@ -23,8 +23,8 @@
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("My Contests", "MyContests", "Contests")</li>
                         <li>@Html.ActionLink("New Contest", "NewContest", "Contests")</li>
+                        <li>@Html.ActionLink("See Contests", "Contests", "Contests")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

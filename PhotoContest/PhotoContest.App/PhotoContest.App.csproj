@@ -296,6 +296,9 @@
     <Content Include="Views\Contests\ManageContestForm.cshtml" />
     <Content Include="Views\Contests\_UpdateContestDataForm.cshtml" />
     <Content Include="Views\Contests\_InviteUsersForm.cshtml" />
+    <Content Include="Views\Contests\_InactiveContestsPartial.cshtml" />
+    <Content Include="Views\Contests\Contests.cshtml" />
+    <Content Include="Views\Contests\_InactiveContestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />
