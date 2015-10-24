@@ -61,7 +61,7 @@
         {
             if (String.IsNullOrWhiteSpace(username) || !this.Data.Users.All().Any(u => u.UserName == username))
             {
-                return this.Json("", JsonRequestBehavior.AllowGet);
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
 
             return this.Json("Username '" + username + "' is taken!", JsonRequestBehavior.AllowGet);
