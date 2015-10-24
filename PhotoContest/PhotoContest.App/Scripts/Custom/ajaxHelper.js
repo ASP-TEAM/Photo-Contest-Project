@@ -31,19 +31,34 @@
 
     $('#invite-user-username').keyup(function(e) {
         var searchTerm = e.target.value;
+
         $.ajax({
             url: "/users/AutoCompleteUsername?searchTerm=" + searchTerm,
             method: "GET",
-            success: function(results) {
-                $('#suggestions').html('');
-                $('#suggestions').css('display', 'initial');
+            success: function (results) {
+                if (results.length > 0) {
+                    $('#suggestions').html('');
+                    $('#suggestions').css('display', 'initial');
 
-                for (var result in results) {
-                    $('#suggestions')
-                        .append('<li data-toggle="tab" onclick=ajaxHelper.autoComplete("' + results[result] + '")>' + results[result] + '</li>');
+                    for (var result in results) {
+                        $('#suggestions')
+                            .append('<li data-toggle="tab" onclick=ajaxHelper.autoComplete("' + results[result] + '")>' + results[result] + '</li>');
+                    }
+                } else {
+                    $('#suggestions').css('display', 'none');
                 }
-            }
+            },
         });
+    });
+
+    $("#Username").keyup(function (input) {
+        $("#usernameCheckResult").html("");
+
+        if ($(input.target).val().length > 0) {
+            $.get("/Users/IsUsernameAvailable/?username=" + $(input.target).val(), function (result) {
+                $("#usernameCheckResult").html(result);
+            });
+        }
     });
 
     function autoComplete(value) {

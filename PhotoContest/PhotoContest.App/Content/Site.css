@@ -70,3 +70,7 @@ a:hover {
 #invite-user-username {
     display: inline-block;
 }
+
+#usernameCheckResult {
+    color: #ff0000;
+}
