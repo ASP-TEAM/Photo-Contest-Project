@@ -21,8 +21,8 @@
         {
         }
 
+        [Authorize(Roles = GlobalConstants.AdminRole)]
         [HttpGet]
-        [System.Web.Mvc.Authorize(Roles = GlobalConstants.AdminRole)]
         public ActionResult All()
         {
             var allUsers =
@@ -38,17 +38,19 @@
             return this.View(allUsers);
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult AutoCompleteUsername(string searchTerm)
         {
-
             if (searchTerm.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
+            var username = this.User.Identity.GetUserName();
+
             var matchingUsers = this.Data.Users.All()
-                .Where(u => searchTerm.Length <= u.UserName.Length && u.UserName.ToLower().Substring(0, searchTerm.Length) == searchTerm.ToLower())
+                .Where(u => u.UserName != username && searchTerm.Length <= u.UserName.Length && u.UserName.ToLower().Substring(0, searchTerm.Length) == searchTerm.ToLower())
                 .Select(u => u.UserName)
                 .Take(5)
                 .ToList();
@@ -67,12 +69,11 @@
             return this.Json("Username '" + username + "' is taken!", JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult GetNotifications()
         {
-            var loggedUserId = this.User.Identity.GetUserId();
-
-            var loggedUser = this.Data.Users.Find(loggedUserId);
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             var notifications =
                 loggedUser.PendingInvitations.Select(

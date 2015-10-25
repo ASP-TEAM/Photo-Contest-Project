@@ -1,4 +1,4 @@
-﻿@model PhotoContest.App.Models.BindingModels.Contest.CreateContestBindingModel
+﻿@model PhotoContest.App.Models.ViewModels.Contest.CreateContestViewModel
 
 @{
     ViewBag.Title = "NewContest";
@@ -18,14 +18,14 @@
         <div class="form-group">
             @Html.LabelFor(c => c.Title, new { @class = "col-lg-2 control-label" })
             <div class="col-lg-10">
-                @Html.TextBoxFor(c => c.Title, new { @class = "form-control" })
+                @Html.TextBoxFor(c => c.Title, new { @class = "form-control"})
                 @Html.ValidationMessageFor(c => c.Title, string.Empty, new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(c => c.Description, new { @class = "col-lg-2 control-label" })
             <div class="col-lg-10">
-                @Html.TextAreaFor(c => c.Description, new { @class = "form-control" })
+                @Html.TextAreaFor(c => c.Description, new { @class = "form-control"})
                 @Html.ValidationMessageFor(c => c.Description, string.Empty, new { @class = "text-danger" })
 
             </div>
@@ -34,8 +34,7 @@
             <label for="RewardStrategyId" class="col-lg-2 control-label">Reward Strategy</label>
             <div class="col-lg-10">
                 <select class="form-control" id="RewardStrategyId" name="RewardStrategyId">
-                    <option value="1">Single winner</option>
-                    <option value="2">Top N prizes</option>
+                    @Html.Partial("_StrategyPartial", Model.RewardStrategies);
                 </select>
             </div>
         </div>
@@ -43,8 +42,7 @@
             <label for="VotingStrategyId" class="col-lg-2 control-label">Voting Strategy</label>
             <div class="col-lg-10">
                 <select class="form-control" id="VotingStrategyId" name="VotingStrategyId">
-                    <option value="1">Open</option>
-                    <option value="2">Closed</option>
+                    @Html.Partial("_StrategyPartial", Model.VotingStrategies);
                 </select>
             </div>
         </div>
@@ -52,8 +50,7 @@
             <label for="ParticipationStrategyId" class="col-lg-2 control-label">Participation Strategy</label>
             <div class="col-lg-10">
                 <select class="form-control" id="ParticipationStrategyId" name="ParticipationStrategyId">
-                    <option value="1">Open</option>
-                    <option value="2">Closed</option>
+                    @Html.Partial("_StrategyPartial", Model.ParticipationStrategies);
                 </select>
             </div>
         </div>
@@ -61,8 +58,7 @@
             <label for="DeadlineStrategyId" class="col-lg-2 control-label">Deadline Strategy</label>
             <div class="col-lg-10">
                 <select class="form-control" id="DeadlineStrategyId" name="DeadlineStrategyId">
-                    <option value="2">By time</option>
-                    <option value="1">By number of participants</option>
+                    @Html.Partial("_StrategyPartial", Model.DeadlineStrategies);
                 </select>
             </div>
         </div>
@@ -80,7 +76,6 @@
                 @Html.TextBoxFor(c => c.EndDate,
                 new { @class = "form-control", type = "date" })
                 @Html.ValidationMessageFor(c => c.EndDate, string.Empty, new { @class = "text-danger" })
-
             </div>
         </div>
         <div class="form-group">

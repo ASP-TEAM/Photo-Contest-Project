@@ -6,7 +6,6 @@
 
     using Microsoft.AspNet.Identity;
 
-    using PhotoContest.App.Models.ViewModels;
     using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Strategies;
@@ -14,8 +13,6 @@
 
     public class PicturesController : BaseController
     {
-        private const int MaxImageSize = 1000000;
-
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
@@ -34,8 +31,8 @@
             return this.View(pictures);
         }
 
-        [HttpGet]
         [Authorize]
+        [HttpPost]
         public ActionResult Vote(int id)
         {
             // TODO change to HTTPPOST

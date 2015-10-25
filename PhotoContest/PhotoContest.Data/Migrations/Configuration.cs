@@ -79,11 +79,11 @@ namespace PhotoContest.Data.Migrations
 
         private void SeedStrategies(PhotoContestDbContext context)
         {
-            var dlStrategyByNumber = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByNumberOfParticipants, Name = "ByNumberOfParticipants" };
-            var dlStrategyByTime = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByTime, Name = "ByTime" };
+            var dlStrategyByNumber = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByNumberOfParticipants, Name = "By Number Of Participants" };
+            var dlStrategyByTime = new DeadlineStrategy { DeadlineStrategyType = DeadlineStrategyType.ByTime, Name = "By Time" };
 
-            var rwStrategySingle = new RewardStrategy { RewardStrategyType = RewardStrategyType.SingleWinner, Name = "SingleWinner" };
-            var rwStrategyTopN = new RewardStrategy { RewardStrategyType = RewardStrategyType.TopNPrizes, Name = "TopNPrizes" };
+            var rwStrategySingle = new RewardStrategy { RewardStrategyType = RewardStrategyType.SingleWinner, Name = "Single Winner" };
+            var rwStrategyTopN = new RewardStrategy { RewardStrategyType = RewardStrategyType.TopNPrizes, Name = "Top N Prizes" };
 
             var vStrategyOpen = new VotingStrategy { VotingStrategyType = VotingStrategyType.Open, Name  = "Open" };
             var vStrategyClosed = new VotingStrategy { VotingStrategyType = VotingStrategyType.Closed, Name = "Closed" };

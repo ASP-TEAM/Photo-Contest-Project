@@ -21,12 +21,9 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
-    using Microsoft.AspNet.SignalR;
-
-    using PhotoContest.App.Hubs;
     using PhotoContest.App.Models.ViewModels.Contest;
     using PhotoContest.App.Models.ViewModels.Invitation;
-    using PhotoContest.App.Models.ViewModels.Picture;
+    using PhotoContest.App.Models.ViewModels.Strategy;
     using PhotoContest.Models.Enums;
     #endregion
 
@@ -87,6 +84,7 @@
             return this.PartialView("_InactiveContestsPartial", activeContests);
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult MyContests()
         {
@@ -98,18 +96,36 @@
                 .To<ContestViewModel>()
                 .ToList();
 
-
             return this.PartialView(myContests);
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult NewContest()
         {
-            return this.View("NewContestForm");
+            var viewModel = new CreateContestViewModel();
+
+            viewModel.RewardStrategies = this.Data.RewardStrategies.All()
+                .Select(r => new StrategyViewModel() { Id = r.Id, Description = r.Description, Name = r.Name })
+                .ToList();
+
+            viewModel.ParticipationStrategies = this.Data.ParticipationStrategies.All()
+                .Select(p => new StrategyViewModel() { Id = p.Id, Description = p.Description, Name = p.Name })
+                .ToList();
+
+            viewModel.VotingStrategies = this.Data.VotingStrategies.All()
+                .Select(v => new StrategyViewModel() { Id = v.Id, Description = v.Description, Name = v.Name })
+                .ToList();
+
+            viewModel.DeadlineStrategies = this.Data.DeadlineStrategies.All()
+                .Select(dl => new StrategyViewModel() { Id = dl.Id, Description = dl.Description, Name = dl.Name})
+                .ToList();
+
+            return this.View("NewContestForm", viewModel);
         }
 
+        [Authorize]
         [HttpPost]
-        [System.Web.Mvc.Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult CreateContest(CreateContestBindingModel model)
         {
@@ -149,11 +165,11 @@
             return new HttpStatusCodeResult(200);
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult Join(int id)
         {
-            var currentUser = this.User.Identity.GetUserId();
-            var user = this.Data.Users.Find(currentUser);
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
             var contest = this.Data.Contests.Find(id);
 
             var messages = new List<string>();
@@ -194,9 +210,9 @@
             return null;
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [System.Web.Mvc.Authorize]
         public ActionResult Upload(int id)
         {
             if (this.Request.Files.Count < 1)
@@ -268,10 +284,12 @@
         {
             // TODO Change login based on is contest active or not!
             var contest = this.Data.Contests.Find(id);
+
             if (contest == null)
             {
                 return this.HttpNotFound("The selected contest no longer exists");
             }
+
             if (!contest.IsActive)
             {
                 //TODO show reward's given for this contest
@@ -290,6 +308,7 @@
             return this.View(contestViewModel);
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult ManageContest(int id)
         {
@@ -313,6 +332,7 @@
             return this.View("ManageContestForm", contestBindingModel);
         }
 
+        [Authorize]
         [HttpPatch]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateContest(UpdateContestBindingModel model)
@@ -366,11 +386,25 @@
             return this.Content("Contest updated successfully");
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult InviteUser(string username, int contestId, InvitationType type)
         {
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+            var contest = this.Data.Contests.Find(contestId);
+
+            if (contest == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("Contest with id {0} not found", contestId));
+            }
+
+            if (!contest.IsOpenForSubmissions)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("The contest is closed for submissions/registrations.");
+            }
+
             var userToInvite = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
 
             if (userToInvite == null)
@@ -379,11 +413,7 @@
                 return this.Content(string.Format("User with username {0} not found", username));
             }
 
-            if (!this.Data.Contests.All().Any(c => c.Id == contestId))
-            {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("Contest with id {0} not found", contestId));
-            }
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (userToInvite.UserName == loggedUser.UserName)
             {
@@ -411,13 +441,13 @@
             loggedUser.SendedInvitations.Add(invitation);
             this.Data.SaveChanges();
 
-            var notifiction = new NotificationViewModel
+            var notification = new NotificationViewModel
                                   {
                                       Sender = loggedUser.UserName,
                                       Type = type.ToString()
                                   };
 
-            this.HubContext.Clients.User(username).notificationReceived(this.RenderViewToString("_Notification", notifiction));
+            this.HubContext.Clients.User(username).notificationReceived(this.RenderViewToString("_Notification", notification));
 
             this.Response.StatusCode = 200;
 
