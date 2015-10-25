@@ -7,27 +7,27 @@ Design
 	-Design/graph web page layout ( headers/ footers/ asides/ body ...)
 
 Contests
-	-Create a contest
+	[done]-Create a contest
 	-View participants list
-	-List active contests
-	-List not active contests
-	-Update a contest (if they are the owners)
+	[done]-List active contests
+	[done]-List not active contests
+	[done]-Update a contest (if they are the owners)
 	-Dismiss a contest – stop the contest and select no winners
 	-Finalize a contest – initialize the end of the contest and choose a winner / winners in accordance with its voting strategy
 	-Show contest results (winners/votes)
 	
 Users
-	-Register for a contest
-	-Preview contest (if the user is not registered, offer registration; 
+	[done]-Register for a contest
+	[done]-Preview contest (if the user is not registered, offer registration; 
 		if registration is not possible, enable viewing the already uploaded photos.)
 	-Invite user for a contest (send notification) (SignalR??)
 	-Accept/Reject invitation for a contest  (SignalR??)
 	-Invite user to a voting committee
 
 Pictures
-	-Upload Picture in contest
+	[done]-Upload Picture in contest
 	-Delete Picture from contest
-	-Vote for a picture
+	[done]-Vote for a picture
 
 Administration
 	-All above
