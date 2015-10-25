@@ -63,6 +63,18 @@
         }
     });
 
+    $("#registerForm #Email").keyup(function (input) {
+        $("#emailCheckResult").html("");
+
+        if ($(input.target).val().length > 0) {
+            $.get("/Users/IsEmailAvailable/?email=" + $(input.target).val(), function (result) {
+                if (result !== true) {
+                    $("#emailCheckResult").html(result);
+                }
+            });
+        }
+    });
+
     $('#notifications-button').click(function () {
         $('#notifications').toggle();
     });

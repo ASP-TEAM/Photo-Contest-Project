@@ -75,12 +75,13 @@ namespace PhotoContest.App.Models.ViewModels
     {
         [Required]
         [EmailAddress]
+        [Remote("IsEmailAvailable", "Users")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [Display(Name = "Username")]
         [Remote("IsUsernameAvailable", "Users")]
+        [Display(Name = "Username")]
         public string Username { get; set; }
 
         [Required]

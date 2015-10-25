@@ -66,7 +66,18 @@
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
 
-            return this.Json("Username '" + username + "' is taken!", JsonRequestBehavior.AllowGet);
+            return this.Json("Username '" + username + "' is already taken!", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult IsEmailAvailable(string email)
+        {
+            if (String.IsNullOrWhiteSpace(email) || !this.Data.Users.All().Any(u => u.Email == email))
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+
+            return this.Json("Email '" + email + "' is already taken!", JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
