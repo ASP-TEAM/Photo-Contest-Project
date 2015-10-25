@@ -63,6 +63,10 @@
         }
     });
 
+    $('#notifications-button').click(function () {
+        $('#notifications').toggle();
+    });
+
     function autoComplete(value) {
         $('#invite-user-username').val(value);
         $('#suggestions').html('');

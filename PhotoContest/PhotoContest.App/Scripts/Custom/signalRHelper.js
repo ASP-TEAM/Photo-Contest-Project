@@ -4,7 +4,10 @@
 
     (function() {
         hub.client.notificationReceived = function (invitation) {
-            $('.notifications').append(invitation);
+            var notifications = $('#notifications');
+            notifications.prepend(invitation);
+            notifications.children().first().css("background-color", "#4ebf50");
+            notifications.show();
         }
     }());
 

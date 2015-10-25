@@ -6,6 +6,12 @@
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
+            <li id="notifications-button">
+                @Ajax.ActionLink("Notifications", "GetNotifications", "Users", new AjaxOptions
+                       {
+                           UpdateTargetId = "notifications"
+                       })
+            </li>
             <li>
                 @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", new { Area = string.Empty }, new { title = "Manage" })
             </li>

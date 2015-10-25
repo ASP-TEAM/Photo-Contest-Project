@@ -31,15 +31,7 @@
             </div>
         </div>
     </div>
-<div class="notifications">
-    @{
-        if (User.Identity.IsAuthenticated)
-        {
-            Html.RenderAction("GetNotifications", "Users");
-        }
-    }
-</div>
-
+<div id="notifications"></div>
 <div class="container body-content">
         @RenderBody()
         <hr />
