@@ -141,6 +141,26 @@
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
 
+            if (this.Data.RewardStrategies.Find(model.RewardStrategyId) == null)
+            {
+                throw new ArgumentException("Not existing reward strategy");
+            }
+
+            if (this.Data.ParticipationStrategies.Find(model.ParticipantsLimit) == null)
+            {
+                throw new ArgumentException("Not existing participation strategy");
+            }
+
+            if (this.Data.VotingStrategies.Find(model.VotingStrategyId) == null)
+            {
+                throw new ArgumentException("Not existing voting strategy");
+            }
+
+            if (this.Data.DeadlineStrategies.Find(model.DeadlineStrategyId) == null)
+            {
+                throw new ArgumentException("Not existing deadline strategy");
+            }
+
             var loggedUserId = this.User.Identity.GetUserId();
 
             var contest = new Contest
