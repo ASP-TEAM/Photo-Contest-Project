@@ -90,3 +90,8 @@ a:hover {
     height: 142px;
     max-height: 150px;
 }
+
+.invitation {
+    margin-top: 20px;
+    width: 50%;
+}

@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using Microsoft.Ajax.Utilities;
@@ -13,6 +14,8 @@
     using PhotoContest.App.Models.ViewModels.User;
     using PhotoContest.Common;
     using PhotoContest.Data.Interfaces;
+    using PhotoContest.Models;
+    using PhotoContest.Models.Enums;
 
     public class UsersController : BaseController
     {
@@ -75,12 +78,91 @@
         {
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
-            var notifications =
-                loggedUser.PendingInvitations.Select(
+            var notifications = loggedUser.PendingInvitations
+                .Where(n => n.Status == InvitationStatus.Neutral)
+                .OrderByDescending(n => n.DateOfInvitation)
+                .Select(
                     n => new NotificationViewModel
-                    { Sender = n.Inviter.UserName, Type = n.Type.ToString() });
+                             {
+                                InvitationId = n.Id,
+                                Sender = n.Inviter.UserName,
+                                Type = n.Type.ToString()
+                             });
 
             return this.PartialView("_Notifications", notifications);
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult ShowInvitation(int id)
+        {
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            var invitation = loggedUser.PendingInvitations.FirstOrDefault(i => i.Id == id);
+
+            if (invitation == null)
+            {
+                return this.HttpNotFound(string.Format("Invitation with id {0} does not exist", id));
+            }
+
+            var invitationView = Mapper.Map<Invitation, InvitationViewModel>(invitation);
+
+            return this.View("Invitation", invitationView);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult AcceptInvitation(int id)
+        {
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            var invitation = loggedUser.PendingInvitations.FirstOrDefault(i => i.Id == id);
+
+            if (invitation == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content(string.Format("Invitation with id {0} does not exist", id));
+            }
+
+            if (invitation.Type == InvitationType.Committee)
+            {
+                //TODO
+            }
+
+            if (invitation.Type == InvitationType.ClosedContest)
+            {
+                //TODO
+            }
+            return new HttpStatusCodeResult(200);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult RejectInvitation(int id)
+        {
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            var invitation = loggedUser.PendingInvitations.FirstOrDefault(i => i.Id == id);
+
+            if (invitation == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content(string.Format("Invitation with id {0} does not exist", id));
+            }
+
+            if (invitation.Status != InvitationStatus.Neutral)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content(string.Format("Invitation with id {0} has been already {1}", id, invitation.Status));
+            }
+
+            invitation.Status = InvitationStatus.Rejected;
+
+            this.Data.SaveChanges();
+
+            return new HttpStatusCodeResult(200);
+        }
+
+
     }
 }

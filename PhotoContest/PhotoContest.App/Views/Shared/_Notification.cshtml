@@ -2,5 +2,5 @@
 
 <div class="alert alert-dismissible alert-success">
     <button type="button" class="close" data-dismiss="alert">×</button>
-    <a href="#" class="alert-link">@Model.Sender invited you to participate in a @Model.Type</a>
+    <a href="@Url.Action("ShowInvitation", "Users", new {id = Model.InvitationId})" class="alert-link">@Model.Sender invited you to participate in a @Model.Type</a>
 </div>

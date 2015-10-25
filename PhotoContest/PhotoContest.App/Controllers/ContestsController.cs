@@ -458,7 +458,7 @@
             if (userToInvite.PendingInvitations.Any(i => i.ContestId == contestId && i.Type == type))
             {
                 this.Response.StatusCode = 400;
-                return this.Content("User is already invited and has not confirmed.");
+                return this.Content(string.Format("User is already invited to contest with id {0}", contest.Id));
             }
 
             var invitation = new Invitation
@@ -478,6 +478,7 @@
 
             var notification = new NotificationViewModel
                                   {
+                                      InvitationId = invitation.Id,
                                       Sender = loggedUser.UserName,
                                       Type = type.ToString()
                                   };

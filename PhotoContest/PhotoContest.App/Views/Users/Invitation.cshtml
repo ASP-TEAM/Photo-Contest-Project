@@ -1,0 +1,27 @@
+﻿@model PhotoContest.App.Models.ViewModels.Invitation.InvitationViewModel
+
+@{
+    ViewBag.Title = "Invitation";
+}
+
+<div class="invitation">
+    <div class="panel panel-default">
+        <div class="panel-heading">@Html.ActionLink(@Model.Contest.Title, "PreviewContest", "Contests", new { id = @Model.ContestId }, null)</div>
+        <div class="panel-body">
+            <p>Description: @Model.Contest.Description</p>
+            <p>Invitation type: Participate in a @Model.Type</p>
+
+            <p>Inviter: @Model.Inviter.UserName</p>
+
+            @Ajax.ActionLink("Accept", "Join", "Contests", 
+           new { id = @Model.ContestId }, 
+           new AjaxOptions { OnFailure = "ajaxHelper.onError", OnSuccess = "ajaxHelper.onSuccess" }, 
+           new { @class = "btn btn-sm btn-success" })
+
+            @Ajax.ActionLink("Reject", "RejectInvitation", "Users", 
+           new { id = @Model.Id }, 
+           new AjaxOptions { OnFailure = "ajaxHelper.onError", OnSuccess = "ajaxHelper.onSuccess" }, 
+           new { @class = "btn btn-sm btn-danger" })
+        </div>
+    </div>
+</div>

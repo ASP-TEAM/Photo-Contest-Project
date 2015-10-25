@@ -319,6 +319,7 @@
     <Content Include="Views\Contests\_AllContestsPartial.cshtml" />
     <Content Include="Views\Contests\_AllContestPartial.cshtml" />
     <Content Include="Views\Contests\_StrategyPartial.cshtml" />
+    <Content Include="Views\Users\Invitation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />
