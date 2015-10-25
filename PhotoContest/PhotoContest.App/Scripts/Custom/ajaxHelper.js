@@ -93,10 +93,17 @@
         notificationHelper.showErrorMessage(xhr.responseText);
     }
 
+    function onReceivedNotifications(data, status, xhr) {
+        if (data.trim() === "") {
+            $("#notifications").html("<h1>No new notifications.</h1>");
+        }
+    }
+
     return {
         onSuccess: onSuccess,
         onError: onError,
-        autoComplete: autoComplete
+        autoComplete: autoComplete,
+        onReceivedNotifications: onReceivedNotifications
     }
 
 })();
