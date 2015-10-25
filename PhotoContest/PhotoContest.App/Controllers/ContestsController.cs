@@ -419,6 +419,20 @@
                 return this.Content(string.Format("Contest with id {0} not found", contestId));
             }
 
+            if (type == InvitationType.Committee 
+                && contest.VotingStrategy.VotingStrategyType != VotingStrategyType.Closed)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("The contest voting strategy type is not 'CLOSED'.");
+            }
+
+            if (type == InvitationType.ClosedContest 
+                && contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("The contest participation strategy type is not 'CLOSED'.");
+            }
+
             if (!contest.IsOpenForSubmissions)
             {
                 this.Response.StatusCode = 400;
