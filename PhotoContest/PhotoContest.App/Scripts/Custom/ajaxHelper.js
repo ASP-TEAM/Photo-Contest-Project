@@ -63,6 +63,18 @@
         }
     });
 
+    $("#registerForm #Email").keyup(function (input) {
+        $("#emailCheckResult").html("");
+
+        if ($(input.target).val().length > 0) {
+            $.get("/Users/IsEmailAvailable/?email=" + $(input.target).val(), function (result) {
+                if (result !== true) {
+                    $("#emailCheckResult").html(result);
+                }
+            });
+        }
+    });
+
     $('#notifications-button').click(function () {
         $('#notifications').toggle();
     });
@@ -81,10 +93,17 @@
         notificationHelper.showErrorMessage(xhr.responseText);
     }
 
+    function onReceivedNotifications(data, status, xhr) {
+        if (data.trim() === "") {
+            $("#notifications").html("<h1>No new notifications.</h1>");
+        }
+    }
+
     return {
         onSuccess: onSuccess,
         onError: onError,
-        autoComplete: autoComplete
+        autoComplete: autoComplete,
+        onReceivedNotifications: onReceivedNotifications
     }
 
 })();

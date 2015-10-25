@@ -9,7 +9,8 @@
             <li id="notifications-button">
                 @Ajax.ActionLink("Notifications", "GetNotifications", "Users", new AjaxOptions
                        {
-                           UpdateTargetId = "notifications"
+                           UpdateTargetId = "notifications",
+                           OnSuccess = "ajaxHelper.onReceivedNotifications"
                        })
             </li>
             <li>

@@ -71,7 +71,7 @@ a:hover {
     display: inline-block;
 }
 
-#usernameCheckResult {
+#usernameCheckResult, #emailCheckResult {
     color: #ff0000;
 }
 #notifications {
