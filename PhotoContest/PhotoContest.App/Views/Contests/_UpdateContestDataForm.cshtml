@@ -4,8 +4,8 @@
                             new AjaxOptions
                             {
                                 HttpMethod = "PATCH",
-                                OnSuccess = "ajaxHelper.onSuccess()",
-                                OnFailure = "ajaxHelper.onError()"
+                                OnSuccess = "ajaxHelper.onSuccess",
+                                OnFailure = "ajaxHelper.onError"
                             }, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()

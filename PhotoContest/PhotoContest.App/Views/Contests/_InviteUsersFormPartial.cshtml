@@ -6,8 +6,8 @@
                         new AjaxOptions
                         {
                             HttpMethod = "POST",
-                            OnSuccess = "ajaxHelper.onSuccess()",
-                            OnFailure = "ajaxHelper.onError()"
+                            OnSuccess = "ajaxHelper.onSuccess",
+                            OnFailure = "ajaxHelper.onError"
                         },
                         new { @class = "form-horizontal", name = "invite-user" }))
     {

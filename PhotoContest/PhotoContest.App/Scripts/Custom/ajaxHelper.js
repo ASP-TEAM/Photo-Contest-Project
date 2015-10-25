@@ -69,12 +69,12 @@
         $('#suggestions').css('display', 'none');
     }
 
-    function onSuccess() {
+    function onSuccess(data, status, xhr) {
         notificationHelper.showSuccessMessage("Operation successfull");
     }
 
-    function onError() {
-        notificationHelper.showErrorMessage('Error occured');
+    function onError(xhr, status, error) {
+        notificationHelper.showErrorMessage(xhr.responseText);
     }
 
     return {

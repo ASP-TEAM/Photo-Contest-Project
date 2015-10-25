@@ -76,6 +76,8 @@ a:hover {
 }
 .alert {
     margin-bottom: 2px;
+    position: fixed;
+    width: 100%;
 }
 
 .contest-panel {
