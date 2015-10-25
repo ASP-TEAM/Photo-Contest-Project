@@ -65,6 +65,7 @@
         {
             var activeContests = this.Data.Contests.All()
                 .Where(c => c.IsActive)
+                .OrderByDescending(c => c.StartDate)
                 .Project()
                 .To<ContestViewModel>()
                 .ToList();
@@ -77,6 +78,7 @@
         {
             var activeContests = this.Data.Contests.All()
                   .Where(c => c.IsActive == false)
+                  .OrderByDescending(c => c.StartDate)
                   .Project()
                   .To<ContestViewModel>()
                   .ToList();
@@ -92,6 +94,7 @@
 
             var myContests = this.Data.Contests.All()
                 .Where(c => c.OrganizatorId == loggedUserId)
+                .OrderByDescending(c => c.StartDate)
                 .Project()
                 .To<ContestViewModel>()
                 .ToList();

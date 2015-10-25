@@ -137,12 +137,12 @@
 
             if (invitation.Type == InvitationType.Committee)
             {
-                //TODO
+                // TODO
             }
 
             if (invitation.Type == InvitationType.ClosedContest)
             {
-                //TODO
+                // TODO
             }
             return new HttpStatusCodeResult(200);
         }
