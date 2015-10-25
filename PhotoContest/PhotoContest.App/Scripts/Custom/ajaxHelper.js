@@ -47,7 +47,7 @@
                 } else {
                     $('#suggestions').css('display', 'none');
                 }
-            },
+            }
         });
     });
 
@@ -95,7 +95,7 @@
 
     function onReceivedNotifications(data, status, xhr) {
         if (data.trim() === "") {
-            $("#notifications").html("<h1>No new notifications.</h1>");
+            $("#notifications").html("<div class='alert alert-dismissible alert-success'><b>No new notifications</b></div>");
         }
     }
 
