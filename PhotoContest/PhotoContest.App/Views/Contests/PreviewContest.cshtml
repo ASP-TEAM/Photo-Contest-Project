@@ -2,6 +2,12 @@
 @{
     ViewBag.Title = "PreviewContest";
 }
+<div class="row pull-right">
+    <div class="clearfix"></div>
+    <div class="col-md-12 col-md-offset-2">
+        @Html.Partial("_ContestParticipantsPartial", Model)
+    </div>
+</div>
 @if (ViewBag.isOrganizator)
 {
     @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })

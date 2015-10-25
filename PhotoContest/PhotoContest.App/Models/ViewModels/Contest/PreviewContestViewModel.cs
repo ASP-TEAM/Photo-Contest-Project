@@ -4,6 +4,7 @@
     using AutoMapper;
     using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.App.Models.ViewModels.Picture;
+    using PhotoContest.App.Models.ViewModels.User;
     using PhotoContest.Models;
 
     public class PreviewContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
@@ -18,10 +19,13 @@
 
         public IEnumerable<FullPictureViewModel> Pictures { get; set; }
 
+        public IEnumerable<MinifiedUserViewModel> Participants { get; set; } 
+
         public void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<Contest, PreviewContestViewModel>()
                .ForMember(c => c.Pictures, opt => opt.MapFrom(c => c.Pictures))
+               .ForMember(c => c.Participants, opt => opt.MapFrom(c => c.Participants))
                .ReverseMap();
         }
     }

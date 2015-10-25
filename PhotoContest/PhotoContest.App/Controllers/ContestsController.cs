@@ -314,7 +314,6 @@
             }
             if (!contest.IsActive)
             {
-                //TODO show reward's given for this contest
                 var contestWinners = 
                     this.Data.ContestWinners.All()
                     .Where(c => c.ContestId == contest.Id)

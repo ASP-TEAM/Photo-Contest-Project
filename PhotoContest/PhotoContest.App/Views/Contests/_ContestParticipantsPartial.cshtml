@@ -1,0 +1,21 @@
+﻿@model PhotoContest.App.Models.ViewModels.Contest.PreviewContestViewModel
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="list-group">
+            <a href="" class="list-group-item active">Participants</a>
+            @if (Model.Participants.Any())
+            {
+                foreach (var participant in Model.Participants)
+                {
+                    <a href="" class="list-group-item">@participant.UserName</a>
+                }
+            }
+            else
+            {
+                <a href="" class="list-group-item">No participants</a>
+            }
+        </div>
+    </div>
+</div>
