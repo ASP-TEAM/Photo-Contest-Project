@@ -312,13 +312,24 @@
             {
                 return this.HttpNotFound("The selected contest no longer exists");
             }
-
             if (!contest.IsActive)
             {
                 //TODO show reward's given for this contest
-                throw new NotImplementedException("This contest is not active");
+                var contestWinners = 
+                    this.Data.ContestWinners.All()
+                    .Where(c => c.ContestId == contest.Id)
+                    .Select(c => new ContestWinnerViewModel
+                    {
+                        Id = c.ContestId,
+                        ContestTitle = c.Contest.Title,
+                        ContestDescription = c.Contest.Description,
+                        Place = c.Place,
+                        Winner = c.Winner.UserName
+                    })
+                    .ToList();
+                return this.View("PreviewInactiveContest", contestWinners);
             }
-
+            
             var currentUserId = this.User.Identity.GetUserId();
             var isInContest = contest.Participants.Any(p => p.Id == currentUserId) ||
                                 contest.OrganizatorId == currentUserId;

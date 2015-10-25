@@ -215,6 +215,7 @@
     <Compile Include="Models\BindingModels\Contest\UpdateContestBindingModel.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestViewModel.cs" />
+    <Compile Include="Models\ViewModels\Contest\ContestWinnerViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\CreateContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\PreviewContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Invitation\InvitationViewModel.cs" />
@@ -320,6 +321,7 @@
     <Content Include="Views\Contests\_AllContestPartial.cshtml" />
     <Content Include="Views\Contests\_StrategyPartial.cshtml" />
     <Content Include="Views\Users\Invitation.cshtml" />
+    <Content Include="Views\Contests\PreviewInactiveContest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />
@@ -383,11 +385,11 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
-  <PropertyGroup>  
-	  <PostBuildEvent>  
+  <PropertyGroup>
+    <PostBuildEvent>  
 		  if not exist "$(WebProjectOutputDir)\bin\Roslyn" md "$(WebProjectOutputDir)\bin\Roslyn"  
 		  start /MIN xcopy /s /y /R "$(OutDir)roslyn\*.*" "$(WebProjectOutputDir)\bin\Roslyn"  
-	  </PostBuildEvent>  
+	  </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
