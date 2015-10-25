@@ -146,7 +146,7 @@
                 throw new ArgumentException("Not existing reward strategy");
             }
 
-            if (this.Data.ParticipationStrategies.Find(model.ParticipantsLimit) == null)
+            if (this.Data.ParticipationStrategies.Find(model.ParticipationStrategyId) == null)
             {
                 throw new ArgumentException("Not existing participation strategy");
             }
@@ -459,6 +459,7 @@
 
             userToInvite.PendingInvitations.Add(invitation);
             loggedUser.SendedInvitations.Add(invitation);
+
             this.Data.SaveChanges();
 
             var notification = new NotificationViewModel
