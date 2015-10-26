@@ -127,7 +127,7 @@
         {
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
-            var invitation = loggedUser.PendingInvitations.FirstOrDefault(i => i.Id == id);
+            var invitation = this.Data.Invitations.Find(id);
 
             if (invitation == null)
             {
@@ -135,15 +135,22 @@
                 return this.Content(string.Format("Invitation with id {0} does not exist", id));
             }
 
-            if (invitation.Type == InvitationType.Committee)
+            if (loggedUser.PendingInvitations.FirstOrDefault(i => i == invitation) == null)
             {
-                // TODO
+                this.Response.StatusCode = 400;
+                return this.Content("You are not the recipient of this invitation");
             }
 
-            if (invitation.Type == InvitationType.ClosedContest)
+            switch (invitation.Type)
             {
-                // TODO
+                case InvitationType.ClosedContest:
+                    return RedirectToAction("Join", "Contests", new {id = invitation.ContestId});
+                    break;
+                case InvitationType.Committee:
+                    return RedirectToAction("JoinCommittee", "Contests", new { id = invitation.ContestId });
+                    break;
             }
+
             return new HttpStatusCodeResult(200);
         }
 
@@ -153,12 +160,18 @@
         {
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
-            var invitation = loggedUser.PendingInvitations.FirstOrDefault(i => i.Id == id);
+            var invitation = this.Data.Invitations.Find(id);
 
             if (invitation == null)
             {
                 this.Response.StatusCode = 400;
                 return this.Content(string.Format("Invitation with id {0} does not exist", id));
+            }
+
+            if (loggedUser.PendingInvitations.FirstOrDefault(i => i == invitation) == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("You are not the recipient of this invitation");
             }
 
             if (invitation.Status != InvitationStatus.Neutral)
@@ -173,7 +186,5 @@
 
             return new HttpStatusCodeResult(200);
         }
-
-
     }
 }

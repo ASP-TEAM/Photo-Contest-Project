@@ -91,6 +91,14 @@
             }
         }
 
+        public IRepository<Invitation> Invitations
+        {
+            get
+            {
+                return this.GetRepository<Invitation>();
+            }
+        }
+
         public int SaveChanges()
         {
             return this.context.SaveChanges();

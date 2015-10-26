@@ -225,12 +225,53 @@
             catch (InvalidOperationException e)
             {
                 messages.Add(e.Message);
-                return this.Content(e.Message);
             }
 
             this.TempData["Messages"] = messages;
 
-            return null;
+            if (messages.Count > 0)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content(string.Join("\n", messages));
+            }
+
+            return new HttpStatusCodeResult(200);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult JoinCommittee(int id)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (!contest.IsActive)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("The contest is not active");
+            }
+
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            var invitation = contest.Organizator.SendedInvitations.FirstOrDefault(i => i.ContestId == contest.Id && i.InvitedId == user.Id && i.Type == InvitationType.Committee);
+
+            if (invitation == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("You don't have an invitation");
+            }
+
+            if (invitation.Status != InvitationStatus.Neutral)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("You already have responded to the invitation");
+            }
+
+            invitation.Status = InvitationStatus.Accepted;
+            contest.Committee.Add(user);
+
+            this.Data.SaveChanges();
+
+            return new HttpStatusCodeResult(200);
         }
 
         [Authorize]
@@ -483,6 +524,11 @@
                                         Type = type,
                                         Status = InvitationStatus.Neutral
                                     };
+
+            if (type == InvitationType.ClosedContest)
+            {
+                contest.InvitedUsers.Add(userToInvite);
+            }
 
             userToInvite.PendingInvitations.Add(invitation);
             loggedUser.SendedInvitations.Add(invitation);

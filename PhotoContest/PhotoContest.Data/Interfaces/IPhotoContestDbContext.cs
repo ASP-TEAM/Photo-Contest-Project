@@ -21,5 +21,7 @@
         IDbSet<Vote> Votes { get; }
 
         IDbSet<ContestWinners> ContestWinners { get; }
+
+        IDbSet<Invitation> Invitations { get; }
     }
 }

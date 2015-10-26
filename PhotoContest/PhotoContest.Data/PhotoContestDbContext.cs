@@ -31,6 +31,8 @@ namespace PhotoContest.Data
         public virtual IDbSet<Picture> Pictures { get; set; }
         public virtual IDbSet<Vote> Votes { get; set; }
         public virtual IDbSet<ContestWinners> ContestWinners { get; set; }
+
+        public virtual IDbSet<Invitation> Invitations { get; set; }
         
         public static PhotoContestDbContext Create()
         {

@@ -23,6 +23,8 @@
 
         IRepository<ContestWinners> ContestWinners { get; }
 
+        IRepository<Invitation> Invitations { get; }
+
         int SaveChanges();
     }
 }

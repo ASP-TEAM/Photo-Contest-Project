@@ -13,8 +13,8 @@
 
             <p>Inviter: @Model.Inviter.UserName</p>
 
-            @Ajax.ActionLink("Accept", "Join", "Contests", 
-           new { id = @Model.ContestId }, 
+            @Ajax.ActionLink("Accept", "AcceptInvitation", "Users", 
+           new { id = @Model.Id }, 
            new AjaxOptions { OnFailure = "ajaxHelper.onError", OnSuccess = "ajaxHelper.onSuccess" }, 
            new { @class = "btn btn-sm btn-success" })
 

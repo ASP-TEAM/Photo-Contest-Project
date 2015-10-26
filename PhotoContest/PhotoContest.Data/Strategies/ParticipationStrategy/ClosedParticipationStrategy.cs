@@ -1,6 +1,8 @@
 ﻿namespace PhotoContest.Data.Strategies.ParticipationStrategy
 {
     using System;
+    using System.Linq;
+    using PhotoContest.Models.Enums;
 
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
@@ -19,6 +21,12 @@
                 // TODO send invitation to users
                 throw new ArgumentException("The user is not selected to participate.");
             }
+
+            var invitation = user.PendingInvitations.FirstOrDefault(i => i.ContestId == contest.Id);
+
+            invitation.Status = InvitationStatus.Accepted;
+
+            data.SaveChanges();
         }
     }
 }
