@@ -8,7 +8,7 @@ Design
 
 Contests
 	[done]-Create a contest
-	-View participants list
+	[done]-View participants list
 	[done]-List active contests
 	[done]-List not active contests
 	[done]-Update a contest (if they are the owners)
