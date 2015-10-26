@@ -22,7 +22,7 @@ Users
 		if registration is not possible, enable viewing the already uploaded photos.)
 	[done]-Invite user for a contest (send notification) (SignalR??)
 	[done]-Accept/Reject invitation for a contest  (SignalR??)
-	-Invite user to a voting committee
+	[done]Invite user to a voting committee
 
 Pictures
 	[done]-Upload Picture in contest
