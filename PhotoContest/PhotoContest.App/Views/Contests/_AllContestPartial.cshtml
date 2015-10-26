@@ -9,7 +9,7 @@
     <div class="panel-body">
         @Model.Description
     </div>
-    @if (Model.IsOpenForSubmissions)
+    @if (Model.IsOpenForSubmissions && Model.CanParticipate)
     {
         <div>
             @Html.ActionLink("Participate", "Join", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })

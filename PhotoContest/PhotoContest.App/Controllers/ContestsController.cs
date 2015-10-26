@@ -36,6 +36,7 @@
         {
         }
 
+        [HttpGet]
         public ActionResult AllContests()
         {
             var allContests =
@@ -45,7 +46,31 @@
                     .To<ContestViewModel>()
                     .ToList();
 
+            
+            this.CanParticipate(allContests);
+
             return this.PartialView("_AllContestsPartial", allContests);
+        }
+
+        private void CanParticipate(List<ContestViewModel> contests)
+        {
+            if (this.User.Identity.GetUserId() != null)
+            {
+                var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+                for (int i = 0; i < contests.Count(); i++)
+                {
+                    contests[i].CanParticipate = true;
+                    
+                    if (contests[i].ParticipationStrategyType == ParticipationStrategyType.Closed 
+                        || user.Id == contests[i].OrganizatorId
+                        || user.InContests.Any(c => c.Id == contests[i].Id) 
+                        || user.CommitteeInContests.Any(c => c.Id == contests[i].Id))
+                    {
+                        contests[i].CanParticipate = false;
+                    }
+                }
+            }
         }
 
         [HttpGet]
@@ -69,6 +94,8 @@
                 .Project()
                 .To<ContestViewModel>()
                 .ToList();
+
+            this.CanParticipate(activeContests);
 
             return this.PartialView(activeContests);
         }
@@ -199,6 +226,11 @@
 
             try
             {
+                if (contest.OrganizatorId == user.Id)
+                {
+                    throw new InvalidOperationException("You cannot join contest created by you");
+                }
+
                 this.DeadlineStrategy =
                     StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
 

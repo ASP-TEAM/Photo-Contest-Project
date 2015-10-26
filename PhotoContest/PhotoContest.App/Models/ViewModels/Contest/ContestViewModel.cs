@@ -1,11 +1,14 @@
-﻿namespace PhotoContest.App.Models.ViewModels.Contest
+﻿using AutoMapper;
+using PhotoContest.Models.Enums;
+
+namespace PhotoContest.App.Models.ViewModels.Contest
 {
     using System;
 
     using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.Models;
 
-    public class ContestViewModel : IMapFrom<Contest>
+    public class ContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -21,10 +24,22 @@
 
         public bool IsOpenForSubmissions { get; set; }
 
+        public bool CanParticipate { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
         public DateTime? SubmissionDate { get; set; }
+        
+        public ParticipationStrategyType ParticipationStrategyType { get; set; }
+
+
+        public void CreateMappings(IConfiguration configuration)
+        {
+            configuration.CreateMap<Contest, ContestViewModel>()
+               .ForMember(c => c.ParticipationStrategyType, opt => opt.MapFrom(c => c.ParticipationStrategy.ParticipationStrategyType))
+               .ReverseMap();
+        }
     }
 }
