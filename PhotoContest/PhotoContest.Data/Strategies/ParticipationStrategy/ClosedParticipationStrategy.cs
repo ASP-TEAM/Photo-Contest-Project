@@ -18,7 +18,6 @@
 
             if (!contest.InvitedUsers.Contains(user))
             {
-                // TODO send invitation to users
                 throw new ArgumentException("The user is not selected to participate.");
             }
 
