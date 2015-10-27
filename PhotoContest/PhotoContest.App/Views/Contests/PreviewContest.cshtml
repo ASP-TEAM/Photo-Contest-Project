@@ -2,42 +2,46 @@
 @{
     ViewBag.Title = "PreviewContest";
 }
-<div class="row pull-right">
-    <div class="clearfix"></div>
-    <div class="col-md-12 col-md-offset-2">
-        @Html.Partial("_ContestParticipantsPartial", Model)
-    </div>
-</div>
-@if (ViewBag.isOrganizator)
-{
-    @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
-}
-
-@if (Model.IsOpenForSubmissions)
-{
-    <div class="row">
-        @using (Html.BeginForm("Upload", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+<div class="container">
+    <div class="col-lg-8">
+        @if (ViewBag.isOrganizator)
         {
-            @Html.AntiForgeryToken()
-            <input type="file" multiple name="files[]" id="uploadPictureInput" />
-            <input type='submit' id='upload-files' value='Upload' />
-            <div class="container" id="contestUploadPicturesContainer">
+            @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        }
 
+        @if (Model.IsOpenForSubmissions)
+        {
+            <div class="row">
+                @using (Html.BeginForm("Upload", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="file" multiple name="files[]" id="uploadPictureInput" />
+                    <input type='submit' id='upload-files' value='Upload' />
+                    <div class="container" id="contestUploadPicturesContainer">
+
+                    </div>
+                }
             </div>
         }
-    </div>
-}
 
-@if (!ViewBag.IsRegisterForContest)
-{
-    @Html.ActionLink("Participate", "Join", new { id = Model.Id }, new { @class = "btn btn-success" })
-}
+        @if (!ViewBag.IsRegisterForContest)
+        {
+            @Html.ActionLink("Participate", "Join", new { id = Model.Id }, new { @class = "btn btn-success" })
+        }
 
-<div class="row">
-    @foreach (var picture in Model.Pictures)
-    {
-        <div class="col-md-4">
-            @Html.Partial("_FullPicturePartial", picture)
+        <div class="row">
+            @foreach (var picture in Model.Pictures)
+            {
+                <div class="col-md-4">
+                    @Html.Partial("_FullPicturePartial", picture)
+                </div>
+            }
         </div>
-    }
+    </div>
+    <div class="col-md-4">
+        <div class="clearfix"></div>
+        <div class="col-md-12 col-md-offset-2">
+            @Html.Partial("_ContestParticipantsPartial", Model)
+        </div>
+    </div>
 </div>
