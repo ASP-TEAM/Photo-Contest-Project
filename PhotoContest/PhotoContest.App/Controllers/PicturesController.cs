@@ -64,9 +64,12 @@
             catch (InvalidOperationException e)
             {
                 this.TempData["message"] = e.Message;
+
+                this.Response.StatusCode = 400;
+                return this.Content(e.ToString());
             }
 
-            return this.Json(picture.Votes.Select(p => p.Id).Count().ToString(), JsonRequestBehavior.AllowGet);
+            return this.Content(picture.Votes.Select(p => p.Id).Count().ToString());
         }
     }
 }
