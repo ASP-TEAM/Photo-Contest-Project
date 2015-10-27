@@ -4,12 +4,12 @@
 }
 <div class="container">
     <div class="col-lg-8">
-        @if (ViewBag.isOrganizator)
+        @if (Model.CanManage)
         {
             @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
         }
 
-        @if (Model.IsOpenForSubmissions)
+        @if (Model.IsOpenForSubmissions && Model.CanUpload)
         {
             <div class="row">
                 @using (Html.BeginForm("Upload", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -24,7 +24,7 @@
             </div>
         }
 
-        @if (!ViewBag.IsRegisterForContest)
+        @if (Model.CanParticipate)
         {
             @Html.ActionLink("Participate", "Join", new { id = Model.Id }, new { @class = "btn btn-success" })
         }

@@ -9,6 +9,13 @@
 
     public class PreviewContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
     {
+        public PreviewContestViewModel()
+        {
+            this.CanParticipate = false;
+            this.CanManage = false;
+            this.CanUpload = false;
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -19,7 +26,13 @@
 
         public IEnumerable<FullPictureViewModel> Pictures { get; set; }
 
-        public IEnumerable<MinifiedUserViewModel> Participants { get; set; } 
+        public IEnumerable<MinifiedUserViewModel> Participants { get; set; }
+
+        public bool CanParticipate { get; set; }
+
+        public bool CanManage { get; set; }
+
+        public bool CanUpload { get; set; }
 
         public void CreateMappings(IConfiguration configuration)
         {

@@ -350,6 +350,12 @@
 
             try
             {
+                if (contest.Committee.Contains(user) || !contest.Participants.Contains(user)
+                    || contest.OrganizatorId == user.Id)
+                {
+                    throw new InvalidOperationException("You are either organizator of this contest or in the committee or you don't not participate in it");
+                }
+
                 this.DeadlineStrategy = StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
 
                 this.DeadlineStrategy.Deadline(this.Data, contest, user);
@@ -412,14 +418,30 @@
                 return this.View("PreviewInactiveContest", contestWinners);
             }
             
-            var currentUserId = this.User.Identity.GetUserId();
-            var isInContest = contest.Participants.Any(p => p.Id == currentUserId) ||
-                                contest.OrganizatorId == currentUserId || contest.Committee.Any(u => u.Id == currentUserId);
-
-            this.ViewBag.IsRegisterForContest = isInContest;
-            this.ViewBag.isOrganizator = contest.OrganizatorId == currentUserId;
-
             var contestViewModel = Mapper.Map<PreviewContestViewModel>(contest);
+
+            if (this.User.Identity.GetUserId() != null)
+            {
+                var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+                if (contest.OrganizatorId == user.Id)
+                {
+                    contestViewModel.CanManage = true;
+                }
+                else
+                {
+                    if (!contest.Committee.Contains(user) && contest.Participants.Contains(user))
+                    {
+                        contestViewModel.CanUpload = true;
+                    }
+
+                    if (!contest.Committee.Contains(user) && !contest.Participants.Contains(user))
+                    {
+                        contestViewModel.CanParticipate = true;
+                    }
+                }
+
+            }
 
             return this.View(contestViewModel);
         }
