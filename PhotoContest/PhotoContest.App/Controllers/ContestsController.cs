@@ -393,6 +393,7 @@
             {
                 return this.HttpNotFound("The selected contest no longer exists");
             }
+
             if (!contest.IsActive)
             {
                 var contestWinners = 
@@ -407,12 +408,13 @@
                         Winner = c.Winner.UserName
                     })
                     .ToList();
+
                 return this.View("PreviewInactiveContest", contestWinners);
             }
             
             var currentUserId = this.User.Identity.GetUserId();
             var isInContest = contest.Participants.Any(p => p.Id == currentUserId) ||
-                                contest.OrganizatorId == currentUserId;
+                                contest.OrganizatorId == currentUserId || contest.Committee.Any(u => u.Id == currentUserId);
 
             this.ViewBag.IsRegisterForContest = isInContest;
             this.ViewBag.isOrganizator = contest.OrganizatorId == currentUserId;
