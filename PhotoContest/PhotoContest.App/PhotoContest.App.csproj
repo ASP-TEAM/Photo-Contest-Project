@@ -302,9 +302,9 @@
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Contests\_PicturePartial.cshtml" />
     <Content Include="Views\Users\All.cshtml" />
-    <Content Include="Views\Contests\ActiveContests.cshtml" />
+    <Content Include="Views\Contests\_ActiveContestsPartial.cshtml" />
     <Content Include="Views\Contests\_ActiveContest.cshtml" />
-    <Content Include="Views\Contests\MyContests.cshtml" />
+    <Content Include="Views\Contests\_MyContestsPartial.cshtml" />
     <Content Include="Views\Contests\_MyContestPartial.cshtml" />
     <Content Include="Views\Contests\NewContestForm.cshtml" />
     <Content Include="Views\Contests\PreviewContest.cshtml" />
@@ -323,6 +323,7 @@
     <Content Include="Views\Users\Invitation.cshtml" />
     <Content Include="Views\Contests\PreviewInactiveContest.cshtml" />
     <Content Include="Views\Contests\_ContestParticipantsPartial.cshtml" />
+    <Content Include="Views\Contests\_ContestButtonsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Controllers\" />

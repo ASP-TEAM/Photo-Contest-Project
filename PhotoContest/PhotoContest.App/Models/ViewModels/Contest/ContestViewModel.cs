@@ -1,15 +1,20 @@
-﻿using AutoMapper;
-using PhotoContest.Models.Enums;
-
-namespace PhotoContest.App.Models.ViewModels.Contest
+﻿namespace PhotoContest.App.Models.ViewModels.Contest
 {
     using System;
 
     using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.Models;
+    using AutoMapper;
+    using PhotoContest.Models.Enums;
 
     public class ContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
     {
+        public ContestViewModel()
+        {
+            this.CanParticipate = false;
+            this.CanManage = false;
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -26,6 +31,8 @@ namespace PhotoContest.App.Models.ViewModels.Contest
 
         public bool CanParticipate { get; set; }
 
+        public bool CanManage { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
@@ -33,7 +40,6 @@ namespace PhotoContest.App.Models.ViewModels.Contest
         public DateTime? SubmissionDate { get; set; }
         
         public ParticipationStrategyType ParticipationStrategyType { get; set; }
-
 
         public void CreateMappings(IConfiguration configuration)
         {

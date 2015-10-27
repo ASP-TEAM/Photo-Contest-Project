@@ -47,12 +47,12 @@
                     .ToList();
 
             
-            this.CanParticipate(allContests);
+            this.ApplyRights(allContests);
 
             return this.PartialView("_AllContestsPartial", allContests);
         }
 
-        private void CanParticipate(List<ContestViewModel> contests)
+        private void ApplyRights(IList<ContestViewModel> contests)
         {
             if (this.User.Identity.GetUserId() != null)
             {
@@ -60,14 +60,17 @@
 
                 for (int i = 0; i < contests.Count(); i++)
                 {
-                    contests[i].CanParticipate = true;
-                    
-                    if (contests[i].ParticipationStrategyType == ParticipationStrategyType.Closed 
-                        || user.Id == contests[i].OrganizatorId
-                        || user.InContests.Any(c => c.Id == contests[i].Id) 
-                        || user.CommitteeInContests.Any(c => c.Id == contests[i].Id))
+                    if (user.Id == contests[i].OrganizatorId)
                     {
-                        contests[i].CanParticipate = false;
+                        contests[i].CanManage = true;
+                        continue;
+                    }
+
+                    if (contests[i].ParticipationStrategyType != ParticipationStrategyType.Closed 
+                        && !user.InContests.Any(c => c.Id == contests[i].Id) 
+                        && !user.CommitteeInContests.Any(c => c.Id == contests[i].Id))
+                    {
+                        contests[i].CanParticipate = true;
                     }
                 }
             }
@@ -95,9 +98,9 @@
                 .To<ContestViewModel>()
                 .ToList();
 
-            this.CanParticipate(activeContests);
+            this.ApplyRights(activeContests);
 
-            return this.PartialView(activeContests);
+            return this.PartialView("_ActiveContestsPartial", activeContests);
         }
 
         [HttpGet]
@@ -126,7 +129,7 @@
                 .To<ContestViewModel>()
                 .ToList();
 
-            return this.PartialView(myContests);
+            return this.PartialView("_MyContestsPartial", myContests);
         }
 
         [Authorize]
@@ -244,6 +247,11 @@
                 if (contest.Participants.Contains(user))
                 {
                     throw new ArgumentException("You already participate in this contest");
+                }
+
+                if (contest.Committee.Contains(user))
+                {
+                    throw new ArgumentException("You cannot participate in this contest, you are in the committee");
                 }
 
                 contest.Participants.Add(user);

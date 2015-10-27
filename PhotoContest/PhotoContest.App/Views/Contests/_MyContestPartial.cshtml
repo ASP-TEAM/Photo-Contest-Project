@@ -9,4 +9,7 @@
     <div class="panel-body">
         @Model.Description
     </div>
+    <div>
+        @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    </div>
 </div>

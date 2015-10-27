@@ -1,0 +1,16 @@
+﻿@model PhotoContest.App.Models.ViewModels.Contest.ContestViewModel
+    
+@if (Request.IsAuthenticated)
+{
+    <div>
+        @if (Model.CanParticipate)
+        {
+            @Html.ActionLink("Participate", "Join", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })
+        }
+
+        @if (Model.CanManage)
+        {
+            @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        }
+    </div>
+}
