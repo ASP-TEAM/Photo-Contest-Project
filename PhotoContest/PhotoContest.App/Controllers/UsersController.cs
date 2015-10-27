@@ -145,10 +145,8 @@
             {
                 case InvitationType.ClosedContest:
                     return RedirectToAction("Join", "Contests", new {id = invitation.ContestId});
-                    break;
                 case InvitationType.Committee:
                     return RedirectToAction("JoinCommittee", "Contests", new { id = invitation.ContestId });
-                    break;
             }
 
             return new HttpStatusCodeResult(200);
