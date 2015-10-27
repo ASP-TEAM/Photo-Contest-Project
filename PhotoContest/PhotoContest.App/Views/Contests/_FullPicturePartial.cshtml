@@ -6,11 +6,12 @@
     <span class="badge">Votes </span>
     <span class="badge" id="@picId">@Model.Votes</span>
 
-    @Ajax.ActionLink("Vote", "Vote", "Pictures", new { id = @Model.Id },
+    @Ajax.ActionLink("Vote", "Vote", "Pictures", new { Area = "", id = @Model.Id },
     new AjaxOptions
     {
         UpdateTargetId = "pictureVotes" + @Model.Id,
         InsertionMode = InsertionMode.Replace,
         HttpMethod = "POST",
+        OnComplete = "ajaxHelper.OnFailure"
     }, new { @class = "btn btn-success" })
 </div>
