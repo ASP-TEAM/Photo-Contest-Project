@@ -25,11 +25,18 @@
     using PhotoContest.App.Models.ViewModels.Invitation;
     using PhotoContest.App.Models.ViewModels.Strategy;
     using PhotoContest.Models.Enums;
+
+    using File = Google.Apis.Drive.v2.Data.File;
+    using Google.Apis.Drive.v2;
+    using Google.Apis.Drive.v2.Data;
+    using PhotoContest.App.Services;
+
     #endregion
 
     public class ContestsController : BaseController
     {
         private const int MaxImageSize = 1000000;
+        private const string GoogleDriveFolderId = "0By2WSCXLYL1JNVJacmZvcXROeVk";
 
         public ContestsController(IPhotoContestData data)
             : base(data)
@@ -46,7 +53,7 @@
                     .To<ContestViewModel>()
                     .ToList();
 
-            
+
             this.ApplyRights(allContests);
 
             return this.PartialView("_AllContestsPartial", allContests);
@@ -66,8 +73,8 @@
                         continue;
                     }
 
-                    if (contests[i].ParticipationStrategyType != ParticipationStrategyType.Closed 
-                        && !user.InContests.Any(c => c.Id == contests[i].Id) 
+                    if (contests[i].ParticipationStrategyType != ParticipationStrategyType.Closed
+                        && !user.InContests.Any(c => c.Id == contests[i].Id)
                         && !user.CommitteeInContests.Any(c => c.Id == contests[i].Id))
                     {
                         contests[i].CanParticipate = true;
@@ -151,7 +158,7 @@
                 .ToList();
 
             viewModel.DeadlineStrategies = this.Data.DeadlineStrategies.All()
-                .Select(dl => new StrategyViewModel() { Id = dl.Id, Description = dl.Description, Name = dl.Name})
+                .Select(dl => new StrategyViewModel() { Id = dl.Id, Description = dl.Description, Name = dl.Name })
                 .ToList();
 
             return this.View("NewContestForm", viewModel);
@@ -368,12 +375,20 @@
 
                 foreach (var file in files)
                 {
-                    var base64PictureString = GetBase64String(file);
+                    var base64String = GetBase64String(file);
+
+                    var result = UploadImageToGoogleDrive(base64String, file.FileName, file.ContentType);
+
+                    if (result[0] != "success")
+                    {
+                        this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                        return this.Content(result[1]);
+                    }
 
                     Picture picture = new Picture
                     {
                         UserId = user.Id,
-                        Url = base64PictureString,
+                        Url = result[1],
                         ContestId = contest.Id
                     };
 
@@ -408,7 +423,7 @@
 
             if (!contest.IsActive)
             {
-                var contestWinners = 
+                var contestWinners =
                     this.Data.ContestWinners.All()
                     .Where(c => c.ContestId == contest.Id)
                     .Select(c => new ContestWinnerViewModel
@@ -423,7 +438,7 @@
 
                 return this.View("PreviewInactiveContest", contestWinners);
             }
-            
+
             var contestViewModel = Mapper.Map<PreviewContestViewModel>(contest);
 
             if (this.User.Identity.GetUserId() != null)
@@ -551,14 +566,14 @@
                 return this.Content("Only the contest organizator can invite users.");
             }
 
-            if (type == InvitationType.Committee 
+            if (type == InvitationType.Committee
                 && contest.VotingStrategy.VotingStrategyType != VotingStrategyType.Closed)
             {
                 this.Response.StatusCode = 400;
                 return this.Content("The contest voting strategy type is not 'CLOSED'.");
             }
 
-            if (type == InvitationType.ClosedContest 
+            if (type == InvitationType.ClosedContest
                 && contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed)
             {
                 this.Response.StatusCode = 400;
@@ -592,14 +607,14 @@
             }
 
             var invitation = new Invitation
-                                    {
-                                        ContestId = contestId,
-                                        InviterId = loggedUser.Id,
-                                        InvitedId = userToInvite.Id,
-                                        DateOfInvitation = DateTime.Now,
-                                        Type = type,
-                                        Status = InvitationStatus.Neutral
-                                    };
+            {
+                ContestId = contestId,
+                InviterId = loggedUser.Id,
+                InvitedId = userToInvite.Id,
+                DateOfInvitation = DateTime.Now,
+                Type = type,
+                Status = InvitationStatus.Neutral
+            };
 
             if (type == InvitationType.ClosedContest)
             {
@@ -618,6 +633,7 @@
             return this.Content(string.Format("User with username {0} successfully invited", username));
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult FinalizeContest(int id)
         {
@@ -658,6 +674,7 @@
             return new HttpStatusCodeResult(200);
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult DismissContest(int id)
         {
@@ -692,6 +709,44 @@
             return new HttpStatusCodeResult(200);
         }
 
+        private string[] UploadImageToGoogleDrive(string fileDataUrl, string fileName, string fileType)
+        {
+            string mediaType = fileType;
+            byte[] byteArray = Convert.FromBase64String(fileDataUrl);
+            MemoryStream stream = new MemoryStream(byteArray);
+
+            var service = GoogleDriveService.Get();
+
+            File body = new File
+            {
+                Title = fileName,
+                MimeType = mediaType,
+                Parents = new List<ParentReference>
+                        {
+                            new ParentReference
+                                {
+                                    Id = GoogleDriveFolderId
+                                }
+                        },
+                Permissions = new List<Permission>()
+                {
+                    new Permission() { Type = "anyone", Role = "reader", WithLink = true }
+                }
+            };
+
+            try
+            {
+                FilesResource.InsertMediaUpload request = service.Files.Insert(body, stream, mediaType);
+                request.Upload();
+
+                return new[] { "success", "http://docs.google.com/uc?export=open&id=" + request.ResponseBody.Id };
+            }
+            catch (Exception exception)
+            {
+                return new[] { "error", string.Format("Something happened.\r\n" + exception.Message) };
+            }
+        }
+
         private ActionResult ValidateImageData(HttpPostedFileBase file)
         {
             if (!file.ContentType.Contains("image"))
@@ -714,9 +769,7 @@
             byte[] fileBuffer = new byte[file.ContentLength];
             file.InputStream.Read(fileBuffer, 0, file.ContentLength);
 
-            string type = "data:image/" + file.ContentType + ";base64,";
-
-            return type + Convert.ToBase64String(fileBuffer);
+            return Convert.ToBase64String(fileBuffer);
         }
     }
 }
