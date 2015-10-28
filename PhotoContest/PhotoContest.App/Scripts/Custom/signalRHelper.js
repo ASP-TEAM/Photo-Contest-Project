@@ -3,11 +3,21 @@
     $.connection.hub.start();
 
     (function() {
-        hub.client.notificationReceived = function (invitation) {
+        hub.client.notificationReceived = function (id) {
             var notifications = $('#notifications');
             notifications.html('');
-            notifications.prepend(invitation);
-            notifications.show();
+
+            $.ajax({
+                url: '/users/GetNotification/' + id,
+                method: 'GET',
+                success: function (invitation) {
+                    notifications.prepend(invitation);
+                    notifications.show();
+                },
+                error: function(xhr) {
+                    notificationHelper.showErrorMessage(xhr.responseText);
+                }
+            });
         }
     }());
 

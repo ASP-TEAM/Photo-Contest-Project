@@ -105,6 +105,27 @@
 
         [Authorize]
         [HttpGet]
+        public ActionResult GetNotification(int id)
+        {
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            var notification =
+                loggedUser.PendingInvitations.Where(n => n.Id == id)
+                    .Select(
+                        n =>
+                        new NotificationViewModel
+                            {
+                                InvitationId = n.Id,
+                                Sender = n.Inviter.UserName,
+                                Type = n.Type.ToString()
+                            })
+                    .FirstOrDefault();
+
+            return this.PartialView("_Notification", notification);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult ShowInvitation(int id)
         {
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());

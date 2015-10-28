@@ -611,14 +611,7 @@
 
             this.Data.SaveChanges();
 
-            var notification = new NotificationViewModel
-                                  {
-                                      InvitationId = invitation.Id,
-                                      Sender = loggedUser.UserName,
-                                      Type = type.ToString()
-                                  };
-
-            this.HubContext.Clients.User(username).notificationReceived(this.RenderViewToString("_Notification", notification));
+            this.HubContext.Clients.User(username).notificationReceived(invitation.Id);
 
             this.Response.StatusCode = 200;
 
@@ -724,20 +717,6 @@
             string type = "data:image/" + file.ContentType + ";base64,";
 
             return type + Convert.ToBase64String(fileBuffer);
-        }
-
-        public string RenderViewToString(string viewName, object model)
-        {
-            this.ViewData.Model = model;
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines.FindPartialView(this.ControllerContext,
-                                                                         viewName);
-                var viewContext = new ViewContext(this.ControllerContext, viewResult.View, this.ViewData, this.TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(this.ControllerContext, viewResult.View);
-                return sw.GetStringBuilder().ToString();
-            }
         }
     }
 }
