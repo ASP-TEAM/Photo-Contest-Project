@@ -5,6 +5,6 @@
 
     public interface IDeadlineStrategy
     {
-        void Deadline(IPhotoContestData data, Contest contest, User user);
+        void CheckDeadline(IPhotoContestData data, Contest contest, User user);
     }
 }

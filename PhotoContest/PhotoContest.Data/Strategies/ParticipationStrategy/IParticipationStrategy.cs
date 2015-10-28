@@ -5,6 +5,6 @@
 
     public interface IParticipationStrategy
     {
-        void Participate(IPhotoContestData data, User user, Contest contest);
+        void CheckPermission(IPhotoContestData data, User user, Contest contest);
     }
 }

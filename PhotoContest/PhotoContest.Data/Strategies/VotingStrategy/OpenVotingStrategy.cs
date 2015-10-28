@@ -7,7 +7,7 @@
 
     public class OpenVotingStrategy : IVotingStrategy
     {
-        public void Vote(IPhotoContestData data, User user, Contest contest)
+        public void CheckPermission(IPhotoContestData data, User user, Contest contest)
         {
             if (contest.Participants.Contains(user))
             {

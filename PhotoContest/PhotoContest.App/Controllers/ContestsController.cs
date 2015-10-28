@@ -174,6 +174,12 @@
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
 
+            if (model.EndDate < DateTime.Now)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Contest end date cannot be before today`s date");
+            }
+
             if (this.Data.RewardStrategies.Find(model.RewardStrategyId) == null)
             {
                 throw new ArgumentException("Not existing reward strategy");
@@ -237,12 +243,12 @@
                 this.DeadlineStrategy =
                     StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
 
-                this.DeadlineStrategy.Deadline(this.Data, contest, user);
+                this.DeadlineStrategy.CheckDeadline(this.Data, contest, user);
 
                 this.ParticipationStrategy =
                     StrategyFactory.GetParticipationStrategy(contest.ParticipationStrategy.ParticipationStrategyType);
 
-                this.ParticipationStrategy.Participate(this.Data, user, contest);
+                this.ParticipationStrategy.CheckPermission(this.Data, user, contest);
 
                 if (contest.Participants.Contains(user))
                 {
@@ -352,7 +358,7 @@
             {
                 this.DeadlineStrategy = StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
 
-                this.DeadlineStrategy.Deadline(this.Data, contest, user);
+                this.DeadlineStrategy.CheckDeadline(this.Data, contest, user);
 
                 foreach (var file in files)
                 {
@@ -515,6 +521,14 @@
                 return this.Content(string.Format("Contest with id {0} not found", contestId));
             }
 
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            if (contest.OrganizatorId != loggedUser.Id)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Only the contest organizator can invite users.");
+            }
+
             if (type == InvitationType.Committee 
                 && contest.VotingStrategy.VotingStrategyType != VotingStrategyType.Closed)
             {
@@ -542,8 +556,6 @@
                 this.Response.StatusCode = 404;
                 return this.Content(string.Format("User with username {0} not found", username));
             }
-
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (userToInvite.UserName == loggedUser.UserName)
             {
@@ -589,6 +601,80 @@
             this.Response.StatusCode = 200;
 
             return this.Content(string.Format("User with username {0} successfully invited", username));
+        }
+
+        [HttpPost]
+        public ActionResult FinalizeContest(int id)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("Contest with id {0} not found", id));
+            }
+
+            if (contest.IsActive == false)
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("Contest with id {0} is not active", id));
+            }
+
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            if (contest.OrganizatorId != loggedUser.Id)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Only the contest organizator can finalize it.");
+            }
+
+            contest.IsOpenForSubmissions = false;
+            contest.IsActive = false;
+            contest.EndDate = DateTime.Now;
+
+            this.Data.SaveChanges();
+
+            this.RewardStrategy =
+                    StrategyFactory.GetRewardStrategy(contest.RewardStrategy.RewardStrategyType);
+
+            this.RewardStrategy.ApplyReward(this.Data, contest);
+
+
+            return new HttpStatusCodeResult(200);
+        }
+
+        [HttpPost]
+        public ActionResult DismissContest(int id)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("Contest with id {0} not found", id));
+            }
+
+            if (contest.IsActive == false)
+            {
+                this.Response.StatusCode = 404;
+                return this.Content(string.Format("Contest with id {0} is not active", id));
+            }
+
+            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            if (contest.OrganizatorId != loggedUser.Id)
+            {
+                this.Response.StatusCode = 400;
+                return this.Content("Only the contest organizator can dismiss it.");
+            }
+
+            contest.IsOpenForSubmissions = false;
+            contest.IsActive = false;
+            contest.EndDate = DateTime.Now;
+
+            this.Data.SaveChanges();
+
+            return new HttpStatusCodeResult(200);
         }
 
         private ActionResult ValidateImageData(HttpPostedFileBase file)

@@ -49,7 +49,7 @@
                 this.VotingStrategy =
                     StrategyFactory.GetVotingStrategy(picture.Contest.VotingStrategy.VotingStrategyType);
 
-                this.VotingStrategy.Vote(this.Data, user, picture.Contest);
+                this.VotingStrategy.CheckPermission(this.Data, user, picture.Contest);
 
                 if (picture.Votes.Any(v => v.UserId == user.Id))
                 {

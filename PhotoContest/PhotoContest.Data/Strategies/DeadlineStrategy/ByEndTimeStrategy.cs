@@ -8,13 +8,13 @@
 
     public class ByEndTimeStrategy : IDeadlineStrategy
     {
-        public void Deadline(IPhotoContestData data, Contest contest, User user)
+        public void CheckDeadline(IPhotoContestData data, Contest contest, User user)
         {
-            if (contest.SubmissionDate < DateTime.Now)
+            if (contest.SubmissionEndDate < DateTime.Now)
             {
-                if (contest.IsOpenForSubmissions == false)
+                if (contest.IsOpenForSubmissions)
                 {
-                    contest.IsOpenForSubmissions = true;
+                    contest.IsOpenForSubmissions = false;
                     data.Contests.Update(contest);
                     data.SaveChanges();
                 }

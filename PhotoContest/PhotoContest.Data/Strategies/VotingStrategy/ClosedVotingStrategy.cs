@@ -7,7 +7,7 @@
 
     public class ClosedVotingStrategy : IVotingStrategy
     {
-        public void Vote(IPhotoContestData data, User user, Contest contest)
+        public void CheckPermission(IPhotoContestData data, User user, Contest contest)
         {
             if (!contest.Committee.Contains(user))
             {

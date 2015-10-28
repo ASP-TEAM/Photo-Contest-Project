@@ -12,3 +12,26 @@
 {
     @Html.Partial("_InviteUsersFormPartial");
 }
+
+@if (Model.IsActive)
+{
+    <div class="finish-contest">
+        @Ajax.ActionLink("Finalize", "FinalizeContest", "Contests", new { id = Model.Id },
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnSuccess = "ajaxHelper.onSuccess",
+            OnFailure = "ajaxHelper.onError"
+        }, 
+        new { @class = "btn btn-primary" })
+        
+        @Ajax.ActionLink("Dismiss", "DismissContest", "Contests", new { id = Model.Id },
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnSuccess = "ajaxHelper.onSuccess",
+            OnFailure = "ajaxHelper.onError"
+        },
+        new { @class = "btn btn-warning" })
+    </div>
+}

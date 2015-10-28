@@ -9,7 +9,7 @@
 
     public class ClosedParticipationStrategy : IParticipationStrategy
     {
-        public void Participate(IPhotoContestData data, User user, Contest contest)
+        public void CheckPermission(IPhotoContestData data, User user, Contest contest)
         {
             if (!contest.IsOpenForSubmissions)
             {

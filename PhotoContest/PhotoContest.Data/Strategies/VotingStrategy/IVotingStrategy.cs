@@ -5,6 +5,6 @@
 
     public interface IVotingStrategy
     {
-        void Vote(IPhotoContestData data, User user, Contest contest);
+        void CheckPermission(IPhotoContestData data, User user, Contest contest);
     }
 }

@@ -48,7 +48,7 @@
 
         public DateTime EndDate { get; set; }
 
-        public DateTime? SubmissionDate { get; set; }
+        public DateTime? SubmissionEndDate { get; set; }
 
         public int RewardStrategyId { get; set; }
 

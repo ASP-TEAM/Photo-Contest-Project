@@ -7,7 +7,7 @@
 
     public class ByNumberOfParticipantsStrategy : IDeadlineStrategy
     {
-        public void Deadline(IPhotoContestData data, Contest contest, User user)
+        public void CheckDeadline(IPhotoContestData data, Contest contest, User user)
         {
             if (contest.Participants.Count >= contest.ParticipantsLimit)
             {

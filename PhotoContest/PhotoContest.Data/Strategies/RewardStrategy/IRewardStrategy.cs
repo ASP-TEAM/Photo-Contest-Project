@@ -6,6 +6,6 @@
 
     public interface IRewardStrategy
     {
-        void Reward(IPhotoContestData data, Contest contest);
+        void ApplyReward(IPhotoContestData data, Contest contest);
     }
 }

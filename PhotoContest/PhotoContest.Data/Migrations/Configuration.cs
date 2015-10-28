@@ -49,7 +49,6 @@ namespace PhotoContest.Data.Migrations
                     IsActive = true,
                     IsOpenForSubmissions = true,
                     StartDate = new DateTime(2015, 10, 10),
-                    SubmissionDate = DateTime.Now,
                     EndDate = new DateTime(2015, 10, 15),
                     RewardStrategyId = context.RewardStrategies.FirstOrDefault().Id,
                     VotingStrategyId = context.VotingStrategies.FirstOrDefault().Id,
