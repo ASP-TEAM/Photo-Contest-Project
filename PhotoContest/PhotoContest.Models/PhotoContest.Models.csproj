@@ -73,6 +73,7 @@
     <Compile Include="ParticipationStrategy.cs" />
     <Compile Include="Picture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reward.cs" />
     <Compile Include="RewardStrategy.cs" />
     <Compile Include="AbstractStrategy.cs" />
     <Compile Include="User.cs" />

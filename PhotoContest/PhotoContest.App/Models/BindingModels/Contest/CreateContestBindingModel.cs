@@ -27,11 +27,8 @@
         [Required]
         public int DeadlineStrategyId { get; set; }
 
-        [Required]
         public int ParticipantsLimit { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
-
+        public DateTime? SubmissionsEndDate { get; set; }
     }
 }

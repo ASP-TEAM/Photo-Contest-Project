@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public class Contest
@@ -38,17 +37,17 @@
         [StringLength(200, MinimumLength = 3)]
         public string Description { get; set; }
 
-        public int ParticipantsLimit { get; set; }
+        public string OrganizatorId { get; set; }
+
+        public virtual User Organizator { get; set; }
 
         public bool IsActive { get; set; }
 
         public bool IsOpenForSubmissions { get; set; }
-
+       
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
-
-        public DateTime? SubmissionEndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public int RewardStrategyId { get; set; }
 
@@ -65,10 +64,16 @@
         public int DeadlineStrategyId { get; set; }
 
         public virtual DeadlineStrategy DeadlineStrategy { get; set; }
-        
-        public string OrganizatorId { get; set; }
 
-        public virtual User Organizator { get; set; }
+        #region Nullables
+
+        public int? ParticipantsLimit { get; set; }
+
+        public int? WinnersPlaces { get; set; }
+
+        public DateTime? SubmissionEndDate { get; set; }
+
+        #endregion
 
         public virtual ICollection<User> Participants
         {

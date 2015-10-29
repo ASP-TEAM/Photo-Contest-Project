@@ -141,24 +141,54 @@
 
         [Authorize]
         [HttpGet]
+        public ActionResult GetDeadlineStrategyPartial(int id)
+        {
+            var strategy = this.Data.DeadlineStrategies.Find(id);
+
+            return PartialView("Strategies/Deadline/_" + strategy.DeadlineStrategyType + "Partial");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult GetRewardStrategyPartial(int id)
+        {
+            var strategy = this.Data.RewardStrategies.Find(id);
+
+            return PartialView("Strategies/Reward/_" + strategy.RewardStrategyType + "Partial");
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult NewContest()
         {
             var viewModel = new CreateContestViewModel();
 
             viewModel.RewardStrategies = this.Data.RewardStrategies.All()
-                .Select(r => new StrategyViewModel() { Id = r.Id, Description = r.Description, Name = r.Name })
+                .Select(r => new StrategyViewModel()
+                {
+                    Id = r.Id, Description = r.Description, Name = r.Name,
+                })
                 .ToList();
 
             viewModel.ParticipationStrategies = this.Data.ParticipationStrategies.All()
-                .Select(p => new StrategyViewModel() { Id = p.Id, Description = p.Description, Name = p.Name })
+                .Select(p => new StrategyViewModel()
+                {
+                    Id = p.Id, Description = p.Description, Name = p.Name,
+                })
                 .ToList();
 
             viewModel.VotingStrategies = this.Data.VotingStrategies.All()
-                .Select(v => new StrategyViewModel() { Id = v.Id, Description = v.Description, Name = v.Name })
+                .Select(v => new StrategyViewModel()
+                {
+                    Id = v.Id, Description = v.Description, Name = v.Name,
+                })
                 .ToList();
 
             viewModel.DeadlineStrategies = this.Data.DeadlineStrategies.All()
-                .Select(dl => new StrategyViewModel() { Id = dl.Id, Description = dl.Description, Name = dl.Name })
+                .Select(dl => new StrategyViewModel()
+                {
+                    Id = dl.Id, Description = dl.Description, Name = dl.Name,
+                })
                 .ToList();
 
             return this.View("NewContestForm", viewModel);
@@ -179,12 +209,6 @@
             {
                 this.Response.StatusCode = 400;
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-            }
-
-            if (model.EndDate < DateTime.Now)
-            {
-                this.Response.StatusCode = 400;
-                return this.Content("Contest end date cannot be before today`s date");
             }
 
             if (this.Data.RewardStrategies.Find(model.RewardStrategyId) == null)
@@ -221,7 +245,6 @@
                 ParticipantsLimit = model.ParticipantsLimit,
                 IsOpenForSubmissions = true,
                 StartDate = DateTime.Now,
-                EndDate = model.EndDate,
                 OrganizatorId = loggedUserId,
             };
 

@@ -24,6 +24,8 @@
                         "~/Scripts/kendo/kendo.all.min.js",
                         "~/Scripts/kendo/kendo.aspnetmvc.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/createContest").Include("~/Scripts/Custom/createContest.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/Scripts/jquery.validate*"));
 
             bundles.Add(
