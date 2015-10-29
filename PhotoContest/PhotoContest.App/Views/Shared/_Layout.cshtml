@@ -6,7 +6,12 @@
     <meta name="description" content="Photo Contest" />
     <title>@ViewBag.Title - Photo Contest</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/kendo")
     @Scripts.Render("~/bundles/jquery")
+    <script src="/signalr/hubs"></script>
+    <script src='~/Scripts/Custom/signalRHelper.js'></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/kendo")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -35,9 +40,7 @@
             <p>&copy; @DateTime.Now.Year - Photo Contest</p>
         </footer>
 </div>
-    <script src="/signalr/hubs"></script>
-    <script src='~/Scripts/Custom/signalRHelper.js'></script>
-    @Scripts.Render("~/bundles/bootstrap")
+    
     @RenderSection("scripts", false)
 </body>
 </html>

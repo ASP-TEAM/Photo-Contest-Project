@@ -76,13 +76,8 @@
       <HintPath>..\packages\Google.Apis.1.9.2\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Infragistics.Olap.DataProvider.Adomd.Mvc, Version=5.15.2.1027, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>External libraries\Infragistics.Olap.DataProvider.Adomd.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="Infragistics.Web.Mvc, Version=5.15.2.1027, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>External libraries\Infragistics.Web.Mvc.dll</HintPath>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>External libraries\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -266,6 +261,7 @@
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
     <Compile Include="Areas\Administration\Controllers\AdminController.cs" />
     <Compile Include="Areas\Administration\Controllers\BaseAdminController.cs" />
+    <Compile Include="Areas\Administration\Controllers\KendoAdminController.cs" />
     <Compile Include="Areas\Administration\Controllers\PicturesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -303,19 +299,9 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\IgniteUI\images\icon_sprite.png" />
-    <Content Include="Content\IgniteUI\images\igGrid\filter-icons-333333.png" />
-    <Content Include="Content\IgniteUI\images\igGrid\filter-icons-FFFFFF.png" />
-    <Content Include="Content\IgniteUI\images\igRating\ig-rating.png" />
-    <Content Include="Content\IgniteUI\images\igVideoPlayer\igVideoPlayerIcons.png" />
-    <Content Include="Content\IgniteUI\images\igVideoPlayer\igVPBackground.png" />
-    <Content Include="Content\IgniteUI\images\igVideoPlayer\igVPBookmarkSprite.png" />
-    <Content Include="Content\IgniteUI\images\ui-anim_basic_16x16.gif" />
-    <Content Include="Content\IgniteUI\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\IgniteUI\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\IgniteUI\images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\IgniteUI\infragistics.css" />
-    <Content Include="Content\IgniteUI\infragistics.theme.css" />
+    <Content Include="Content\kendo\kendo.black.min.css" />
+    <Content Include="Content\kendo\kendo.common.core.min.css" />
+    <Content Include="Content\kendo\kendo.common.min.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -349,8 +335,6 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="External libraries\Infragistics.Olap.DataProvider.Adomd.Mvc.dll" />
-    <Content Include="External libraries\Infragistics.Web.Mvc.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -364,16 +348,10 @@
     <Content Include="Areas\Administration\Views\Admin\ManageContests.cshtml" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Custom\ajaxHelper.js" />
-    <Content Include="Scripts\Custom\igniteUIHelper.js" />
     <Content Include="Scripts\Custom\picturesUpload.js" />
     <Content Include="Scripts\Custom\signalRHelper.js" />
-    <Content Include="Scripts\igniteUI\infragistics.core.js" />
-    <Content Include="Scripts\igniteUI\infragistics.dv.js" />
-    <Content Include="Scripts\igniteUI\infragistics.lob.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-ui-1.11.4.js" />
-    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.form.min.js" />
     <Content Include="Scripts\jquery.form.min.js.map" />
@@ -387,6 +365,9 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\kendo\jquery.min.js" />
+    <Content Include="Scripts\kendo\kendo.all.min.js" />
+    <Content Include="Scripts\kendo\kendo.aspnetmvc.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Custom\notificationHelper.js" />
     <Content Include="Scripts\respond.js" />
@@ -456,6 +437,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Models\" />
+    <Folder Include="Areas\Administration\Views\KendoAdmin\" />
+    <Folder Include="External libraries\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

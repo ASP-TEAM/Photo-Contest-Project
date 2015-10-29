@@ -1,6 +1,29 @@
-﻿@model IQueryable<PhotoContest.App.Models.ViewModels.User.FullUserViewModel>
+﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.User.FullUserViewModel>
 @{
     ViewBag.Title = "ManageUsers";
 }
 
 <h2>ManageUsers</h2>
+
+@(Html.Kendo()
+    .Grid(Model)
+    .Name("grid")
+    .Columns(cols =>
+        {
+            cols.AutoGenerate(true);
+            cols.Command(c => c.Edit()).Title("Edit");
+            cols.Command(c => c.Destroy()).Title("Delete");
+        })
+    .ColumnMenu()
+    .Pageable(page => page.Refresh(true))
+    .Sortable()
+    .Filterable()
+    .Editable(edit => edit.Mode(GridEditMode.PopUp))
+    .DataSource(data =>
+    data
+        .Ajax()
+        .Model(m => m.Id(a => a.Id))
+        .Read(read => read.Action("ReadUsers", "Admin"))
+        .Update(update => update.Action("Edit", "Admin"))
+        .Destroy(destroy => destroy.Action("Destroy", "Admin"))
+    ))

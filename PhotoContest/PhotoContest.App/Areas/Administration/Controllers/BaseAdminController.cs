@@ -1,5 +1,6 @@
 ﻿namespace PhotoContest.App.Areas.Administration.Controllers
 {
+    using System.Data.Entity;
     using System.Web.Mvc;
 
     using PhotoContest.App.Controllers;
@@ -13,5 +14,7 @@
             : base(data)
         {
         }
+
+        protected DbContext Context { get; set; }
     }
 }
