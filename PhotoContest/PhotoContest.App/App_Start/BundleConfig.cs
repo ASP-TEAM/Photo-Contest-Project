@@ -22,7 +22,8 @@
 
             bundles.Add(new ScriptBundle("~/bundles/kendo").Include(
                         "~/Scripts/kendo/kendo.all.min.js",
-                        "~/Scripts/kendo/kendo.aspnetmvc.min.js"));
+                        "~/Scripts/kendo/kendo.aspnetmvc.min.js",
+                        "~/Scripts/kendo/kendo.culture.en.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/Scripts/jquery.validate*"));
 

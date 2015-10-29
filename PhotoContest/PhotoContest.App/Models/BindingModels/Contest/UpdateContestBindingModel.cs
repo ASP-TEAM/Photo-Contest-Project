@@ -25,6 +25,7 @@
 
         public bool IsActive { get; set; }
 
+        [UIHint("DateTimeNullable")]
         public DateTime EndDate { get; set; }
     }
 }
