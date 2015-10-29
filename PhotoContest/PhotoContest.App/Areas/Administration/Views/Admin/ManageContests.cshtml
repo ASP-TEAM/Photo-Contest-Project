@@ -4,29 +4,39 @@
 
 <h2>ManageContests</h2>
 
-@(Html.Kendo().Grid<PhotoContest.App.Models.ViewModels.Contest.ContestViewModel>
-      ()
+@(Html.Kendo()
+       .Grid<PhotoContest.App.Models.ViewModels.Contest.ContestViewModel>()
       .Name("grid")
       .Columns(columns =>
       {
           columns.Bound(c => c.Id);
           columns.Bound(c => c.Title);
           columns.Bound(c => c.Description);
+<<<<<<< HEAD
           columns.Bound(c => c.IsActive);
           columns.Bound(c => c.IsOpenForSubmissions);
           columns.Command(c => c.Edit());
           columns.Command(c => c.Destroy());
+=======
+          columns.Bound(c => c.ParticipantsLimit);
+          columns.Bound(c => c.ParticipationStrategyType);
+          columns.Bound(c => c.IsActive).Title("Active");
+          columns.Bound(c => c.IsOpenForSubmissions).Title("Open For Submissions");
+          columns.Bound(c => c.EndDate).Format("{0:dd.MM.yyyy}");
+          columns.Command(c => c.Edit()).Title("Edit");
+          columns.Command(c => c.Destroy()).Title("Delete");
+>>>>>>> 503d9b8bd7cd32ea446dc9db63b29af3101c3934
       })
       .Sortable()
       .Pageable(pageable => pageable.PageSizes(true))
-      .Editable(edit => edit.Mode(GridEditMode.InCell))
+      .Editable(edit => edit.Mode(GridEditMode.PopUp))
       .DataSource(dataSource =>
             dataSource
             .Ajax()
             .Model(m => m.Id(a => a.Id))
             .Read(read => read.Action("ReadContests", "Admin"))
-            .Update(update => update.Action("Edit", "Admin"))
-            .Destroy(destroy => destroy.Action("Destroy", "Admin"))
+            .Update(update => update.Action("EditContest", "Admin"))
+            .Destroy(destroy => destroy.Action("DestroyContest", "Admin"))
       ))
 
 

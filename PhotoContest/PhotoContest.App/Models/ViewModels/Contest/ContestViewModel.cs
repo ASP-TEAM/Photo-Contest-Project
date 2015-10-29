@@ -1,6 +1,7 @@
 ﻿namespace PhotoContest.App.Models.ViewModels.Contest
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.Models;
@@ -31,8 +32,16 @@
 
         public bool CanManage { get; set; }
 
+        [UIHint("DateTimeNullable")]
         public DateTime StartDate { get; set; }
 
+<<<<<<< HEAD
+=======
+        [UIHint("DateTimeNullable")]
+        public DateTime EndDate { get; set; }
+
+        [UIHint("DateTimeNullable")]
+>>>>>>> 503d9b8bd7cd32ea446dc9db63b29af3101c3934
         public DateTime? SubmissionDate { get; set; }
         
         public ParticipationStrategyType ParticipationStrategyType { get; set; }
