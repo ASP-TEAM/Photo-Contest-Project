@@ -1,0 +1,20 @@
+﻿@using PhotoContest.Common
+@if (User.Identity.IsAuthenticated)
+{
+    <li>@Html.ActionLink("New Contest", "NewContest", "Contests", new { Area = string.Empty }, null)</li>
+    <li>@Html.ActionLink("Contests", "Contests", "Contests", new {Area = string.Empty}, null)</li>
+    if (User.IsInRole(GlobalConstants.AdminRole))
+    {
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true">
+                Administration <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="themes">
+                <li>
+                    @Html.ActionLink("Manage Users", "ManageUsers", "Admin", new { Area = GlobalConstants.AdministrationAreaName }, null)
+                    @Html.ActionLink("Manage Contests", "ManageContests", "Admin", new { Area = GlobalConstants.AdministrationAreaName }, null)
+                </li>
+            </ul>
+        </li>
+    }
+}

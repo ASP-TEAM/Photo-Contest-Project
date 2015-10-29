@@ -6,10 +6,7 @@
     <meta name="description" content="Photo Contest" />
     <title>@ViewBag.Title - Photo Contest</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/ignitecss")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/ignitejs")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -24,11 +21,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("New Contest", "NewContest", "Contests")</li>
-                        <li>@Html.ActionLink("Contests", "Contests", "Contests")</li>
-                    }
+                    @Html.Partial("_NavigationPartial")
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

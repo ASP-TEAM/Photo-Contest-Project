@@ -22,8 +22,8 @@
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include("~/Scripts/jquery-ui-1.11.4.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/ignitejs")
-                    .IncludeDirectory("~/Scripts/igniteUI", "*.js", true));
+            //bundles.Add(new ScriptBundle("~/bundles/ignitejs")
+            //        .IncludeDirectory("~/Scripts/igniteUI", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/Scripts/jquery.validate*"));
 
@@ -32,8 +32,8 @@
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css", "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/ignitecss")
-                    .IncludeDirectory("~/Content/igniteUI", "*.css", true));
+            //bundles.Add(new StyleBundle("~/Content/ignitecss")
+            //        .IncludeDirectory("~/Content/igniteUI", "*.css", true));
         }
     }
 }

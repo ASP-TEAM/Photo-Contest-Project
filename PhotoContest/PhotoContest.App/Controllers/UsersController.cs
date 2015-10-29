@@ -23,24 +23,7 @@
             : base(data)
         {
         }
-
-        [Authorize(Roles = GlobalConstants.AdminRole)]
-        [HttpGet]
-        public ActionResult All()
-        {
-            var allUsers =
-                this.Data.Users.All()
-                    .OrderByDescending(u => u.RegisteredAt)
-                    .ThenBy(u => u.Id)
-                    .ProjectTo<FullUserViewModel>()
-                    .ToList();
-            // In the end of the Linq methods after sort, where clauses etc. rather than doing .Select(..)
-            // You need to write .Project().To<name of the view model class>()
-            // There is 2 important automapper does not automatically materialize the collection, so you must do it mannually
-            // And second automapper works only with Queryable
-            return this.View(allUsers);
-        }
-
+        
         [Authorize]
         [HttpGet]
         public ActionResult AutoCompleteUsername(string searchTerm)

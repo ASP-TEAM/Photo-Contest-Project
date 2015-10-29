@@ -95,3 +95,8 @@ a:hover {
     margin-top: 20px;
     width: 50%;
 }
+
+.profile-sm-img {
+    max-width: 50%;
+    max-height: 61px;
+}

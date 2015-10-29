@@ -264,6 +264,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
+    <Compile Include="Areas\Administration\Controllers\AdminController.cs" />
+    <Compile Include="Areas\Administration\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Administration\Controllers\PicturesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -356,8 +358,13 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Administration\Views\web.config" />
+    <Content Include="Areas\Administration\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\ManageUsers.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\ManageContests.cshtml" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Custom\ajaxHelper.js" />
+    <Content Include="Scripts\Custom\igniteUIHelper.js" />
     <Content Include="Scripts\Custom\picturesUpload.js" />
     <Content Include="Scripts\Custom\signalRHelper.js" />
     <Content Include="Scripts\igniteUI\infragistics.core.js" />
@@ -445,10 +452,10 @@
     <Content Include="Views\Contests\PreviewInactiveContest.cshtml" />
     <Content Include="Views\Contests\_ContestParticipantsPartial.cshtml" />
     <Content Include="Views\Contests\_ContestButtonsPartial.cshtml" />
+    <Content Include="Views\Shared\_NavigationPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Models\" />
-    <Folder Include="Areas\Administration\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
