@@ -11,6 +11,7 @@
     using Kendo.Mvc.UI;
 
     using PhotoContest.App.Areas.Administration.Models.BindingModels;
+    using PhotoContest.App.Areas.Administration.Models.ViewModels;
     using PhotoContest.App.Models.BindingModels.Contest;
     using PhotoContest.App.Models.ViewModels;
     using PhotoContest.App.Models.ViewModels.Contest;
@@ -36,7 +37,7 @@
 
         protected IEnumerable GetContestsData()
         {
-            return this.Data.Contests.All().Project().To<ContestViewModel>().ToList();
+            return this.Data.Contests.All().Project().To<ManageContestViewModel>().ToList();
         }
 
         [HttpPost]
@@ -70,17 +71,20 @@
         }
 
         [HttpPost]
-        public ActionResult EditContest([DataSourceRequest]DataSourceRequest request, UpdateContestBindingModel model)
+        public ActionResult EditContest([DataSourceRequest]DataSourceRequest request, ManageContestViewModel model)
         {
             var contest = this.Data.Contests.Find(model.Id);
             contest.IsActive = model.IsActive;
-            
-            contest.EndDate = model.EndDate;
+            contest.Title = model.Title;
             contest.Description = model.Description;
+            contest.IsOpenForSubmissions = model.IsOpenForSubmissions;
+            contest.ParticipationStrategy.ParticipationStrategyType = model.ParticipationStrategyType;
+            contest.VotingStrategy.VotingStrategyType = model.VotingStrategyType;
+            contest.DeadlineStrategy.DeadlineStrategyType = model.DeadlineStrategyType;
             this.Data.Contests.Update(contest);
             this.Data.SaveChanges();
 
-            return this.RedirectToAction("ReadContests");
+            return this.Json(new[] { model }.ToDataSourceResult(request, this.ModelState));
         }
 
         [HttpPost]
