@@ -23,12 +23,20 @@
           columns.Command(c => c.Destroy());
       })
       .Sortable()
-      .Pageable(pageable => pageable.PageSizes(true))
+      .Pageable(pageable =>
+      {
+          pageable.PageSizes(true);
+          pageable.Refresh(true);
+      })
       .Editable(edit => edit.Mode(GridEditMode.PopUp))
       .DataSource(dataSource =>
             dataSource
             .Ajax()
-            .Model(m => m.Id(a => a.Id))
+            .Model(model =>
+            {
+                model.Id(m => m.Id);
+                model.Field(m => m.Id).Editable(false);
+            })
             .Read(read => read.Action("ReadContests", "Admin"))
             .Update(update => update.Action("EditContest", "Admin"))
             .Destroy(destroy => destroy.Action("DestroyContest", "Admin"))
