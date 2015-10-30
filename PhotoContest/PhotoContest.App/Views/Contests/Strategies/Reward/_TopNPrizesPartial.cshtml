@@ -1,4 +1,10 @@
-﻿<div class="form-control">
-    <label>Top N Prizes: </label>
-    <input type="number" name="nPrizes"/>
+﻿@model PhotoContest.App.Models.ViewModels.Strategy.Reward.TopNPrizesViewModel
+
+<div class="form-group">
+    @Html.LabelFor(c => c.TopNPlaces, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(c => c.TopNPlaces,
+                new { @class = "form-control", type = "number" })
+        @Html.ValidationMessageFor(c => c.TopNPlaces, string.Empty, new { @class = "text-danger" })
+    </div>
 </div>

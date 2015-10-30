@@ -10,7 +10,7 @@
     {
         public void CheckDeadline(IPhotoContestData data, Contest contest, User user)
         {
-            if (contest.SubmissionEndDate < DateTime.Now)
+            if (contest.SubmissionDeadline < DateTime.Now)
             {
                 if (contest.IsOpenForSubmissions)
                 {

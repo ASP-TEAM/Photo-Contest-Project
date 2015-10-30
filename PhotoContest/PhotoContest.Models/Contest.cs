@@ -69,9 +69,9 @@
 
         public int? ParticipantsLimit { get; set; }
 
-        public int? WinnersPlaces { get; set; }
+        public int? TopNPlaces { get; set; }
 
-        public DateTime? SubmissionEndDate { get; set; }
+        public DateTime? SubmissionDeadline { get; set; }
 
         #endregion
 

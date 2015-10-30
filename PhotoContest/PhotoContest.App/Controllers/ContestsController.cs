@@ -1,4 +1,7 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.App.Models.ViewModels.Strategy.Deadline;
+using PhotoContest.App.Models.ViewModels.Strategy.Reward;
+
+namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -143,18 +146,41 @@
         [HttpGet]
         public ActionResult GetDeadlineStrategyPartial(int id)
         {
-            var strategy = this.Data.DeadlineStrategies.Find(id);
+            try
+            {
+                var strategy = this.Data.DeadlineStrategies.Find(id);
 
-            return PartialView("Strategies/Deadline/_" + strategy.DeadlineStrategyType + "Partial");
+                var viewModel = (AbstractDeadlineStrategyViewModel)Activator.CreateInstance(null, "PhotoContest.App.Models.ViewModels.Strategy.Deadline." + strategy.DeadlineStrategyType + "ViewModel").Unwrap();
+
+                return PartialView("Strategies/Deadline/_" + strategy.DeadlineStrategyType + "Partial", viewModel);
+            }
+            catch (Exception e)
+            {
+                
+            }
+
+            return this.Content("");
         }
 
         [Authorize]
         [HttpGet]
         public ActionResult GetRewardStrategyPartial(int id)
         {
-            var strategy = this.Data.RewardStrategies.Find(id);
+            try
+            {
+                var strategy = this.Data.RewardStrategies.Find(id);
 
-            return PartialView("Strategies/Reward/_" + strategy.RewardStrategyType + "Partial");
+                var viewModel = (AbstractRewardStrategyViewModel)Activator.CreateInstance(null, "PhotoContest.App.Models.ViewModels.Strategy.Reward." + strategy.RewardStrategyType + "ViewModel")
+                .Unwrap();
+
+                return PartialView("Strategies/Reward/_" + strategy.RewardStrategyType + "Partial", viewModel);
+            }
+            catch (Exception)
+            {
+                
+            }
+            
+            return this.Content("");
         }
 
         [Authorize]
@@ -243,6 +269,8 @@
                 ParticipationStrategyId = model.ParticipationStrategyId,
                 DeadlineStrategyId = model.DeadlineStrategyId,
                 ParticipantsLimit = model.ParticipantsLimit,
+                TopNPlaces = model.TopNPlaces,
+                SubmissionDeadline = model.SubmissionDeadline,
                 IsOpenForSubmissions = true,
                 StartDate = DateTime.Now,
                 OrganizatorId = loggedUserId,

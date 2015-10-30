@@ -1,6 +1,5 @@
 ﻿namespace PhotoContest.App.Models.ViewModels.Contest
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
 
     using System.Collections.Generic;
@@ -29,12 +28,6 @@
 
         [Required]
         public int DeadlineStrategyId { get; set; }
-
-        [Required]
-        public int ParticipantsLimit { get; set; }
-
-        [Required]
-        public DateTime EndDate { get; set; }
 
         public IEnumerable<StrategyViewModel> RewardStrategies { get; set; } 
 

@@ -1,4 +1,10 @@
-﻿<div class="form-control">
-    <label>Number of participants: </label>
-    <input type="number" min="1" name="participantsLimit" value=""/>
+﻿@model PhotoContest.App.Models.ViewModels.Strategy.Deadline.ByNumberOfParticipantsViewModel
+
+<div class="form-group">
+    @Html.LabelFor(c => c.ParticipantsLimit, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(c => c.ParticipantsLimit,
+                new { @class = "form-control", type = "number" })
+        @Html.ValidationMessageFor(c => c.ParticipantsLimit, string.Empty, new { @class = "text-danger" })
+    </div>
 </div>

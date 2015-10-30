@@ -35,9 +35,6 @@
         [UIHint("DateTimeNullable")]
         public DateTime StartDate { get; set; }
 
-        [UIHint("DateTimeNullable")]
-        public DateTime? SubmissionDate { get; set; }
-        
         public ParticipationStrategyType ParticipationStrategyType { get; set; }
 
         public void CreateMappings(IConfiguration configuration)
