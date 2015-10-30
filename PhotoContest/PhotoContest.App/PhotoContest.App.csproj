@@ -435,14 +435,11 @@
     <Content Include="Views\Contests\_ContestParticipantsPartial.cshtml" />
     <Content Include="Views\Contests\_ContestButtonsPartial.cshtml" />
     <Content Include="Views\Shared\_NavigationPartial.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Contests\Strategies\Reward\_SingleWinnerPartial.cshtml" />
     <Content Include="Views\Contests\Strategies\Reward\_TopNPrizesPartial.cshtml" />
     <Content Include="Views\Contests\Strategies\Deadline\_ByTimePartial.cshtml" />
     <Content Include="Views\Contests\Strategies\Deadline\_ByNumberOfParticipantsPartial.cshtml" />
-=======
     <Content Include="Views\Shared\EditorTemplates\DateTimeNullable.cshtml" />
->>>>>>> 503d9b8bd7cd32ea446dc9db63b29af3101c3934
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\KendoAdmin\" />
