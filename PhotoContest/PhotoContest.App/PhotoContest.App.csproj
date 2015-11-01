@@ -264,6 +264,7 @@
     <Compile Include="Areas\Administration\Controllers\PicturesController.cs" />
     <Compile Include="Areas\Administration\Models\BindingModels\DeleteContestBindingModel.cs" />
     <Compile Include="Areas\Administration\Models\ViewModels\ManageContestViewModel.cs" />
+    <Compile Include="Areas\Administration\Models\ViewModels\ManageUserViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
@@ -353,6 +354,12 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\web\foods\1.jpg" />
+    <Content Include="Content\web\foods\2.jpg" />
+    <Content Include="Content\web\foods\3.jpg" />
+    <Content Include="Content\web\foods\4.jpg" />
+    <Content Include="Content\web\foods\5.jpg" />
+    <Content Include="Content\web\foods\6.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -364,6 +371,7 @@
     <Content Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Administration\Views\Admin\ManageUsers.cshtml" />
     <Content Include="Areas\Administration\Views\Admin\ManageContests.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\ManageUser.cshtml" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Custom\ajaxHelper.js" />
     <Content Include="Scripts\Custom\createContest.js" />
@@ -458,9 +466,10 @@
     <Content Include="Views\Contests\Strategies\Deadline\_ByTimePartial.cshtml" />
     <Content Include="Views\Contests\Strategies\Deadline\_ByNumberOfParticipantsPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeNullable.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TextFieldReadonly.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\KendoDateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Administration\Views\KendoAdmin\" />
     <Folder Include="External libraries\" />
     <Folder Include="Views\Contests\Strategies\Participation\" />
     <Folder Include="Views\Contests\Strategies\Voting\" />

@@ -1,0 +1,13 @@
+﻿@model string
+<div class="row">
+    <div class="col-md-4">
+        @Html.LabelFor(m => m)
+        @Html.TextBoxFor(m => m, new { @readonly = "true", @class = "form-control" })
+    </div>
+    <div>
+        @Html.ValidationMessageFor(m => m)
+    </div>
+</div>
+
+
+

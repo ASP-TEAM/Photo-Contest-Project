@@ -1,0 +1,15 @@
+﻿@model PhotoContest.App.Areas.Administration.Models.ViewModels.ManageContestViewModel
+
+@(Html.Kendo().DropDownListFor(m => m)
+            .Name("OrganizedContests")
+            .DataValueField("Id")
+            .DataTextField("Title")
+            .BindTo((System.Collections.IEnumerable)ViewData["OrganizedContests"])
+)
+
+@*@(Html.Kendo().DropDownListFor(m => m)
+            .Name("OrganizedContests")
+            .DataValueField("Id")
+            .DataTextField("Title")
+            .BindTo((System.Collections.IEnumerable)ViewData["OrganizedContests"])
+)*@

@@ -1,0 +1,38 @@
+﻿@using PhotoContest.App.Models.ViewModels.Picture
+@model PhotoContest.App.Areas.Administration.Models.ViewModels.ManageUserViewModel
+@{
+    ViewBag.Title = "Manage User";
+}
+
+<h2>ManageUser</h2>
+
+<div class="row">
+    @using (Ajax.BeginForm("BanUser", "Admin", null,
+                new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    OnSuccess = "showSuccessMessage"
+                }
+                , null))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Id)
+        @Html.EditorFor(x => x.UserName)
+        @Html.EditorFor(x => x.Email)
+        @Html.EditorFor(x => x.FullName)<br />
+        @Html.EditorFor(x => x.RegisteredAt)<br />
+        @Html.Label("", "Organized Contests")<br />
+        @(Html.Kendo()
+            .DropDownList().Name("productDropDownList").DataTextField("Title").DataValueField("Id").BindTo(Model.OrganizedContests)
+        )
+
+        <input type="submit" value="Ban user" class="btn btn-danger" />
+    }
+
+</div>
+
+<script>
+    function showSuccessMessage(data) {
+        return notificationHelper.showSuccessMessage(data);
+    }
+</script>

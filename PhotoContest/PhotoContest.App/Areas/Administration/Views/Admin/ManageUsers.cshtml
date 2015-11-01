@@ -1,11 +1,40 @@
 ﻿@model IEnumerable<PhotoContest.App.Models.ViewModels.User.FullUserViewModel>
 @{
-    ViewBag.Title = "ManageUsers";
+    ViewBag.Title = "Manage Users";
 }
 
 <h2>ManageUsers</h2>
 
-@(Html.Kendo()
+<div class="row">
+    @using (Html.BeginForm("GetUserDetails", "Admin", FormMethod.Post))
+    {
+        @(Html.Kendo()
+    .AutoComplete()
+    .Name("searchUsers")
+    .Placeholder("Search by username...")
+    .MinLength(2)
+    .DataTextField("UserName")
+    .DataSource(dataSource =>
+    {
+        dataSource
+            .Read(x => x.Action("SearchByUsername", "Admin")
+            .Data("onUserSearchData"))
+            .ServerFiltering(true);
+    }))
+
+        <input type="submit" value="Manage"/>
+    }
+</div>
+
+<script>
+    function onUserSearchData() {
+        return {
+            text: $("#searchUsers").val()
+        }
+    }
+</script>
+
+@*@(Html.Kendo()
     .Grid(Model)
     .Name("grid")
     .Columns(cols =>
@@ -26,4 +55,4 @@
         .Read(read => read.Action("ReadUsers", "Admin"))
         .Update(update => update.Action("Edit", "Admin"))
         .Destroy(destroy => destroy.Action("Destroy", "Admin"))
-    ))
+    ))*@

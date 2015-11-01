@@ -1,22 +1,33 @@
 ﻿namespace PhotoContest.App.Areas.Administration.Controllers
 {
+    using System;
     using System.Collections;
     using System.Data.Entity;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
+    using System.Web.Security;
 
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using Kendo.Mvc.Extensions;
     using Kendo.Mvc.UI;
+
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.Owin;
 
     using PhotoContest.App.Areas.Administration.Models.BindingModels;
     using PhotoContest.App.Areas.Administration.Models.ViewModels;
     using PhotoContest.App.Models.BindingModels.Contest;
     using PhotoContest.App.Models.ViewModels;
     using PhotoContest.App.Models.ViewModels.Contest;
+    using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.App.Models.ViewModels.User;
+    using PhotoContest.Data;
     using PhotoContest.Data.Interfaces;
+    using PhotoContest.Models;
 
     public class AdminController : BaseAdminController
     {
@@ -48,11 +59,6 @@
                 .ToDataSourceResult(request);
 
             return this.Json(ads);
-        }
-
-        protected IEnumerable GetUsersData()
-        {
-            return this.Data.Users.All().Project().To<FullUserViewModel>();
         }
 
         [HttpPost]
@@ -87,14 +93,36 @@
             return this.Json(new[] { model }.ToDataSourceResult(request, this.ModelState));
         }
 
-        [HttpPost]
-        public ActionResult ReadUsers([DataSourceRequest]DataSourceRequest request)
+        [HttpGet]
+        public JsonResult SearchByUsername(string text)
         {
-            var ads =
-                this.GetUsersData()
-                .ToDataSourceResult(request);
+            var usersByCriteria =
+                this.Data.Users.All()
+                    .Where(u => u.UserName.ToLower().Contains(text.ToLower()))
+                    .Project()
+                    .To<ManageUserViewModel>()
+                    .ToList();
+            return this.Json(usersByCriteria, JsonRequestBehavior.AllowGet);
+        }
 
-            return this.Json(ads);
+        [HttpPost]
+        public ActionResult GetUserDetails([DataSourceRequest] DataSourceRequest request, string searchUsers)
+        {
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == searchUsers);
+            var model = Mapper.Map<ManageUserViewModel>(user);
+            return this.View("ManageUser", model);
+        }
+
+        public async Task<JsonResult> BanUser(ManageUserViewModel model)
+        {
+            var context = new PhotoContestDbContext();
+            var store = new UserStore<User>(context);
+            var manager = new UserManager<User>(store);
+            await manager.SetLockoutEnabledAsync(model.Id, true);
+            await manager.SetLockoutEndDateAsync(model.Id, DateTime.Now.AddDays(14));
+            return this.Json(
+                string.Format("Successfully locked user {0}", model.UserName),
+                JsonRequestBehavior.AllowGet); 
         }
     }
 }
