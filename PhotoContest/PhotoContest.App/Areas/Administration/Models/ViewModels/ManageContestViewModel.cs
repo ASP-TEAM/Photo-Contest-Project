@@ -16,13 +16,9 @@
 
         public string Organizator { get; set; }
 
-        public bool IsActive { get; set; }
+        public ContestStatus Status { get; set; }
 
         public bool IsOpenForSubmissions { get; set; }
-
-        public bool CanParticipate { get; set; }
-
-        public bool CanManage { get; set; }
 
         public ParticipationStrategyType ParticipationStrategyType { get; set; }
 

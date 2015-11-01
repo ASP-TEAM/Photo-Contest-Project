@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Models
+﻿using PhotoContest.Models.Enums;
+
+namespace PhotoContest.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +9,7 @@
     public class Contest
     {
         private const int DefaultParticipantsLimit = -1;
-        private const bool DefaultContestState = true;
+        private const ContestStatus DefaultContestState = ContestStatus.Active;
 
         private ICollection<User> participants;
 
@@ -23,8 +25,8 @@
             this.committee = new HashSet<User>();
             this.invitedUsers = new HashSet<User>();
             this.pictures = new HashSet<Picture>();
-            this.IsActive = DefaultContestState;
             this.ParticipantsLimit = DefaultParticipantsLimit;
+            this.Status = DefaultContestState;
         }
 
         public int Id { get; set; }
@@ -41,7 +43,7 @@
 
         public virtual User Organizator { get; set; }
 
-        public bool IsActive { get; set; }
+        public ContestStatus Status { get; set; }
 
         public bool IsOpenForSubmissions { get; set; }
        

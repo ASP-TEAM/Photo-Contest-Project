@@ -46,7 +46,6 @@ namespace PhotoContest.Data.Migrations
                 {
                     Title = "TestContest",
                     Description = "TestDescription",
-                    IsActive = true,
                     IsOpenForSubmissions = true,
                     StartDate = new DateTime(2015, 10, 10),
                     EndDate = new DateTime(2015, 10, 15),

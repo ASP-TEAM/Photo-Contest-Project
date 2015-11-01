@@ -97,7 +97,7 @@
         public ActionResult ActiveContests()
         {
             var activeContests = this.Data.Contests.All()
-                .Where(c => c.IsActive)
+                .Where(c => c.Status == ContestStatus.Active)
                 .OrderByDescending(c => c.StartDate)
                 .Project()
                 .To<ContestViewModel>()
@@ -112,7 +112,7 @@
         public ActionResult InactiveContests()
         {
             var activeContests = this.Data.Contests.All()
-                  .Where(c => c.IsActive == false)
+                  .Where(c => c.Status != ContestStatus.Active)
                   .OrderByDescending(c => c.StartDate)
                   .Project()
                   .To<ContestViewModel>()
@@ -258,7 +258,7 @@
             {
                 Title = model.Title,
                 Description = model.Description,
-                IsActive = true,
+                Status = ContestStatus.Active,
                 RewardStrategyId = model.RewardStrategyId,
                 VotingStrategyId = model.VotingStrategyId,
                 ParticipationStrategyId = model.ParticipationStrategyId,
@@ -274,7 +274,7 @@
             this.Data.Contests.Add(contest);
             this.Data.SaveChanges();
 
-            return new HttpStatusCodeResult(200);
+            return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
         [Authorize]
@@ -334,7 +334,7 @@
                 return this.Content(string.Join("\n", messages));
             }
 
-            return new HttpStatusCodeResult(200);
+            return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
         [Authorize]
@@ -343,7 +343,7 @@
         {
             var contest = this.Data.Contests.Find(id);
 
-            if (!contest.IsActive)
+            if (contest.Status != ContestStatus.Active)
             {
                 this.Response.StatusCode = 400;
                 return this.Content("The contest is not active");
@@ -445,7 +445,7 @@
 
                 this.Response.StatusCode = 200;
 
-                return RedirectToAction("Contest", new { id = contest.Id });
+                return RedirectToAction("PreviewContest", new { id = contest.Id });
             }
             catch (InvalidOperationException e)
             {
@@ -466,19 +466,12 @@
                 return this.HttpNotFound("The selected contest no longer exists");
             }
 
-            if (!contest.IsActive)
+            if (contest.Status != ContestStatus.Active)
             {
                 var contestWinners =
                     this.Data.ContestWinners.All()
                     .Where(c => c.ContestId == contest.Id)
-                    .Select(c => new ContestWinnerViewModel
-                    {
-                        Id = c.ContestId,
-                        ContestTitle = c.Contest.Title,
-                        ContestDescription = c.Contest.Description,
-                        Place = c.Place,
-                        Winner = c.Winner.UserName
-                    })
+                    .ProjectTo<ContestWinnerViewModel>()
                     .ToList();
 
                 return this.View("PreviewInactiveContest", contestWinners);
@@ -544,7 +537,7 @@
             if (model == null)
             {
                 this.Response.StatusCode = 400;
-                return this.Content("Missing Data");
+                return this.Json(new { ErrorMessage = "Missing Data" } );
             }
 
             if (!this.ModelState.IsValid)
@@ -565,7 +558,7 @@
             if (contest.OrganizatorId != loggedUserId)
             {
                 this.Response.StatusCode = 401;
-                return this.Content("Logged user is not the contest organizator");
+                return this.Json(new { ErrorMessage = "Logged user is not the contest organizator" });
             }
 
             if (!string.IsNullOrWhiteSpace(model.Title))
@@ -586,8 +579,7 @@
             this.Data.Contests.Update(contest);
             this.Data.SaveChanges();
 
-            this.Response.StatusCode = 200;
-            return this.Content("Contest updated successfully");
+            return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
         [Authorize]
@@ -690,7 +682,7 @@
                 return this.Content(string.Format("Contest with id {0} not found", id));
             }
 
-            if (contest.IsActive == false)
+            if (contest.Status != ContestStatus.Active)
             {
                 this.Response.StatusCode = 404;
                 return this.Content(string.Format("Contest with id {0} is not active", id));
@@ -705,7 +697,7 @@
             }
 
             contest.IsOpenForSubmissions = false;
-            contest.IsActive = false;
+            contest.Status = ContestStatus.Finalized;
             contest.EndDate = DateTime.Now;
 
             this.Data.SaveChanges();
@@ -714,7 +706,6 @@
                     StrategyFactory.GetRewardStrategy(contest.RewardStrategy.RewardStrategyType);
 
             this.RewardStrategy.ApplyReward(this.Data, contest);
-
 
             return new HttpStatusCodeResult(200);
         }
@@ -731,7 +722,7 @@
                 return this.Content(string.Format("Contest with id {0} not found", id));
             }
 
-            if (contest.IsActive == false)
+            if (contest.Status != ContestStatus.Active)
             {
                 this.Response.StatusCode = 404;
                 return this.Content(string.Format("Contest with id {0} is not active", id));
@@ -746,7 +737,7 @@
             }
 
             contest.IsOpenForSubmissions = false;
-            contest.IsActive = false;
+            contest.Status = ContestStatus.Dismissed;
             contest.EndDate = DateTime.Now;
 
             this.Data.SaveChanges();

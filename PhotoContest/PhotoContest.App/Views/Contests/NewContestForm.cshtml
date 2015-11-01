@@ -4,13 +4,7 @@
     ViewBag.Title = "NewContest";
 }
 
-@using (Ajax.BeginForm("CreateContest", "Contests", new {},
-    new AjaxOptions
-    {
-        HttpMethod = "POST",
-        OnSuccess = "ajaxHelper.onSuccess",
-        OnFailure = "ajaxHelper.onError"
-    }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("CreateContest", "Contests", new {}, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     <fieldset>

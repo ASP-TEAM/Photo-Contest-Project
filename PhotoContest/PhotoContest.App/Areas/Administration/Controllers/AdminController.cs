@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Areas.Administration.Controllers
+﻿using PhotoContest.Models.Enums;
+
+namespace PhotoContest.App.Areas.Administration.Controllers
 {
     using System;
     using System.Net;
@@ -69,7 +71,7 @@
             if (model != null && this.ModelState.IsValid)
             {
                 var contest = this.Data.Contests.Find(model.Id);
-                contest.IsActive = false;
+                //contest.IsActive = false;
                 contest.IsOpenForSubmissions = false;
                 this.Data.Contests.Update(contest);
                 this.Data.SaveChanges();
@@ -82,7 +84,7 @@
         public ActionResult EditContest([DataSourceRequest]DataSourceRequest request, ManageContestViewModel model)
         {
             var contest = this.Data.Contests.Find(model.Id);
-            contest.IsActive = model.IsActive;
+            contest.Status = model.Status;
             contest.Title = model.Title;
             contest.Description = model.Description;
             contest.IsOpenForSubmissions = model.IsOpenForSubmissions;
@@ -132,10 +134,12 @@
         public ActionResult ShowContestPictures(ManageContestViewModel model)
         {
             var contest = this.Data.Contests.Find(model.Id);
+
             if (contest == null)
             {
                 return this.HttpNotFound("Contest does not exists");
             }
+
             var viewModel =
                         contest.Pictures.AsQueryable()
                        .Project()
@@ -150,10 +154,11 @@
         {
             var activeContests =
                 this.Data.Contests.All()
-                    .Where(c => c.IsActive)
+                    .Where(c => c.Status == ContestStatus.Active)
                     .Project()
                     .To<ManageContestViewModel>()
                     .ToList();
+
             return this.Json(activeContests, JsonRequestBehavior.AllowGet);
         }
 

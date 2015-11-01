@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Models.Enums;
+
+namespace PhotoContest.App.Controllers
 {
     using System;
     using System.Linq;
@@ -35,13 +37,12 @@
         [HttpPost]
         public ActionResult Vote(int id)
         {
-            // TODO change to HTTPPOST
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
             var picture = this.Data.Pictures.Find(id);
 
             try
             {
-                if (!picture.Contest.IsActive)
+                if (picture.Contest.Status != ContestStatus.Active)
                 {
                     throw new InvalidOperationException("The contest is closed.");
                 }

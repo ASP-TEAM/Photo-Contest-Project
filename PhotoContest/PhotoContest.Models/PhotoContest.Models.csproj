@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Contest.cs" />
     <Compile Include="DeadlineStrategy.cs" />
+    <Compile Include="Enums\ContestStatus.cs" />
     <Compile Include="Enums\DeadlineStrategyType.cs" />
     <Compile Include="Enums\InvitationStatus.cs" />
     <Compile Include="Enums\InvitationType.cs" />
