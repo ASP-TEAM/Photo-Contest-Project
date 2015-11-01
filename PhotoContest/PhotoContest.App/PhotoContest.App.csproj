@@ -354,12 +354,6 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="Content\web\foods\1.jpg" />
-    <Content Include="Content\web\foods\2.jpg" />
-    <Content Include="Content\web\foods\3.jpg" />
-    <Content Include="Content\web\foods\4.jpg" />
-    <Content Include="Content\web\foods\5.jpg" />
-    <Content Include="Content\web\foods\6.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
