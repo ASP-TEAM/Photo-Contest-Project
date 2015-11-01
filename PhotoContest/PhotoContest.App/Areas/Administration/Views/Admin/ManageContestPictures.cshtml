@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Manage Pictures";
+}
+
+<h2>Manage active contests pictures</h2>
+
+@using (Ajax.BeginForm("ShowContestPictures", "Admin", null,
+    new AjaxOptions
+    {
+        UpdateTargetId = "contestPicturesWrapper",
+        HttpMethod = "POST"
+    },
+    null))
+{
+    @Html.AntiForgeryToken()
+        @(Html.Kendo()
+            .DropDownList()
+            .Name("contestPictures")
+            .DataTextField("Title")
+            .DataValueField("Id")
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                { read.Action("GetActiveContests", "Admin"); });
+            })
+        )
+
+    @Html.Hidden("Id", "", new {id= "Id", @class="hidden" })
+
+    <input type="submit" value="View Details" id="viewDetails" class="btn btn-primary"/>
+}
+<br />
+<div id="contestPicturesWrapper"></div>
+
+<script>
+    $("#viewDetails").click(function () {
+        $("#Id").val($('#contestPictures').data("kendoDropDownList").value());
+    })
+</script>

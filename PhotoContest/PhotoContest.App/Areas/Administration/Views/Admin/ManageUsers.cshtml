@@ -18,41 +18,10 @@
     {
         dataSource
             .Read(x => x.Action("SearchByUsername", "Admin")
-            .Data("onUserSearchData"))
+            .Data("adminManager.onUserSearchData"))
             .ServerFiltering(true);
     }))
 
-        <input type="submit" value="Manage"/>
+        <input type="submit" value="View Details" class="btn btn-primary"/>
     }
 </div>
-
-<script>
-    function onUserSearchData() {
-        return {
-            text: $("#searchUsers").val()
-        }
-    }
-</script>
-
-@*@(Html.Kendo()
-    .Grid(Model)
-    .Name("grid")
-    .Columns(cols =>
-        {
-            cols.AutoGenerate(true);
-            cols.Command(c => c.Edit()).Title("Edit");
-            cols.Command(c => c.Destroy()).Title("Delete");
-        })
-    .ColumnMenu()
-    .Pageable(page => page.Refresh(true))
-    .Sortable()
-    .Filterable()
-    .Editable(edit => edit.Mode(GridEditMode.PopUp))
-    .DataSource(data =>
-    data
-        .Ajax()
-        .Model(m => m.Id(a => a.Id))
-        .Read(read => read.Action("ReadUsers", "Admin"))
-        .Update(update => update.Action("Edit", "Admin"))
-        .Destroy(destroy => destroy.Action("Destroy", "Admin"))
-    ))*@

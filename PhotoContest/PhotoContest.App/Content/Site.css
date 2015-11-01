@@ -100,3 +100,8 @@ a:hover {
     max-width: 50%;
     max-height: 61px;
 }
+
+.manage-picture {
+    max-width: 180px;
+    max-height: 180px;
+}

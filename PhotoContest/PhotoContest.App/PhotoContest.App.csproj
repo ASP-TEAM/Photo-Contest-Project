@@ -261,8 +261,8 @@
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
     <Compile Include="Areas\Administration\Controllers\AdminController.cs" />
     <Compile Include="Areas\Administration\Controllers\BaseAdminController.cs" />
-    <Compile Include="Areas\Administration\Controllers\PicturesController.cs" />
     <Compile Include="Areas\Administration\Models\BindingModels\DeleteContestBindingModel.cs" />
+    <Compile Include="Areas\Administration\Models\ViewModels\ManageContestPicturesViewModel.cs" />
     <Compile Include="Areas\Administration\Models\ViewModels\ManageContestViewModel.cs" />
     <Compile Include="Areas\Administration\Models\ViewModels\ManageUserViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -366,7 +366,10 @@
     <Content Include="Areas\Administration\Views\Admin\ManageUsers.cshtml" />
     <Content Include="Areas\Administration\Views\Admin\ManageContests.cshtml" />
     <Content Include="Areas\Administration\Views\Admin\ManageUser.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\ManageContestPictures.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\_ManageContestPicturesPartial.cshtml" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="Scripts\Custom\administration.js" />
     <Content Include="Scripts\Custom\ajaxHelper.js" />
     <Content Include="Scripts\Custom\createContest.js" />
     <Content Include="Scripts\Custom\picturesUpload.js" />

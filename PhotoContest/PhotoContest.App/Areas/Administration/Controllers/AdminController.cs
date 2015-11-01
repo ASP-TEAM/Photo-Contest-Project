@@ -20,11 +20,6 @@
 
     using PhotoContest.App.Areas.Administration.Models.BindingModels;
     using PhotoContest.App.Areas.Administration.Models.ViewModels;
-    using PhotoContest.App.Models.BindingModels.Contest;
-    using PhotoContest.App.Models.ViewModels;
-    using PhotoContest.App.Models.ViewModels.Contest;
-    using PhotoContest.App.Models.ViewModels.Picture;
-    using PhotoContest.App.Models.ViewModels.User;
     using PhotoContest.Data;
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
@@ -34,6 +29,11 @@
         public AdminController(IPhotoContestData data)
             : base(data)
         {
+        }
+
+        public ActionResult ManageContestPictures()
+        {
+            return this.View();
         }
 
         public ActionResult ManageContests()
@@ -123,6 +123,55 @@
             return this.Json(
                 string.Format("Successfully locked user {0}", model.UserName),
                 JsonRequestBehavior.AllowGet); 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ShowContestPictures(ManageContestViewModel model)
+        {
+            var contest = this.Data.Contests.Find(model.Id);
+            if (contest == null)
+            {
+                return this.HttpNotFound("Contest does not exists");
+            }
+            var viewModel =
+                        contest.Pictures.AsQueryable()
+                       .Project()
+                       .To<ManageContestPicturesViewModel>()
+                       .ToList();
+
+            return this.PartialView("_ManageContestPicturesPartial", viewModel);
+        }
+
+        [HttpGet]
+        public ActionResult GetActiveContests()
+        {
+            var activeContests =
+                this.Data.Contests.All()
+                    .Where(c => c.IsActive)
+                    .Project()
+                    .To<ManageContestViewModel>()
+                    .ToList();
+            return this.Json(activeContests, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult DeletePictureFromContest(int id)
+        {
+            var picture = this.Data.Pictures.Find(id);
+            if (picture == null)
+            {
+                this.Response.StatusCode = 400;
+                return this.Json("Picture not found", JsonRequestBehavior.AllowGet);
+            }
+
+            picture.Contest.Pictures.Remove(picture);
+            picture.User.Pictures.Remove(picture);
+            this.Data.Pictures.Delete(picture);
+            this.Data.SaveChanges();
+            this.Response.StatusCode = 200;
+
+            return this.Json("Successfully deleted picture!", JsonRequestBehavior.AllowGet);
         }
     }
 }
