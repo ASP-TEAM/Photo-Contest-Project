@@ -1,12 +1,11 @@
 ﻿namespace PhotoContest.App.Areas.Administration.Controllers
 {
     using System;
+    using System.Net;
     using System.Collections;
-    using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using System.Web.Security;
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
@@ -16,9 +15,9 @@
 
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
-    using Microsoft.Owin;
 
     using PhotoContest.App.Areas.Administration.Models.BindingModels;
+    using PhotoContest.App.Services;
     using PhotoContest.App.Areas.Administration.Models.ViewModels;
     using PhotoContest.Data;
     using PhotoContest.Data.Interfaces;
@@ -26,9 +25,12 @@
 
     public class AdminController : BaseAdminController
     {
+        private PicturesService _picturesService;
+
         public AdminController(IPhotoContestData data)
             : base(data)
         {
+            this._picturesService = new PicturesService();
         }
 
         public ActionResult ManageContestPictures()
@@ -159,14 +161,24 @@
         public ActionResult DeletePictureFromContest(int id)
         {
             var picture = this.Data.Pictures.Find(id);
+
             if (picture == null)
             {
                 this.Response.StatusCode = 400;
                 return this.Json("Picture not found", JsonRequestBehavior.AllowGet);
             }
 
+            var googleDeleteResult = this._picturesService.DeleteImageFromGoogleDrive(picture.GoogleFileId);
+
+            if (googleDeleteResult[0] != "success")
+            {
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(googleDeleteResult[1], JsonRequestBehavior.AllowGet);
+            }
+
             picture.Contest.Pictures.Remove(picture);
             picture.User.Pictures.Remove(picture);
+
             this.Data.Pictures.Delete(picture);
             this.Data.SaveChanges();
             this.Response.StatusCode = 200;

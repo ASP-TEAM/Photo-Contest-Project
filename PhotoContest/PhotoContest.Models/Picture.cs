@@ -15,6 +15,16 @@
 
         public string Url { get; set; }
 
+        public string GoogleFileId { get; set; }
+
+        public string UserId { get; set; }
+
+        public virtual User User { get; set; }
+
+        public int ContestId { get; set; }
+
+        public virtual Contest Contest { get; set; }
+
         public virtual ICollection<Vote> Votes
         {
             get
@@ -26,13 +36,5 @@
                 this.votes = value;
             }
         }
-
-        public string UserId { get; set; }
-
-        public virtual User User { get; set; }
-
-        public int ContestId { get; set; }
-
-        public virtual Contest Contest { get; set; }
     }
 }

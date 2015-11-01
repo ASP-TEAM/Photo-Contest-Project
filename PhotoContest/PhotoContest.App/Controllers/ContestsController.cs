@@ -1,7 +1,4 @@
-﻿using PhotoContest.App.Models.ViewModels.Strategy.Deadline;
-using PhotoContest.App.Models.ViewModels.Strategy.Reward;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -18,32 +15,31 @@ namespace PhotoContest.App.Controllers
     using PhotoContest.Data.Strategies;
 
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using PhotoContest.App.Models.ViewModels.Contest;
-    using PhotoContest.App.Models.ViewModels.Invitation;
     using PhotoContest.App.Models.ViewModels.Strategy;
     using PhotoContest.Models.Enums;
+    using PhotoContest.App.Models.ViewModels.Strategy.Deadline;
+    using PhotoContest.App.Models.ViewModels.Strategy.Reward;
 
-    using File = Google.Apis.Drive.v2.Data.File;
-    using Google.Apis.Drive.v2;
-    using Google.Apis.Drive.v2.Data;
     using PhotoContest.App.Services;
 
     #endregion
 
     public class ContestsController : BaseController
     {
-        private const int MaxImageSize = 1000000;
-        private const string GoogleDriveFolderId = "0By2WSCXLYL1JNVJacmZvcXROeVk";
+        private const string GoogleDrivePicturesBaseLink = "http://docs.google.com/uc?export=open&id=";
+
+        private PicturesService _picturesService;
 
         public ContestsController(IPhotoContestData data)
             : base(data)
         {
+            this._picturesService = new PicturesService();
         }
 
         [HttpGet]
@@ -55,7 +51,6 @@ namespace PhotoContest.App.Controllers
                     .Project()
                     .To<ContestViewModel>()
                     .ToList();
-
 
             this.ApplyRights(allContests);
 
@@ -393,11 +388,12 @@ namespace PhotoContest.App.Controllers
 
             for (int i = 0; i < this.Request.Files.Count; i++)
             {
-                var result = this.ValidateImageData(this.Request.Files[i]);
+                var result = this._picturesService.ValidateImageData(this.Request.Files[i]);
 
                 if (result != null)
                 {
-                    return result;
+                    this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    return this.Json(new { ErrorMessage = result });
                 }
 
                 files.Add(this.Request.Files[i]);
@@ -426,9 +422,7 @@ namespace PhotoContest.App.Controllers
 
                 foreach (var file in files)
                 {
-                    var base64String = GetBase64String(file);
-
-                    var result = UploadImageToGoogleDrive(base64String, file.FileName, file.ContentType);
+                    var result = this._picturesService.UploadImageToGoogleDrive(file, file.FileName, file.ContentType);
 
                     if (result[0] != "success")
                     {
@@ -439,7 +433,8 @@ namespace PhotoContest.App.Controllers
                     Picture picture = new Picture
                     {
                         UserId = user.Id,
-                        Url = result[1],
+                        Url = GoogleDrivePicturesBaseLink + result[1],
+                        GoogleFileId = result[1],
                         ContestId = contest.Id
                     };
 
@@ -450,7 +445,7 @@ namespace PhotoContest.App.Controllers
 
                 this.Response.StatusCode = 200;
 
-                return null;
+                return RedirectToAction("Contest", new { id = contest.Id });
             }
             catch (InvalidOperationException e)
             {
@@ -464,7 +459,6 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult PreviewContest(int id)
         {
-            // TODO Change login based on is contest active or not!
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
@@ -758,69 +752,6 @@ namespace PhotoContest.App.Controllers
             this.Data.SaveChanges();
 
             return new HttpStatusCodeResult(200);
-        }
-
-        private string[] UploadImageToGoogleDrive(string fileDataUrl, string fileName, string fileType)
-        {
-            string mediaType = fileType;
-            byte[] byteArray = Convert.FromBase64String(fileDataUrl);
-            MemoryStream stream = new MemoryStream(byteArray);
-
-            var service = GoogleDriveService.Get();
-
-            File body = new File
-            {
-                Title = fileName,
-                MimeType = mediaType,
-                Parents = new List<ParentReference>
-                        {
-                            new ParentReference
-                                {
-                                    Id = GoogleDriveFolderId
-                                }
-                        },
-                Permissions = new List<Permission>()
-                {
-                    new Permission() { Type = "anyone", Role = "reader", WithLink = true }
-                }
-            };
-
-            try
-            {
-                FilesResource.InsertMediaUpload request = service.Files.Insert(body, stream, mediaType);
-                request.Upload();
-
-                return new[] { "success", "http://docs.google.com/uc?export=open&id=" + request.ResponseBody.Id };
-            }
-            catch (Exception exception)
-            {
-                return new[] { "error", string.Format("Something happened.\r\n" + exception.Message) };
-            }
-        }
-
-        private ActionResult ValidateImageData(HttpPostedFileBase file)
-        {
-            if (!file.ContentType.Contains("image"))
-            {
-                this.Response.StatusCode = 400;
-                return this.Json(new { ErrorMessage = "The file is not a picture" });
-            }
-
-            if (file.ContentLength > MaxImageSize)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "Picture size must be in range [1 - 1024 kb]" });
-            }
-
-            return null;
-        }
-
-        private string GetBase64String(HttpPostedFileBase file)
-        {
-            byte[] fileBuffer = new byte[file.ContentLength];
-            file.InputStream.Read(fileBuffer, 0, file.ContentLength);
-
-            return Convert.ToBase64String(fileBuffer);
         }
     }
 }
