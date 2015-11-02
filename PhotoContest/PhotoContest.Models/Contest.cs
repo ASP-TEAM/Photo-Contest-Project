@@ -1,14 +1,12 @@
-﻿using PhotoContest.Models.Enums;
-
-namespace PhotoContest.Models
+﻿namespace PhotoContest.Models
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using PhotoContest.Models.Enums;
 
     public class Contest
     {
-        private const int DefaultParticipantsLimit = -1;
         private const ContestStatus DefaultContestState = ContestStatus.Active;
 
         private ICollection<User> participants;
@@ -19,13 +17,15 @@ namespace PhotoContest.Models
 
         private ICollection<User> invitedUsers;
 
+        private ICollection<Reward> rewards;
+
         public Contest()
         {
             this.participants = new HashSet<User>();
             this.committee = new HashSet<User>();
             this.invitedUsers = new HashSet<User>();
             this.pictures = new HashSet<Picture>();
-            this.ParticipantsLimit = DefaultParticipantsLimit;
+            this.rewards = new HashSet<Reward>();
             this.Status = DefaultContestState;
         }
 
@@ -124,5 +124,17 @@ namespace PhotoContest.Models
                 this.pictures = value;
             }
         }
+
+        public virtual ICollection<Reward> Rewards
+        {
+            get
+            {
+                return this.rewards; 
+            }
+            set
+            {
+                this.rewards = value;
+            }
+        } 
     }
 }
