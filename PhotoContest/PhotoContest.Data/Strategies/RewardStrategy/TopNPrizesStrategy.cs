@@ -33,6 +33,11 @@
                         Place = i + 1,
                         WinnerId = winners.ElementAt(i).Id
                     });
+
+                    foreach (var reward in contest.Rewards.Where(r => r.Place == i + 1))
+                    {
+                        reward.UserId = winners[i].Id;
+                    }
                 }
 
                 data.SaveChanges();

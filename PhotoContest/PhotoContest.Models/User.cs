@@ -26,7 +26,9 @@
 
         private ICollection<Invitation> pendingInvitations;
 
-        private ICollection<Invitation> sendedInvitations; 
+        private ICollection<Invitation> sendedInvitations;
+
+        private ICollection<Reward> rewards; 
 
         public User()
         {
@@ -37,6 +39,8 @@
             this.votes = new HashSet<Vote>();
 
             this.pictures = new HashSet<Picture>();
+            
+            this.rewards = new HashSet<Reward>();
 
             this.sendedInvitations = new HashSet<Invitation>();
             this.pendingInvitations = new HashSet<Invitation>();
@@ -93,6 +97,18 @@
             set
             {
                 this.votes = value;
+            }
+        }
+
+        public virtual ICollection<Reward> Rewards
+        {
+            get
+            {
+                return this.rewards;
+            }
+            set
+            {
+                this.rewards = value;
             }
         }
 

@@ -1,4 +1,7 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.App.Models.BindingModels.Reward;
+using PhotoContest.App.Models.ViewModels.Reward;
+
+namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -160,6 +163,53 @@
             }
 
             return this.Content("");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult GetRewardPartial()
+        {
+            return PartialView("~/Views/Rewards/_AddPartial.cshtml", new AddRewardViewModel());
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AddRewards(int id, CreateRewardsBindingModel model)
+        {
+            if (model == null)
+            {
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new {ErrorMessage = "Missing data"});
+            }
+
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                return this.HttpNotFound("Contest not found");
+            }
+
+            for (int i = 0; i < model.Name.Length; i++)
+            {
+                if (model.Place[i] < 1 || (contest.TopNPlaces != null && model.Place[i] > contest.TopNPlaces))
+                {
+                    this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    return this.Json(new { ErrorMessage = "Reward for unknown place" });
+                }
+
+                contest.Rewards.Add(new Reward()
+                {
+                    ContestId = contest.Id,
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Place = model.Place[i],
+                    ImageUrl = model.ImageUrl[i]
+                });
+            }
+
+            this.Data.SaveChanges();
+
+            return this.RedirectToAction("PreviewContest", new {id = id});
         }
 
         [Authorize]

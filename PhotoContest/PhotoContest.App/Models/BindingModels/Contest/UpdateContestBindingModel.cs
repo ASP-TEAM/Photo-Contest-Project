@@ -5,6 +5,7 @@
 
     using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.Models;
+    using PhotoContest.Models.Enums;
 
     public class UpdateContestBindingModel : IMapFrom<Contest>
     {
@@ -23,7 +24,7 @@
 
         public ParticipationStrategy ParticipationStrategy { get; set; }
 
-        public bool IsActive { get; set; }
+        public ContestStatus Status { get; set; }
 
         [UIHint("DateTimeNullable")]
         public DateTime EndDate { get; set; }

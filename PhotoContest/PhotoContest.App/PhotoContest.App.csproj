@@ -280,6 +280,7 @@
     <Compile Include="Infrastructure\Mapping\IMapFrom.cs" />
     <Compile Include="Models\BindingModels\Contest\CreateContestBindingModel.cs" />
     <Compile Include="Models\BindingModels\Contest\UpdateContestBindingModel.cs" />
+    <Compile Include="Models\BindingModels\Reward\CreateRewardsBindingModel.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestWinnerViewModel.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Models\ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\ViewModels\Picture\FullPictureViewModel.cs" />
     <Compile Include="Models\ViewModels\Picture\PictureViewModel.cs" />
+    <Compile Include="Models\ViewModels\Reward\AddRewardViewModel.cs" />
     <Compile Include="Models\ViewModels\Strategy\Deadline\ByTimeViewModel.cs" />
     <Compile Include="Models\ViewModels\Strategy\Deadline\AbstractDeadlineStrategyViewModel.cs" />
     <Compile Include="Models\ViewModels\Strategy\Deadline\ByNumberOfParticipantsViewModel.cs" />
@@ -466,6 +468,7 @@
     <Content Include="Views\Shared\EditorTemplates\DateTimeNullable.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextFieldReadonly.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\KendoDateTime.cshtml" />
+    <Content Include="Views\Rewards\_AddPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="External libraries\" />

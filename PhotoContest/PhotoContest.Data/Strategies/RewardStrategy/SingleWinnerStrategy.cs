@@ -25,6 +25,11 @@
                     WinnerId = winner.Id
                 });
 
+                foreach (var reward in contest.Rewards)
+                {
+                    reward.UserId = winner.Id;
+                }
+
                 data.SaveChanges();
             }  
         }

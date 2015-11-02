@@ -8,13 +8,31 @@
 @Html.Partial("_UpdateContestDataForm")
 
 @if (Model.ParticipationStrategy.ParticipationStrategyType == ParticipationStrategyType.Closed ||
-    Model.VotingStrategy.VotingStrategyType == VotingStrategyType.Closed)
+                Model.VotingStrategy.VotingStrategyType == VotingStrategyType.Closed)
 {
     @Html.Partial("_InviteUsersFormPartial");
 }
 
-@if (Model.IsActive)
+@if (Model.Status == ContestStatus.Active)
 {
+    <div>
+        @using (Html.BeginForm("AddRewards", "Contests", new { id = Model.Id}, FormMethod.Post))
+        {
+            <div id="manageRewardsContainer" class="container">
+
+            </div>
+            <div>
+                @Ajax.ActionLink("Add reward", "GetRewardPartial", "Contests", new AjaxOptions()
+                {
+                    HttpMethod = "GET",
+                    InsertionMode = InsertionMode.InsertAfter,
+                    UpdateTargetId = "manageRewardsContainer",
+                }, new { @class = "btn btn-info" })
+            </div>
+            <input type="submit" value="Save Rewards" class="btn btn-info"/>
+        }
+    </div>
+
     <div class="finish-contest">
         @Ajax.ActionLink("Finalize", "FinalizeContest", "Contests", new { id = Model.Id },
         new AjaxOptions
@@ -22,9 +40,9 @@
             HttpMethod = "POST",
             OnSuccess = "ajaxHelper.onSuccess",
             OnFailure = "ajaxHelper.onError"
-        }, 
+        },
         new { @class = "btn btn-primary" })
-        
+
         @Ajax.ActionLink("Dismiss", "DismissContest", "Contests", new { id = Model.Id },
         new AjaxOptions
         {
