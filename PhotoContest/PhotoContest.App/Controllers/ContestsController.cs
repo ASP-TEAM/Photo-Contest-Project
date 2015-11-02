@@ -36,12 +36,17 @@
 
         private PicturesService _picturesService;
 
+        public ContestsController()
+        {
+        }
+
         public ContestsController(IPhotoContestData data)
             : base(data)
         {
             this._picturesService = new PicturesService();
         }
 
+        
         [HttpGet]
         public ActionResult AllContests()
         {

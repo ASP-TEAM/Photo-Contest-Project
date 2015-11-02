@@ -13,6 +13,11 @@
         private readonly DbContext context;
         private readonly IDictionary<Type, object> repositories;
 
+        public PhotoContestData()
+            : this(new PhotoContestDbContext())
+        {
+        }
+
         public PhotoContestData(DbContext context)
         {
             this.context = context;
