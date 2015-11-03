@@ -4,11 +4,18 @@
     using System.Linq;
     using System.Collections.Generic;
     using AutoMapper.QueryableExtensions;
+
+    using PhotoContest.Data.Interfaces;
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Models.Enums;
 
     public class ContestService : BaseService, IContestsService
     {
+        public ContestService(IPhotoContestData data)
+            :base(data)
+        {
+        }
+
         public IEnumerable<ContestViewModel> GetActiveContests(string userId)
         {
             var activeContests = this.Data.Contests.All()

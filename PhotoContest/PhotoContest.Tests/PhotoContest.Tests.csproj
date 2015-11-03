@@ -96,6 +96,18 @@
       <Project>{41f98e1a-673f-411e-ae27-5945018b52e2}</Project>
       <Name>PhotoContest.App</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PhotoContest.Data\PhotoContest.Data.csproj">
+      <Project>{A9D027BD-FFE7-42F5-845C-19CCA215FD2C}</Project>
+      <Name>PhotoContest.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhotoContest.Infrastructure\PhotoContest.Infrastructure.csproj">
+      <Project>{6E278382-9762-4639-AC59-61692290AF50}</Project>
+      <Name>PhotoContest.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhotoContest.Models\PhotoContest.Models.csproj">
+      <Project>{A02CAA68-8AFC-4A09-8843-ACEFF296F3EA}</Project>
+      <Name>PhotoContest.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

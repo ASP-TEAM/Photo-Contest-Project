@@ -19,6 +19,9 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
+    using Microsoft.AspNet.SignalR;
+
+    using PhotoContest.App.Hubs;
     using PhotoContest.Models.Enums;
 
     using PhotoContest.Infrastructure.Interfaces;
@@ -78,7 +81,7 @@
             return this.PartialView("_InactiveContestsPartial", viewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult MyContests()
         {
@@ -87,14 +90,33 @@
             return this.PartialView("_MyContestsPartial", viewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
+<<<<<<< HEAD
+=======
+        public ActionResult GetDeadlineStrategyPartial(int id)
+        {
+            try
+            {
+                var viewModel = this._strategyService.GetDeadlineStrategyOptions(id);
+
+                return PartialView("Strategies/Deadline/_" + viewModel.Type + "Partial", viewModel);
+            }
+            catch (Exception)
+            {
+                return this.Content("");
+            }
+        }
+
+        [System.Web.Mvc.Authorize]
+        [HttpGet]
+>>>>>>> 8577aeb5c56251899283d8d78526594818d2d534
         public ActionResult GetRewardPartial()
         {
             return PartialView("~/Views/Rewards/_AddPartial.cshtml", new AddRewardViewModel());
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult AddRewards(int id, CreateRewardsBindingModel model)
         {
@@ -140,8 +162,32 @@
             return this.RedirectToAction("PreviewContest", new {id = id});
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
+<<<<<<< HEAD
+=======
+        public ActionResult GetRewardStrategyPartial(int id)
+        {
+            try
+            {
+                var strategy = this.Data.RewardStrategies.Find(id);
+
+                var viewModel = (AbstractRewardStrategyViewModel)Activator.CreateInstance(null, "PhotoContest.App.Models.ViewModels.Strategy.Reward." + strategy.RewardStrategyType + "ViewModel")
+                .Unwrap();
+
+                return PartialView("Strategies/Reward/_" + strategy.RewardStrategyType + "Partial", viewModel);
+            }
+            catch (Exception)
+            {
+                
+            }
+            
+            return this.Content("");
+        }
+
+        [System.Web.Mvc.Authorize]
+        [HttpGet]
+>>>>>>> 8577aeb5c56251899283d8d78526594818d2d534
         public ActionResult NewContest()
         {
             var viewModel = new CreateContestViewModel();
@@ -177,7 +223,7 @@
             return this.View("NewContestForm", viewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateContest(CreateContestBindingModel model)
@@ -239,7 +285,7 @@
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult Join(int id)
         {
@@ -299,7 +345,7 @@
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult JoinCommittee(int id)
         {
@@ -335,7 +381,7 @@
             return new HttpStatusCodeResult(200);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Upload(int id)
@@ -467,7 +513,7 @@
             return this.View(contestViewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult ManageContest(int id)
         {
@@ -491,7 +537,7 @@
             return this.View("ManageContestForm", contestBindingModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPatch]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateContest(UpdateContestBindingModel model)
@@ -544,7 +590,7 @@
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult InviteUser(string username, int contestId, InvitationType type)
@@ -625,14 +671,15 @@
 
             this.Data.SaveChanges();
 
-            this.HubContext.Clients.User(username).notificationReceived(invitation.Id);
+            var hub = GlobalHost.ConnectionManager.GetHubContext<PhotoContestHub>();
+            hub.Clients.User(username).notificationReceived(invitation.Id);
 
             this.Response.StatusCode = 200;
 
             return this.Content(string.Format("User with username {0} successfully invited", username));
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult FinalizeContest(int id)
         {
@@ -672,7 +719,7 @@
             return new HttpStatusCodeResult(200);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult DismissContest(int id)
         {
