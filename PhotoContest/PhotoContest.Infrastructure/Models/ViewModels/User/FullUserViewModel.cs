@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-using PhotoContest.Infrastructure.Models.ViewModels.Contest;
-using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.User
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.User
 {
+    using System;
+    using System.Collections.Generic;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
+    using PhotoContest.Infrastructure.Models.ViewModels.Contest;
+    using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
+
     /// <summary>
     /// IMapFrom<> - maps all properties(automatically) from the class provided eg(User),
     ///  but the types and names must match

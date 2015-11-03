@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Picture
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Picture
 {
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
+
     public class PictureViewModel : IMapFrom<PhotoContest.Models.Picture>, IHaveCustomMappings
     {
         public string Url { get; set; }

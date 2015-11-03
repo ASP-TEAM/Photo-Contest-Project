@@ -1,7 +1,4 @@
-﻿using PhotoContest.Infrastructure.Interfaces;
-using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     using System;
     using System.Linq;
@@ -16,6 +13,8 @@ namespace PhotoContest.App.Controllers
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
     using PhotoContest.Models.Enums;
+    using PhotoContest.Infrastructure.Interfaces;
+    using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
 
     public class UsersController : BaseController
     {
@@ -73,8 +72,7 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult GetNotifications()
         {
-            var viewModel = this._service.GetNotifications(this.User.Identity.GetUserId())
-                            .AsQueryable().ProjectTo<NotificationViewModel>().ToList();
+            var viewModel = this._service.GetNotifications(this.User.Identity.GetUserId());
 
             return this.PartialView("_Notifications", viewModel);
         }

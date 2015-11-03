@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using PhotoContest.Models;
-
-namespace PhotoContest.Infrastructure.Interfaces
+﻿namespace PhotoContest.Infrastructure.Interfaces
 {
+    using System.Collections.Generic;
+    using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
+
     public interface IUsersService
     {
-        IQueryable<Invitation> GetNotifications(string userId);
+        IEnumerable<NotificationViewModel> GetNotifications(string userId);
     }
 }

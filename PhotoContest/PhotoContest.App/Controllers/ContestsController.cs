@@ -1,12 +1,4 @@
-﻿using PhotoContest.Infrastructure.Models.BindingModels.Contest;
-using PhotoContest.Infrastructure.Models.BindingModels.Reward;
-using PhotoContest.Infrastructure.Models.ViewModels.Contest;
-using PhotoContest.Infrastructure.Models.ViewModels.Reward;
-using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
-using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline;
-using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -29,6 +21,16 @@ namespace PhotoContest.App.Controllers
 
     using PhotoContest.Models.Enums;
 
+    using PhotoContest.Infrastructure.Interfaces;
+
+    using PhotoContest.Infrastructure.Models.BindingModels.Contest;
+    using PhotoContest.Infrastructure.Models.BindingModels.Reward;
+    using PhotoContest.Infrastructure.Models.ViewModels.Contest;
+    using PhotoContest.Infrastructure.Models.ViewModels.Reward;
+    using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
+    using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline;
+    using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward;
+
     using PhotoContest.App.Services;
 
     #endregion
@@ -39,54 +41,16 @@ namespace PhotoContest.App.Controllers
 
         private PicturesService _picturesService;
 
-        public ContestsController()
-        {
-        }
+        private IContestsService _service;
 
-        public ContestsController(IPhotoContestData data)
+        private IStrategyService _strategyService;
+
+        public ContestsController(IPhotoContestData data, IContestsService service, IStrategyService strategyService)
             : base(data)
         {
             this._picturesService = new PicturesService();
-        }
-
-        
-        [HttpGet]
-        public ActionResult AllContests()
-        {
-            var allContests =
-                this.Data.Contests.All()
-                    .OrderByDescending(c => c.StartDate)
-                    .Project()
-                    .To<ContestViewModel>()
-                    .ToList();
-
-            this.ApplyRights(allContests);
-
-            return this.PartialView("_AllContestsPartial", allContests);
-        }
-
-        private void ApplyRights(IList<ContestViewModel> contests)
-        {
-            if (this.User.Identity.GetUserId() != null)
-            {
-                var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-                for (int i = 0; i < contests.Count(); i++)
-                {
-                    if (user.Id == contests[i].OrganizatorId)
-                    {
-                        contests[i].CanManage = true;
-                        continue;
-                    }
-
-                    if (contests[i].ParticipationStrategyType != ParticipationStrategyType.Closed
-                        && !user.InContests.Any(c => c.Id == contests[i].Id)
-                        && !user.CommitteeInContests.Any(c => c.Id == contests[i].Id))
-                    {
-                        contests[i].CanParticipate = true;
-                    }
-                }
-            }
+            this._service = service;
+            this._strategyService = strategyService;
         }
 
         [HttpGet]
@@ -96,53 +60,36 @@ namespace PhotoContest.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Contest(int id)
+        public ActionResult AllContests()
         {
-            return null;
+            var viewModel = _service.GetAllContests(this.User.Identity.GetUserId());
+
+            return this.PartialView("_AllContestsPartial", viewModel);
         }
 
         [HttpGet]
         public ActionResult ActiveContests()
         {
-            var activeContests = this.Data.Contests.All()
-                .Where(c => c.Status == ContestStatus.Active)
-                .OrderByDescending(c => c.StartDate)
-                .Project()
-                .To<ContestViewModel>()
-                .ToList();
+            var viewModel = this._service.GetActiveContests(this.User.Identity.GetUserId());
 
-            this.ApplyRights(activeContests);
-
-            return this.PartialView("_ActiveContestsPartial", activeContests);
+            return this.PartialView("_ActiveContestsPartial", viewModel);
         }
 
         [HttpGet]
         public ActionResult InactiveContests()
         {
-            var activeContests = this.Data.Contests.All()
-                  .Where(c => c.Status != ContestStatus.Active)
-                  .OrderByDescending(c => c.StartDate)
-                  .Project()
-                  .To<ContestViewModel>()
-                  .ToList();
+            var viewModel = this._service.GetInactiveContests();
 
-            return this.PartialView("_InactiveContestsPartial", activeContests);
+            return this.PartialView("_InactiveContestsPartial", viewModel);
         }
 
         [Authorize]
         [HttpGet]
         public ActionResult MyContests()
         {
-            var loggedUserId = this.User.Identity.GetUserId();
+            var viewModel = this._service.GetMyContests(this.User.Identity.GetUserId());
 
-            var myContests = this.Data.Contests.All()
-                .Where(c => c.OrganizatorId == loggedUserId)
-                .OrderByDescending(c => c.StartDate)
-                .Project()
-                .To<ContestViewModel>()
-                .ToList();
-
-            return this.PartialView("_MyContestsPartial", myContests);
+            return this.PartialView("_MyContestsPartial", viewModel);
         }
 
         [Authorize]
@@ -151,18 +98,14 @@ namespace PhotoContest.App.Controllers
         {
             try
             {
-                var strategy = this.Data.DeadlineStrategies.Find(id);
+                var viewModel = this._strategyService.GetDeadlineStrategyOptions(id);
 
-                var viewModel = (AbstractDeadlineStrategyViewModel)Activator.CreateInstance(null, "PhotoContest.App.Models.ViewModels.Strategy.Deadline." + strategy.DeadlineStrategyType + "ViewModel").Unwrap();
-
-                return PartialView("Strategies/Deadline/_" + strategy.DeadlineStrategyType + "Partial", viewModel);
+                return PartialView("Strategies/Deadline/_" + viewModel.Type + "Partial", viewModel);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                
+                return this.Content("");
             }
-
-            return this.Content("");
         }
 
         [Authorize]

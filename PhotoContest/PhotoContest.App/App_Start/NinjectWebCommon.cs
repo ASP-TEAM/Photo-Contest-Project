@@ -73,6 +73,12 @@ namespace PhotoContest.App
             kernel.Bind<IUsersService>()
                 .To<UsersService>();
 
+            kernel.Bind<IContestsService>()
+                .To<ContestService>();
+
+            kernel.Bind<IStrategyService>()
+                .To<StrategyService>();
+
             kernel.Bind<IPhotoContestData>()
                 .To<PhotoContestData>()
                 .WithConstructorArgument("context", new PhotoContestDbContext());
