@@ -92,25 +92,6 @@
 
         [System.Web.Mvc.Authorize]
         [HttpGet]
-<<<<<<< HEAD
-=======
-        public ActionResult GetDeadlineStrategyPartial(int id)
-        {
-            try
-            {
-                var viewModel = this._strategyService.GetDeadlineStrategyOptions(id);
-
-                return PartialView("Strategies/Deadline/_" + viewModel.Type + "Partial", viewModel);
-            }
-            catch (Exception)
-            {
-                return this.Content("");
-            }
-        }
-
-        [System.Web.Mvc.Authorize]
-        [HttpGet]
->>>>>>> 8577aeb5c56251899283d8d78526594818d2d534
         public ActionResult GetRewardPartial()
         {
             return PartialView("~/Views/Rewards/_AddPartial.cshtml", new AddRewardViewModel());
@@ -164,30 +145,6 @@
 
         [System.Web.Mvc.Authorize]
         [HttpGet]
-<<<<<<< HEAD
-=======
-        public ActionResult GetRewardStrategyPartial(int id)
-        {
-            try
-            {
-                var strategy = this.Data.RewardStrategies.Find(id);
-
-                var viewModel = (AbstractRewardStrategyViewModel)Activator.CreateInstance(null, "PhotoContest.App.Models.ViewModels.Strategy.Reward." + strategy.RewardStrategyType + "ViewModel")
-                .Unwrap();
-
-                return PartialView("Strategies/Reward/_" + strategy.RewardStrategyType + "Partial", viewModel);
-            }
-            catch (Exception)
-            {
-                
-            }
-            
-            return this.Content("");
-        }
-
-        [System.Web.Mvc.Authorize]
-        [HttpGet]
->>>>>>> 8577aeb5c56251899283d8d78526594818d2d534
         public ActionResult NewContest()
         {
             var viewModel = new CreateContestViewModel();

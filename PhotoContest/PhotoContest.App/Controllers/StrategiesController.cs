@@ -4,7 +4,7 @@
     using System;
     using System.Web.Mvc;
 
-    public class StrategiesController : BaseController
+    public class StrategiesController : Controller
     {
         private IStrategyService _strategyService;
 
