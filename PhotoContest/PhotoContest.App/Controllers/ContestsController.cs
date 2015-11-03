@@ -189,6 +189,12 @@ namespace PhotoContest.App.Controllers
                 return this.HttpNotFound("Contest not found");
             }
 
+            if (contest.Status != ContestStatus.Active)
+            {
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(new {ErrorMessage = "Cannot add reward to inactive contest."});
+            }
+
             for (int i = 0; i < model.Name.Length; i++)
             {
                 if (model.Place[i] < 1 || (contest.TopNPlaces != null && model.Place[i] > contest.TopNPlaces))
