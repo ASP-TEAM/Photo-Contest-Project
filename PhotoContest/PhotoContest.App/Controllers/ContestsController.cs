@@ -19,6 +19,9 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
+    using Microsoft.AspNet.SignalR;
+
+    using PhotoContest.App.Hubs;
     using PhotoContest.Models.Enums;
 
     using PhotoContest.Infrastructure.Interfaces;
@@ -83,7 +86,7 @@
             return this.PartialView("_InactiveContestsPartial", viewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult MyContests()
         {
@@ -92,7 +95,7 @@
             return this.PartialView("_MyContestsPartial", viewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult GetDeadlineStrategyPartial(int id)
         {
@@ -108,14 +111,14 @@
             }
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult GetRewardPartial()
         {
             return PartialView("~/Views/Rewards/_AddPartial.cshtml", new AddRewardViewModel());
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult AddRewards(int id, CreateRewardsBindingModel model)
         {
@@ -161,7 +164,7 @@
             return this.RedirectToAction("PreviewContest", new {id = id});
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult GetRewardStrategyPartial(int id)
         {
@@ -182,7 +185,7 @@
             return this.Content("");
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult NewContest()
         {
@@ -219,7 +222,7 @@
             return this.View("NewContestForm", viewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateContest(CreateContestBindingModel model)
@@ -281,7 +284,7 @@
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult Join(int id)
         {
@@ -341,7 +344,7 @@
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult JoinCommittee(int id)
         {
@@ -377,7 +380,7 @@
             return new HttpStatusCodeResult(200);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Upload(int id)
@@ -509,7 +512,7 @@
             return this.View(contestViewModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpGet]
         public ActionResult ManageContest(int id)
         {
@@ -533,7 +536,7 @@
             return this.View("ManageContestForm", contestBindingModel);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPatch]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateContest(UpdateContestBindingModel model)
@@ -586,7 +589,7 @@
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult InviteUser(string username, int contestId, InvitationType type)
@@ -667,14 +670,15 @@
 
             this.Data.SaveChanges();
 
-            this.HubContext.Clients.User(username).notificationReceived(invitation.Id);
+            var hub = GlobalHost.ConnectionManager.GetHubContext<PhotoContestHub>();
+            hub.Clients.User(username).notificationReceived(invitation.Id);
 
             this.Response.StatusCode = 200;
 
             return this.Content(string.Format("User with username {0} successfully invited", username));
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult FinalizeContest(int id)
         {
@@ -714,7 +718,7 @@
             return new HttpStatusCodeResult(200);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult DismissContest(int id)
         {
