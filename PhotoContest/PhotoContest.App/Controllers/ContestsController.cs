@@ -28,8 +28,6 @@
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Infrastructure.Models.ViewModels.Reward;
     using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
-    using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline;
-    using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward;
 
     using PhotoContest.App.Services;
 
@@ -43,14 +41,11 @@
 
         private IContestsService _service;
 
-        private IStrategyService _strategyService;
-
-        public ContestsController(IPhotoContestData data, IContestsService service, IStrategyService strategyService)
+        public ContestsController(IPhotoContestData data, IContestsService service)
             : base(data)
         {
             this._picturesService = new PicturesService();
             this._service = service;
-            this._strategyService = strategyService;
         }
 
         [HttpGet]
@@ -90,22 +85,6 @@
             var viewModel = this._service.GetMyContests(this.User.Identity.GetUserId());
 
             return this.PartialView("_MyContestsPartial", viewModel);
-        }
-
-        [Authorize]
-        [HttpGet]
-        public ActionResult GetDeadlineStrategyPartial(int id)
-        {
-            try
-            {
-                var viewModel = this._strategyService.GetDeadlineStrategyOptions(id);
-
-                return PartialView("Strategies/Deadline/_" + viewModel.Type + "Partial", viewModel);
-            }
-            catch (Exception)
-            {
-                return this.Content("");
-            }
         }
 
         [Authorize]
@@ -159,27 +138,6 @@
             this.Data.SaveChanges();
 
             return this.RedirectToAction("PreviewContest", new {id = id});
-        }
-
-        [Authorize]
-        [HttpGet]
-        public ActionResult GetRewardStrategyPartial(int id)
-        {
-            try
-            {
-                var strategy = this.Data.RewardStrategies.Find(id);
-
-                var viewModel = (AbstractRewardStrategyViewModel)Activator.CreateInstance(null, "PhotoContest.App.Models.ViewModels.Strategy.Reward." + strategy.RewardStrategyType + "ViewModel")
-                .Unwrap();
-
-                return PartialView("Strategies/Reward/_" + strategy.RewardStrategyType + "Partial", viewModel);
-            }
-            catch (Exception)
-            {
-                
-            }
-            
-            return this.Content("");
         }
 
         [Authorize]
@@ -297,15 +255,15 @@
                     throw new InvalidOperationException("You cannot join contest created by you");
                 }
 
-                this.DeadlineStrategy =
+                var deadlineStrategy =
                     StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
 
-                this.DeadlineStrategy.CheckDeadline(this.Data, contest, user);
+                deadlineStrategy.CheckDeadline(this.Data, contest, user);
 
-                this.ParticipationStrategy =
+                var participationStrategy =
                     StrategyFactory.GetParticipationStrategy(contest.ParticipationStrategy.ParticipationStrategyType);
 
-                this.ParticipationStrategy.CheckPermission(this.Data, user, contest);
+                participationStrategy.CheckPermission(this.Data, user, contest);
 
                 if (contest.Participants.Contains(user))
                 {
@@ -420,9 +378,9 @@
                     throw new InvalidOperationException("You are either organizator of this contest or in the committee or you don't not participate in it");
                 }
 
-                this.DeadlineStrategy = StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
+                var deadlineStrategy = StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
 
-                this.DeadlineStrategy.CheckDeadline(this.Data, contest, user);
+                deadlineStrategy.CheckDeadline(this.Data, contest, user);
 
                 foreach (var file in files)
                 {
@@ -706,10 +664,10 @@
 
             this.Data.SaveChanges();
 
-            this.RewardStrategy =
+            var rewardStrategy =
                     StrategyFactory.GetRewardStrategy(contest.RewardStrategy.RewardStrategyType);
 
-            this.RewardStrategy.ApplyReward(this.Data, contest);
+            rewardStrategy.ApplyReward(this.Data, contest);
 
             return new HttpStatusCodeResult(200);
         }

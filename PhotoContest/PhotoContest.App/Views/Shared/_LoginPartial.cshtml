@@ -7,7 +7,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li id="notifications-button">
-                @Ajax.ActionLink("Notifications", "GetNotifications", "Users", new AjaxOptions
+                @Ajax.ActionLink("Notifications", "GetNotifications", "Users", new { Area = "" },  new AjaxOptions
                        {
                            UpdateTargetId = "notifications",
                            OnSuccess = "ajaxHelper.onReceivedNotifications"

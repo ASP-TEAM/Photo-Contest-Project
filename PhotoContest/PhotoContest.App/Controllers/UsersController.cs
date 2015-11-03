@@ -1,20 +1,18 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System.IdentityModel;
+    using System.Net;
+
     using System;
     using System.Linq;
     using System.Web.Mvc;
-
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
 
     using Microsoft.Ajax.Utilities;
     using Microsoft.AspNet.Identity;
 
     using PhotoContest.Data.Interfaces;
-    using PhotoContest.Models;
     using PhotoContest.Models.Enums;
     using PhotoContest.Infrastructure.Interfaces;
-    using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
 
     public class UsersController : BaseController
     {
@@ -81,67 +79,48 @@
         [HttpGet]
         public ActionResult GetNotification(int id)
         {
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+            var viewModel = this._service.GetNotification(this.User.Identity.GetUserId(), id);
 
-            var notification =
-                loggedUser.PendingInvitations.Where(n => n.Id == id)
-                    .Select(
-                        n =>
-                        new NotificationViewModel
-                            {
-                                InvitationId = n.Id,
-                                Sender = n.Inviter.UserName,
-                                Type = n.Type.ToString()
-                            })
-                    .FirstOrDefault();
-
-            return this.PartialView("_Notification", notification);
+            return this.PartialView("_Notification", viewModel);
         }
 
         [Authorize]
         [HttpGet]
         public ActionResult ShowInvitation(int id)
         {
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            var invitation = loggedUser.PendingInvitations.FirstOrDefault(i => i.Id == id);
-
-            if (invitation == null)
+            try
             {
-                return this.HttpNotFound(string.Format("Invitation with id {0} does not exist", id));
+                var viewModel = this._service.ShowInvitation(id, this.User.Identity.GetUserId());
+
+                return this.View("Invitation", viewModel);
             }
-
-            var invitationView = Mapper.Map<Invitation, InvitationViewModel>(invitation);
-
-            return this.View("Invitation", invitationView);
+            catch (ArgumentException exception)
+            {
+                this.Response.StatusCode = (int) HttpStatusCode.NotFound;
+                return this.Json(new {ErrorMessage = exception.Message});
+            }
         }
 
         [Authorize]
         [HttpGet]
         public ActionResult AcceptInvitation(int id)
         {
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            var invitation = this.Data.Invitations.Find(id);
-
-            if (invitation == null)
+            try
             {
-                this.Response.StatusCode = 400;
-                return this.Content(string.Format("Invitation with id {0} does not exist", id));
+                var invitationResult = this._service.AcceptInvitation(id, this.User.Identity.GetUserId());
+
+                switch ((InvitationType) invitationResult["Type"])
+                {
+                    case InvitationType.ClosedContest:
+                        return RedirectToAction("Join", "Contests", new { id = invitationResult["ContestId"] });
+                    case InvitationType.Committee:
+                        return RedirectToAction("JoinCommittee", "Contests", new { id = invitationResult["ContestId"] });
+                }
             }
-
-            if (loggedUser.PendingInvitations.FirstOrDefault(i => i == invitation) == null)
+            catch (BadRequestException exception)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("You are not the recipient of this invitation");
-            }
-
-            switch (invitation.Type)
-            {
-                case InvitationType.ClosedContest:
-                    return RedirectToAction("Join", "Contests", new {id = invitation.ContestId});
-                case InvitationType.Committee:
-                    return RedirectToAction("JoinCommittee", "Contests", new { id = invitation.ContestId });
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = exception.Message }, JsonRequestBehavior.AllowGet);
             }
 
             return new HttpStatusCodeResult(200);
@@ -151,31 +130,15 @@
         [HttpGet]
         public ActionResult RejectInvitation(int id)
         {
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            var invitation = this.Data.Invitations.Find(id);
-
-            if (invitation == null)
+            try
             {
-                this.Response.StatusCode = 400;
-                return this.Content(string.Format("Invitation with id {0} does not exist", id));
+                this._service.RejectInvitation(id, this.User.Identity.GetUserId());
             }
-
-            if (loggedUser.PendingInvitations.FirstOrDefault(i => i == invitation) == null)
+            catch (BadRequestException exception)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("You are not the recipient of this invitation");
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(new {ErrorMessage = exception.Message}, JsonRequestBehavior.AllowGet);
             }
-
-            if (invitation.Status != InvitationStatus.Neutral)
-            {
-                this.Response.StatusCode = 400;
-                return this.Content(string.Format("Invitation with id {0} has been already {1}", id, invitation.Status));
-            }
-
-            invitation.Status = InvitationStatus.Rejected;
-
-            this.Data.SaveChanges();
 
             return new HttpStatusCodeResult(200);
         }

@@ -1,7 +1,4 @@
-﻿using PhotoContest.Infrastructure.Models.ViewModels.Picture;
-using PhotoContest.Models.Enums;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     using System;
     using System.Linq;
@@ -12,25 +9,13 @@ namespace PhotoContest.App.Controllers
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Strategies;
     using PhotoContest.Models;
+    using PhotoContest.Models.Enums;
 
     public class PicturesController : BaseController
     {
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
-        }
-
-        public ActionResult Index()
-        {
-            var pictures =
-                this.Data.Pictures.All()
-                .Select(p => new PictureViewModel
-                {
-                    Url = p.Url,
-                    User = p.User.UserName
-                });
-
-            return this.View(pictures);
         }
 
         [Authorize]
@@ -47,10 +32,10 @@ namespace PhotoContest.App.Controllers
                     throw new InvalidOperationException("The contest is closed.");
                 }
 
-                this.VotingStrategy =
+                var votingStrategy =
                     StrategyFactory.GetVotingStrategy(picture.Contest.VotingStrategy.VotingStrategyType);
 
-                this.VotingStrategy.CheckPermission(this.Data, user, picture.Contest);
+                votingStrategy.CheckPermission(this.Data, user, picture.Contest);
 
                 if (picture.Votes.Any(v => v.UserId == user.Id))
                 {

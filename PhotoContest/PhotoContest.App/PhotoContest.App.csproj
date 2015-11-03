@@ -127,6 +127,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
@@ -265,6 +266,7 @@
     <Compile Include="Areas\Administration\Models\ViewModels\ManageContestViewModel.cs" />
     <Compile Include="Areas\Administration\Models\ViewModels\ManageUserViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\StrategiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -408,7 +410,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Pictures\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\NumberField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
@@ -436,10 +437,10 @@
     <Content Include="Views\Contests\_ContestParticipantsPartial.cshtml" />
     <Content Include="Views\Contests\_ContestButtonsPartial.cshtml" />
     <Content Include="Views\Shared\_NavigationPartial.cshtml" />
-    <Content Include="Views\Contests\Strategies\Reward\_SingleWinnerPartial.cshtml" />
-    <Content Include="Views\Contests\Strategies\Reward\_TopNPrizesPartial.cshtml" />
-    <Content Include="Views\Contests\Strategies\Deadline\_ByTimePartial.cshtml" />
-    <Content Include="Views\Contests\Strategies\Deadline\_ByNumberOfParticipantsPartial.cshtml" />
+    <Content Include="Views\Strategies\Reward\_SingleWinnerPartial.cshtml" />
+    <Content Include="Views\Strategies\Reward\_TopNPrizesPartial.cshtml" />
+    <Content Include="Views\Strategies\Deadline\_ByTimePartial.cshtml" />
+    <Content Include="Views\Strategies\Deadline\_ByNumberOfParticipantsPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeNullable.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextFieldReadonly.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\KendoDateTime.cshtml" />
@@ -447,8 +448,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="External libraries\" />
-    <Folder Include="Views\Contests\Strategies\Participation\" />
-    <Folder Include="Views\Contests\Strategies\Voting\" />
+    <Folder Include="Views\Strategies\Participation\" />
+    <Folder Include="Views\Strategies\Voting\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
