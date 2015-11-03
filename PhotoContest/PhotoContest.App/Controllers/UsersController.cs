@@ -1,4 +1,7 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Infrastructure.Interfaces;
+using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
+
+namespace PhotoContest.App.Controllers
 {
     using System;
     using System.Linq;
@@ -10,18 +13,18 @@
     using Microsoft.Ajax.Utilities;
     using Microsoft.AspNet.Identity;
 
-    using PhotoContest.App.Models.ViewModels.Invitation;
-    using PhotoContest.App.Models.ViewModels.User;
-    using PhotoContest.Common;
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
     using PhotoContest.Models.Enums;
 
     public class UsersController : BaseController
     {
-        public UsersController(IPhotoContestData data)
+        private IUsersService _service;
+
+        public UsersController(IPhotoContestData data, IUsersService service)
             : base(data)
         {
+            this._service = service;
         }
         
         [Authorize]
@@ -70,20 +73,10 @@
         [HttpGet]
         public ActionResult GetNotifications()
         {
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
+            var viewModel = this._service.GetNotifications(this.User.Identity.GetUserId())
+                            .AsQueryable().ProjectTo<NotificationViewModel>().ToList();
 
-            var notifications = loggedUser.PendingInvitations
-                .Where(n => n.Status == InvitationStatus.Neutral)
-                .OrderByDescending(n => n.DateOfInvitation)
-                .Select(
-                    n => new NotificationViewModel
-                             {
-                                InvitationId = n.Id,
-                                Sender = n.Inviter.UserName,
-                                Type = n.Type.ToString()
-                             });
-
-            return this.PartialView("_Notifications", notifications);
+            return this.PartialView("_Notifications", viewModel);
         }
 
         [Authorize]

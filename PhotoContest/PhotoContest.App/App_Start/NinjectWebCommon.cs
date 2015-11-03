@@ -1,7 +1,10 @@
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PhotoContest.App.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(PhotoContest.App.App_Start.NinjectWebCommon), "Stop")]
+using PhotoContest.Infrastructure.Interfaces;
+using PhotoContest.Infrastructure.Services;
 
-namespace PhotoContest.App.App_Start
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PhotoContest.App.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(PhotoContest.App.NinjectWebCommon), "Stop")]
+
+namespace PhotoContest.App
 {
     using System;
     using System.Web;
@@ -66,6 +69,10 @@ namespace PhotoContest.App.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IPhotoContestDbContext>().To<PhotoContestDbContext>();
+
+            kernel.Bind<IUsersService>()
+                .To<UsersService>();
+
             kernel.Bind<IPhotoContestData>()
                 .To<PhotoContestData>()
                 .WithConstructorArgument("context", new PhotoContestDbContext());

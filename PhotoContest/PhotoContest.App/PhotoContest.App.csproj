@@ -251,7 +251,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -276,31 +275,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\PhotoContestHub.cs" />
-    <Compile Include="Infrastructure\Mapping\IHaveCustomMappings.cs" />
-    <Compile Include="Infrastructure\Mapping\IMapFrom.cs" />
-    <Compile Include="Models\BindingModels\Contest\CreateContestBindingModel.cs" />
-    <Compile Include="Models\BindingModels\Contest\UpdateContestBindingModel.cs" />
-    <Compile Include="Models\BindingModels\Reward\CreateRewardsBindingModel.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
-    <Compile Include="Models\ViewModels\Contest\ContestViewModel.cs" />
-    <Compile Include="Models\ViewModels\Contest\ContestWinnerViewModel.cs" />
-    <Compile Include="Models\ViewModels\Contest\CreateContestViewModel.cs" />
-    <Compile Include="Models\ViewModels\Contest\PreviewContestViewModel.cs" />
-    <Compile Include="Models\ViewModels\Invitation\InvitationViewModel.cs" />
-    <Compile Include="Models\ViewModels\Invitation\NotificationViewModel.cs" />
     <Compile Include="Models\ViewModels\ManageViewModels.cs" />
-    <Compile Include="Models\ViewModels\Picture\FullPictureViewModel.cs" />
-    <Compile Include="Models\ViewModels\Picture\PictureViewModel.cs" />
-    <Compile Include="Models\ViewModels\Reward\AddRewardViewModel.cs" />
-    <Compile Include="Models\ViewModels\Strategy\Deadline\ByTimeViewModel.cs" />
-    <Compile Include="Models\ViewModels\Strategy\Deadline\AbstractDeadlineStrategyViewModel.cs" />
-    <Compile Include="Models\ViewModels\Strategy\Deadline\ByNumberOfParticipantsViewModel.cs" />
-    <Compile Include="Models\ViewModels\Strategy\Reward\AbstractRewardStrategyViewModel.cs" />
-    <Compile Include="Models\ViewModels\Strategy\Reward\TopNPrizesViewModel.cs" />
-    <Compile Include="Models\ViewModels\Strategy\StrategyViewModel.cs" />
-    <Compile Include="Models\ViewModels\User\FullUserViewModel.cs" />
-    <Compile Include="Models\ViewModels\User\MinifiedUserViewModel.cs" />
-    <Compile Include="Models\ViewModels\Vote\VoteViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GoogleDriveService.cs" />
     <Compile Include="Services\PicturesService.cs" />
@@ -437,7 +413,6 @@
     <Content Include="Views\Shared\EditorTemplates\NumberField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Contests\_PicturePartial.cshtml" />
-    <Content Include="Views\Users\All.cshtml" />
     <Content Include="Views\Contests\_ActiveContestsPartial.cshtml" />
     <Content Include="Views\Contests\_ActiveContest.cshtml" />
     <Content Include="Views\Contests\_MyContestsPartial.cshtml" />
@@ -491,6 +466,10 @@
     <ProjectReference Include="..\PhotoContest.Data\PhotoContest.Data.csproj">
       <Project>{A9D027BD-FFE7-42F5-845C-19CCA215FD2C}</Project>
       <Name>PhotoContest.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhotoContest.Infrastructure\PhotoContest.Infrastructure.csproj">
+      <Project>{6e278382-9762-4639-ac59-61692290af50}</Project>
+      <Name>PhotoContest.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\PhotoContest.Models\PhotoContest.Models.csproj">
       <Project>{A02CAA68-8AFC-4A09-8843-ACEFF296F3EA}</Project>

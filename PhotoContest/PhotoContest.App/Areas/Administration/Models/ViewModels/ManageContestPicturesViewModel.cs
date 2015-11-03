@@ -4,8 +4,8 @@
 
     using AutoMapper;
 
-    using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.Models;
+    using PhotoContest.Infrastructure.Mapping;
 
     public class ManageContestPicturesViewModel : IMapFrom<Picture>, IHaveCustomMappings
     {

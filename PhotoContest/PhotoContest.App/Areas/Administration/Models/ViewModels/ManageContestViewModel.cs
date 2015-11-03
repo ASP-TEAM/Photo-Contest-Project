@@ -2,9 +2,9 @@
 {
     using AutoMapper;
 
-    using PhotoContest.App.Infrastructure.Mapping;
     using PhotoContest.Models;
     using PhotoContest.Models.Enums;
+    using PhotoContest.Infrastructure.Mapping;
 
     public class ManageContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
     {

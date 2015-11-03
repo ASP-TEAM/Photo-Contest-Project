@@ -1,4 +1,5 @@
-﻿using PhotoContest.Models.Enums;
+﻿using PhotoContest.Infrastructure.Models.ViewModels.Picture;
+using PhotoContest.Models.Enums;
 
 namespace PhotoContest.App.Controllers
 {
@@ -8,7 +9,6 @@ namespace PhotoContest.App.Controllers
 
     using Microsoft.AspNet.Identity;
 
-    using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Strategies;
     using PhotoContest.Models;

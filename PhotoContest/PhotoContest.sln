@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Common", "Phot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Tests", "PhotoContest.Tests\PhotoContest.Tests.csproj", "{599DA37B-5B64-4539-8B6B-979A2DC49391}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Infrastructure", "PhotoContest.Infrastructure\PhotoContest.Infrastructure.csproj", "{6E278382-9762-4639-AC59-61692290AF50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{599DA37B-5B64-4539-8B6B-979A2DC49391}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{599DA37B-5B64-4539-8B6B-979A2DC49391}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{599DA37B-5B64-4539-8B6B-979A2DC49391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E278382-9762-4639-AC59-61692290AF50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E278382-9762-4639-AC59-61692290AF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E278382-9762-4639-AC59-61692290AF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E278382-9762-4639-AC59-61692290AF50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

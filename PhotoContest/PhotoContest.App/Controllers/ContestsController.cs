@@ -1,5 +1,10 @@
-﻿using PhotoContest.App.Models.BindingModels.Reward;
-using PhotoContest.App.Models.ViewModels.Reward;
+﻿using PhotoContest.Infrastructure.Models.BindingModels.Contest;
+using PhotoContest.Infrastructure.Models.BindingModels.Reward;
+using PhotoContest.Infrastructure.Models.ViewModels.Contest;
+using PhotoContest.Infrastructure.Models.ViewModels.Reward;
+using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
+using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline;
+using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward;
 
 namespace PhotoContest.App.Controllers
 {
@@ -13,7 +18,6 @@ namespace PhotoContest.App.Controllers
 
     using Microsoft.AspNet.Identity;
 
-    using PhotoContest.App.Models.BindingModels.Contest;
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Data.Strategies;
 
@@ -23,11 +27,7 @@ namespace PhotoContest.App.Controllers
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
-    using PhotoContest.App.Models.ViewModels.Contest;
-    using PhotoContest.App.Models.ViewModels.Strategy;
     using PhotoContest.Models.Enums;
-    using PhotoContest.App.Models.ViewModels.Strategy.Deadline;
-    using PhotoContest.App.Models.ViewModels.Strategy.Reward;
 
     using PhotoContest.App.Services;
 

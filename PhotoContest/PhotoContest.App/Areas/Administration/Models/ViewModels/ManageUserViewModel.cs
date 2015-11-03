@@ -6,9 +6,9 @@
 
     using AutoMapper;
 
-    using PhotoContest.App.Infrastructure.Mapping;
-    using PhotoContest.App.Models.ViewModels.Picture;
     using PhotoContest.Models;
+    using PhotoContest.Infrastructure.Mapping;
+    using PhotoContest.Infrastructure.Models.ViewModels.Picture;
 
     public class ManageUserViewModel : IMapFrom<User>, IHaveCustomMappings
     {

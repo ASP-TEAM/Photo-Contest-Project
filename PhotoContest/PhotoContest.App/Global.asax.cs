@@ -7,6 +7,8 @@
     using System.Web.Optimization;
     using System.Web.Routing;
 
+    using PhotoContest.Infrastructure.Mapping;
+
     #endregion
 
     public class MvcApplication : HttpApplication
