@@ -39,7 +39,7 @@ a:hover {
     height: 150px;
 }
 
-    .picture > img {
+    .picture > a > img {
         width: 150px;
         height: 150px;
     }

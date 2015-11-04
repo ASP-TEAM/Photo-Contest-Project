@@ -1,7 +1,10 @@
 ﻿@model PhotoContest.Infrastructure.Models.ViewModels.Picture.FullPictureViewModel
 @{ var picId = "pictureVotes" + Model.Id;}
 <div class="picture">
-    <img src="@Model.Url" class="img-thumbnail"/>
+    <a href="#" onclick="ajaxHelper.toggleModal(@Model.Id)">
+        <img src="@Model.Url" class="img-thumbnail"/>
+        @Html.Partial("_PictureModalPartial")
+    </a>
     <p><strong>Uploader: </strong> @Model.UserName</p>
     <span class="badge">Votes </span>
     <span class="badge" id="@picId">@Model.Votes</span>
