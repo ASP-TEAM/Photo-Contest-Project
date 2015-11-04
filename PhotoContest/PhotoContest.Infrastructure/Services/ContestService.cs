@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using PhotoContest.Common.Exceptions;
-using PhotoContest.Infrastructure.Models.BindingModels.Reward;
-
-namespace PhotoContest.Infrastructure.Services
+﻿namespace PhotoContest.Infrastructure.Services
 {
     using PhotoContest.Infrastructure.Interfaces;
     using System.Linq;
@@ -13,16 +9,34 @@ namespace PhotoContest.Infrastructure.Services
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Models.Enums;
     using System;
+
+    using PhotoContest.Common.Exceptions;
     using PhotoContest.Data.Strategies;
     using PhotoContest.Infrastructure.Models.BindingModels.Contest;
     using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
     using PhotoContest.Models;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Models.BindingModels.Reward;
+
+    using BadRequestException = System.IdentityModel.BadRequestException;
 
     public class ContestService : BaseService, IContestsService
     {
         public ContestService(IPhotoContestData data)
             :base(data)
         {
+        }
+
+        public IQueryable<ContestViewModel> GetTopNewestContests(int takeCount)
+        {
+            var topContests =
+                this.Data.Contests.All()
+                    .Where(c => c.Status == ContestStatus.Active)
+                    .OrderByDescending(c => c.StartDate)
+                    .Take(takeCount)
+                    .Project()
+                    .To<ContestViewModel>();
+            return topContests;
         }
 
         public IEnumerable<ContestViewModel> GetActiveContests(string userId)
@@ -89,10 +103,10 @@ namespace PhotoContest.Infrastructure.Services
                     Winners = this.Data.ContestWinners.All()
                         .Where(c => c.ContestId == contest.Id)
                         .ProjectTo<ContestWinnerViewModel>()
-                        .ToList()
+                        .ToList(),
+                    Status = contest.Status
                 };
 
-                viewModel.Status = contest.Status;
                 return viewModel;
             }
 
@@ -108,12 +122,14 @@ namespace PhotoContest.Infrastructure.Services
                 }
                 else
                 {
-                    if (!contest.Committee.Contains(user) && contest.Participants.Contains(user))
+                    if (!contest.Committee.Contains(user) && contest.Participants.Contains(user) && contest.IsOpenForSubmissions)
                     {
                         contestViewModel.CanUpload = true;
                     }
 
-                    if (!contest.Committee.Contains(user) && !contest.Participants.Contains(user))
+                    if (contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed
+                        && !user.InContests.Any(c => c.Id == contest.Id)
+                        && !user.CommitteeInContests.Any(c => c.Id == contest.Id))
                     {
                         contestViewModel.CanParticipate = true;
                     }

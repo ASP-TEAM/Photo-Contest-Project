@@ -1,0 +1,14 @@
+﻿@model PhotoContest.Infrastructure.Models.ViewModels.Contest.ContestViewModel
+
+<div class="panel panel-danger contest-panel-top">
+    <div class="panel-heading">
+        <h4>
+            <span class="label label-danger">Title: </span>
+            @Html.ActionLink(@Model.Title, "PreviewContest", "Contests", new { id = @Model.Id }, null)
+        </h4>
+    </div>
+    <div class="panel-body">
+        <span class="label label-danger">Description: </span>
+        <p>@Model.Description</p>
+    </div>
+</div>

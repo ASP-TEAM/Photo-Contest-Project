@@ -24,13 +24,12 @@ namespace PhotoContest.Tests
     public class ControllersTests
     {
         private ContestsController fakeContestsController;
-        private ContestService fakeContestsService;
+
+        private MocksContainer mocksContainer;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            // TODO Extract this in Mock Container
-
             AutoMapperConfig.Execute();
             var request = new Mock<HttpRequestBase>();
             request.SetupGet(x => x.Headers).Returns(
@@ -40,42 +39,21 @@ namespace PhotoContest.Tests
 
             var context = new Mock<HttpContextBase>();
             context.SetupGet(x => x.Request).Returns(request.Object);
-            var contestsRepoMock = new Mock<IRepository<Contest>>();
 
-            contestsRepoMock.Setup(r => r.All())
-                .Returns(new List<Contest>
-                             {
-                                 new Contest {
-                                     Id = 1,
-                                     Title = "Test Title1",
-                                     Description = "Test Descr",
-                                     OrganizatorId = "asdsada",
-                                     ParticipationStrategy = new ParticipationStrategy()
-                                                                 {
-                                                                     Id = 1,
-                                                                     Name = "test strategy name",
-                                                                     Description = "test strategy",
-                                                                     ParticipationStrategyType = ParticipationStrategyType.Closed
-                                                                 },
-                                     Status = ContestStatus.Finalized,
-                                     EndDate = DateTime.Now,
-                                     IsOpenForSubmissions = false,
-                                     StartDate = DateTime.Now
-                                 }
-                             }.AsQueryable());
+            this.mocksContainer = new MocksContainer();
+            this.mocksContainer.SetupMocks();
 
             var dataMock = new Mock<IPhotoContestData>();
-            dataMock.Setup(d => d.Contests).Returns(contestsRepoMock.Object);
-
-            var strategyServiceMock = new Mock<IStrategyService>();
+            dataMock.Setup(d => d.Contests).Returns(this.mocksContainer.ContestsRepositoryMock.Object);
 
             var service = new ContestService(dataMock.Object);
-            var controller = new ContestsController(dataMock.Object, service, strategyServiceMock.Object);
+            var controller = new ContestsController(dataMock.Object, service);
 
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
 
             this.fakeContestsController = controller;
         }
+
         [TestMethod]
         public void InactiveContestsShouldReturn_InactiveContestsPartial()
         {

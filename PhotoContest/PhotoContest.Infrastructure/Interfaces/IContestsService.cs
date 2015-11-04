@@ -3,12 +3,16 @@
 namespace PhotoContest.Infrastructure.Interfaces
 {
     using System.Collections.Generic;
+    using System.Linq;
+
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Infrastructure.Models.BindingModels.Contest;
     using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
 
     public interface IContestsService
     {
+        IQueryable<ContestViewModel> GetTopNewestContests(int takeCount);
+
         IEnumerable<ContestViewModel> GetActiveContests(string userId);
 
         IEnumerable<ContestViewModel> GetInactiveContests();

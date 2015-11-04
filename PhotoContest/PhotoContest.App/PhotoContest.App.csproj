@@ -446,6 +446,7 @@
     <Content Include="Views\Shared\EditorTemplates\TextFieldReadonly.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\KendoDateTime.cshtml" />
     <Content Include="Views\Rewards\_AddPartial.cshtml" />
+    <Content Include="Views\Home\_NewestContestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="External libraries\" />
