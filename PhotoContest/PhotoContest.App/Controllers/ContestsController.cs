@@ -1,4 +1,7 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Infrastructure.Exceptions;
+using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
+
+namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -197,49 +200,17 @@
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
 
-            if (this.Data.RewardStrategies.Find(model.RewardStrategyId) == null)
+            try
             {
-                throw new ArgumentException("Not existing reward strategy");
+                int contestId = this._service.CreateContest(model, this.User.Identity.GetUserId());
+
+                return this.RedirectToAction("PreviewContest", new { id = contestId });
             }
-
-            if (this.Data.ParticipationStrategies.Find(model.ParticipationStrategyId) == null)
+            catch (NotFoundException exception)
             {
-                throw new ArgumentException("Not existing participation strategy");
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            if (this.Data.VotingStrategies.Find(model.VotingStrategyId) == null)
-            {
-                throw new ArgumentException("Not existing voting strategy");
-            }
-
-            if (this.Data.DeadlineStrategies.Find(model.DeadlineStrategyId) == null)
-            {
-                throw new ArgumentException("Not existing deadline strategy");
-            }
-
-            var loggedUserId = this.User.Identity.GetUserId();
-
-            var contest = new Contest
-            {
-                Title = model.Title,
-                Description = model.Description,
-                Status = ContestStatus.Active,
-                RewardStrategyId = model.RewardStrategyId,
-                VotingStrategyId = model.VotingStrategyId,
-                ParticipationStrategyId = model.ParticipationStrategyId,
-                DeadlineStrategyId = model.DeadlineStrategyId,
-                ParticipantsLimit = model.ParticipantsLimit,
-                TopNPlaces = model.TopNPlaces,
-                SubmissionDeadline = model.SubmissionDeadline,
-                IsOpenForSubmissions = true,
-                StartDate = DateTime.Now,
-                OrganizatorId = loggedUserId,
-            };
-
-            this.Data.Contests.Add(contest);
-            this.Data.SaveChanges();
-
-            return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
         [System.Web.Mvc.Authorize]
@@ -550,128 +521,65 @@
         [System.Web.Mvc.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult InviteUser(string username, int contestId, InvitationType type)
+        public ActionResult InviteUser(CreateInvitationBindingModel model)
         {
-            var contest = this.Data.Contests.Find(contestId);
-
-            if (contest == null)
+            if (model == null)
             {
-                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} not found", contestId) });
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(new {ErrorMessage = "Missing data"});
             }
 
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            if (contest.OrganizatorId != loggedUser.Id)
+            if (!this.ModelState.IsValid)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "Only the contest organizator can invite users." });
+                return this.Json(new { ErrorMessage = this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage) });
             }
 
-            if (type == InvitationType.Committee
-                && contest.VotingStrategy.VotingStrategyType != VotingStrategyType.Closed)
+            try
+            {
+                var invitationId = this._service.InviteUser(model, this.User.Identity.GetUserId());
+
+                var hub = GlobalHost.ConnectionManager.GetHubContext<PhotoContestHub>();
+                hub.Clients.User(model.Username).notificationReceived(invitationId);
+            }
+            catch (NotFoundException exception)
+            {
+                this.Response.StatusCode = (int) HttpStatusCode.NotFound;
+                return this.Json(new {ErrorMessage = exception.Message});
+            }
+            catch (BadRequestException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "The contest voting strategy type is not 'CLOSED'." });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            if (type == InvitationType.ClosedContest
-                && contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "The contest participation strategy type is not 'CLOSED'." });
-            }
-
-            if (!contest.IsOpenForSubmissions)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "The contest is closed for submissions/registrations." });
-            }
-
-            var userToInvite = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
-
-            if (userToInvite == null)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return this.Json(new { ErrorMessage = string.Format("User with username {0} not found", username) });
-            }
-
-            if (userToInvite.UserName == loggedUser.UserName)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "Users cannot invite themselves." });
-            }
-
-            if (userToInvite.PendingInvitations.Any(i => i.ContestId == contestId && i.Type == type))
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = string.Format("User is already invited to contest with id {0}", contest.Id) });
-            }
-
-            var invitation = new Invitation
-            {
-                ContestId = contestId,
-                InviterId = loggedUser.Id,
-                InvitedId = userToInvite.Id,
-                DateOfInvitation = DateTime.Now,
-                Type = type,
-                Status = InvitationStatus.Neutral
-            };
-
-            if (type == InvitationType.ClosedContest)
-            {
-                contest.InvitedUsers.Add(userToInvite);
-            }
-
-            userToInvite.PendingInvitations.Add(invitation);
-            loggedUser.SendedInvitations.Add(invitation);
-
-            this.Data.SaveChanges();
-
-            var hub = GlobalHost.ConnectionManager.GetHubContext<PhotoContestHub>();
-            hub.Clients.User(username).notificationReceived(invitation.Id);
 
             this.Response.StatusCode = (int)HttpStatusCode.OK;
-
-            return this.Json(new { SuccessfulMessage = string.Format("User with username {0} successfully invited", username) });
+            return this.Json(new { SuccessfulMessage = string.Format("User with username {0} successfully invited", model.Username) });
         }
 
         [System.Web.Mvc.Authorize]
         [HttpPost]
         public ActionResult FinalizeContest(int id)
         {
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
+            try
+            {
+                this._service.FinalizeContest(id, this.User.Identity.GetUserId());
+            }
+            catch (NotFoundException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} not found", id) });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            if (contest.Status != ContestStatus.Active)
+            catch (BadRequestException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} is not active", id) });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            if (contest.OrganizatorId != loggedUser.Id)
+            catch (UnauthorizedException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                return this.Json(new { ErrorMessage = "Only the contest organizator can finalize it." });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            contest.IsOpenForSubmissions = false;
-            contest.Status = ContestStatus.Finalized;
-            contest.EndDate = DateTime.Now;
-
-            this.Data.SaveChanges();
-
-            var rewardStrategy =
-                    StrategyFactory.GetRewardStrategy(contest.RewardStrategy.RewardStrategyType);
-
-            rewardStrategy.ApplyReward(this.Data, contest);
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
@@ -680,33 +588,25 @@
         [HttpPost]
         public ActionResult DismissContest(int id)
         {
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
+            try
+            {
+                this._service.DismissContest(id, this.User.Identity.GetUserId());
+            }
+            catch (NotFoundException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} not found", id) });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            if (contest.Status != ContestStatus.Active)
+            catch (BadRequestException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} is not active", id) });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            if (contest.OrganizatorId != loggedUser.Id)
+            catch (UnauthorizedException exception)
             {
                 this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                return this.Json(new { ErrorMessage = "Only the contest organizator can dismiss it." });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            contest.IsOpenForSubmissions = false;
-            contest.Status = ContestStatus.Dismissed;
-            contest.EndDate = DateTime.Now;
-
-            this.Data.SaveChanges();
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }

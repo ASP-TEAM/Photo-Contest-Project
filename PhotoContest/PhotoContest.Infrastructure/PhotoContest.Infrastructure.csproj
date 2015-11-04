@@ -61,12 +61,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\BadRequestException.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
+    <Compile Include="Exceptions\UnauthorizedException.cs" />
     <Compile Include="Interfaces\IStrategyService.cs" />
     <Compile Include="Mapping\AutoMapperConfig.cs" />
     <Compile Include="Mapping\IHaveCustomMappings.cs" />
     <Compile Include="Mapping\IMapFrom.cs" />
     <Compile Include="Models\BindingModels\Contest\CreateContestBindingModel.cs" />
     <Compile Include="Models\BindingModels\Contest\UpdateContestBindingModel.cs" />
+    <Compile Include="Models\BindingModels\Invitation\CreateInvitationBindingModel.cs" />
     <Compile Include="Models\BindingModels\Reward\CreateRewardsBindingModel.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestWinnerViewModel.cs" />
