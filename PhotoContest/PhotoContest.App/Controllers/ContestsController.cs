@@ -187,13 +187,13 @@
         {
             if (model == null)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("Missing Data");
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "Missing Data" });
             }
 
             if (!this.ModelState.IsValid)
             {
-                this.Response.StatusCode = 400;
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
 
@@ -295,8 +295,8 @@
 
             if (messages.Count > 0)
             {
-                this.Response.StatusCode = 400;
-                return this.Content(string.Join("\n", messages));
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = string.Join("\n", messages) });
             }
 
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });
@@ -310,8 +310,8 @@
 
             if (contest.Status != ContestStatus.Active)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("The contest is not active");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "The contest is not active" });
             }
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
@@ -320,14 +320,14 @@
 
             if (invitation == null)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("You don't have an invitation");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "You don't have an invitation" });
             }
 
             if (invitation.Status != InvitationStatus.Neutral)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("You already have responded to the invitation");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "You already have responded to the invitation" });
             }
 
             invitation.Status = InvitationStatus.Accepted;
@@ -335,7 +335,7 @@
 
             this.Data.SaveChanges();
 
-            return new HttpStatusCodeResult(200);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [System.Web.Mvc.Authorize]
@@ -345,7 +345,7 @@
         {
             if (this.Request.Files.Count < 1)
             {
-                this.Response.StatusCode = 400;
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return this.Json(new { ErrorMessage = "No file data" });
             }
 
@@ -408,7 +408,7 @@
 
                 this.Data.SaveChanges();
 
-                this.Response.StatusCode = 200;
+                this.Response.StatusCode = (int)HttpStatusCode.OK;
 
                 return RedirectToAction("PreviewContest", new { id = contest.Id });
             }
@@ -417,7 +417,7 @@
                 this.TempData["message"] = e.Message;
             }
 
-            this.Response.StatusCode = 400;
+            this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return this.Json(new { ErrorMessage = this.TempData["message"] });
         }
 
@@ -485,8 +485,8 @@
 
             if (contest.OrganizatorId != loggedUserId)
             {
-                this.Response.StatusCode = 401;
-                return this.Content("Logged user is not the contest organizator");
+                this.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                return this.Json(new { ErrorMessage =  "Logged user is not the contest organizator" });
             }
 
             var contestBindingModel = Mapper.Map<UpdateContestBindingModel>(contest);
@@ -501,13 +501,13 @@
         {
             if (model == null)
             {
-                this.Response.StatusCode = 400;
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return this.Json(new { ErrorMessage = "Missing Data" } );
             }
 
             if (!this.ModelState.IsValid)
             {
-                this.Response.StatusCode = 400;
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
 
@@ -522,7 +522,7 @@
 
             if (contest.OrganizatorId != loggedUserId)
             {
-                this.Response.StatusCode = 401;
+                this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return this.Json(new { ErrorMessage = "Logged user is not the contest organizator" });
             }
 
@@ -556,56 +556,56 @@
 
             if (contest == null)
             {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("Contest with id {0} not found", contestId));
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} not found", contestId) });
             }
 
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (contest.OrganizatorId != loggedUser.Id)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("Only the contest organizator can invite users.");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "Only the contest organizator can invite users." });
             }
 
             if (type == InvitationType.Committee
                 && contest.VotingStrategy.VotingStrategyType != VotingStrategyType.Closed)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("The contest voting strategy type is not 'CLOSED'.");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "The contest voting strategy type is not 'CLOSED'." });
             }
 
             if (type == InvitationType.ClosedContest
                 && contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("The contest participation strategy type is not 'CLOSED'.");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "The contest participation strategy type is not 'CLOSED'." });
             }
 
             if (!contest.IsOpenForSubmissions)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("The contest is closed for submissions/registrations.");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "The contest is closed for submissions/registrations." });
             }
 
             var userToInvite = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
 
             if (userToInvite == null)
             {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("User with username {0} not found", username));
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return this.Json(new { ErrorMessage = string.Format("User with username {0} not found", username) });
             }
 
             if (userToInvite.UserName == loggedUser.UserName)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("Users cannot invite themselves.");
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "Users cannot invite themselves." });
             }
 
             if (userToInvite.PendingInvitations.Any(i => i.ContestId == contestId && i.Type == type))
             {
-                this.Response.StatusCode = 400;
-                return this.Content(string.Format("User is already invited to contest with id {0}", contest.Id));
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = string.Format("User is already invited to contest with id {0}", contest.Id) });
             }
 
             var invitation = new Invitation
@@ -631,9 +631,9 @@
             var hub = GlobalHost.ConnectionManager.GetHubContext<PhotoContestHub>();
             hub.Clients.User(username).notificationReceived(invitation.Id);
 
-            this.Response.StatusCode = 200;
+            this.Response.StatusCode = (int)HttpStatusCode.OK;
 
-            return this.Content(string.Format("User with username {0} successfully invited", username));
+            return this.Json(new { SuccessfulMessage = string.Format("User with username {0} successfully invited", username) });
         }
 
         [System.Web.Mvc.Authorize]
@@ -644,22 +644,22 @@
 
             if (contest == null)
             {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("Contest with id {0} not found", id));
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} not found", id) });
             }
 
             if (contest.Status != ContestStatus.Active)
             {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("Contest with id {0} is not active", id));
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} is not active", id) });
             }
 
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (contest.OrganizatorId != loggedUser.Id)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("Only the contest organizator can finalize it.");
+                this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return this.Json(new { ErrorMessage = "Only the contest organizator can finalize it." });
             }
 
             contest.IsOpenForSubmissions = false;
@@ -673,7 +673,7 @@
 
             rewardStrategy.ApplyReward(this.Data, contest);
 
-            return new HttpStatusCodeResult(200);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [System.Web.Mvc.Authorize]
@@ -684,22 +684,22 @@
 
             if (contest == null)
             {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("Contest with id {0} not found", id));
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} not found", id) });
             }
 
             if (contest.Status != ContestStatus.Active)
             {
-                this.Response.StatusCode = 404;
-                return this.Content(string.Format("Contest with id {0} is not active", id));
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = string.Format("Contest with id {0} is not active", id) });
             }
 
             var loggedUser = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (contest.OrganizatorId != loggedUser.Id)
             {
-                this.Response.StatusCode = 400;
-                return this.Content("Only the contest organizator can dismiss it.");
+                this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return this.Json(new { ErrorMessage = "Only the contest organizator can dismiss it." });
             }
 
             contest.IsOpenForSubmissions = false;
@@ -708,7 +708,7 @@
 
             this.Data.SaveChanges();
 
-            return new HttpStatusCodeResult(200);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
     }
 }

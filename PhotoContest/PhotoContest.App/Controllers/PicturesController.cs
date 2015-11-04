@@ -10,6 +10,7 @@
     using PhotoContest.Data.Strategies;
     using PhotoContest.Models;
     using PhotoContest.Models.Enums;
+    using System.Net;
 
     public class PicturesController : BaseController
     {
@@ -51,8 +52,8 @@
             {
                 this.TempData["message"] = e.Message;
 
-                this.Response.StatusCode = 400;
-                return this.Content(e.ToString());
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = e.ToString() });
             }
 
             return this.Content(picture.Votes.Select(p => p.Id).Count().ToString());

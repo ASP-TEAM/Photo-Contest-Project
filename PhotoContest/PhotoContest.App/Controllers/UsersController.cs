@@ -123,7 +123,7 @@
                 return this.Json(new { ErrorMessage = exception.Message }, JsonRequestBehavior.AllowGet);
             }
 
-            return new HttpStatusCodeResult(200);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [Authorize]
@@ -140,7 +140,7 @@
                 return this.Json(new {ErrorMessage = exception.Message}, JsonRequestBehavior.AllowGet);
             }
 
-            return new HttpStatusCodeResult(200);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
     }
 }
