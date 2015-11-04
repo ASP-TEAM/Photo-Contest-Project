@@ -1,20 +1,20 @@
-﻿@model IEnumerable<PhotoContest.Infrastructure.Models.ViewModels.Contest.ContestWinnerViewModel>
+﻿@model PhotoContest.Infrastructure.Models.ViewModels.Contest.PreviewInactiveContestViewModel
 @{
     ViewBag.Title = "PreviewInactiveContest";
 }
 
 <div class="jumbotron">
-    @if (Model.Any())
+    @if (Model.Winners.Any())
     {
         <div class="row">
             <div class="text-center alert alert-dismissible alert-success">
-                <h2>@Model.First().ContestTitle</h2>
-                <h3>@Model.First().ContestDescription</h3>
+                <h2>@Model.Winners.First().ContestTitle</h2>
+                <h3>@Model.Winners.First().ContestDescription</h3>
             </div>
         </div>
         <br />
         <div class="row">
-            @foreach(var contestWinner in Model)
+            @foreach(var contestWinner in Model.Winners)
             {
                 <div class="col-md-8 col-md-offset-2">
                     <div class="panel panel-success">

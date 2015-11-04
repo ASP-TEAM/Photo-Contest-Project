@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-using PhotoContest.Models.Enums;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Contest
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Contest
 {
-    public class ContestViewModel : IMapFrom<PhotoContest.Models.Contest>, IHaveCustomMappings
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
+    using PhotoContest.Models.Enums;
+
+    public class ContestViewModel : BaseContestViewModel, IMapFrom<PhotoContest.Models.Contest>, IHaveCustomMappings
     {
         public ContestViewModel()
         {

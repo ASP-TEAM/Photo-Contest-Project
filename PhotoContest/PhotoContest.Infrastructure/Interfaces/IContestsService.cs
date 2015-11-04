@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Infrastructure.Interfaces
+﻿using PhotoContest.Infrastructure.Models.BindingModels.Reward;
+
+namespace PhotoContest.Infrastructure.Interfaces
 {
     using System.Collections.Generic;
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
@@ -15,14 +17,22 @@
 
         IEnumerable<ContestViewModel> GetAllContests(string userId);
 
+        BaseContestViewModel GetPreviewContest(int id, string userId = null);
+
         bool DismissContest(int id, string userId);
 
         bool FinalizeContest(int id, string userId);
+
+        bool JoinContestCommittee(int id, string userId);
 
         int InviteUser(CreateInvitationBindingModel model, string loggedUserId);
 
         int CreateContest(CreateContestBindingModel model, string userId);
 
         int JoinContest(int id, string userId);
+
+        int UpdateContest(UpdateContestBindingModel model, string userId);
+
+        int AddRewards(int id, CreateRewardsBindingModel model, string userId);
     }
 }
