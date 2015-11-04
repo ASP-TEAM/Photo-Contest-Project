@@ -62,6 +62,14 @@
         }
 
         [TestMethod]
+        public void AllContestsShouldReturnAllContestsPartial()
+        {
+            var result = (PartialViewResult)this.fakeContestsController.AllContests();
+
+            Assert.AreEqual("_AllContestsPartial", result.ViewName);
+        }
+
+        [TestMethod]
         public void InactiveContestsShouldReturnInactiveContestsPartial()
         {
             var result = (PartialViewResult)this.fakeContestsController.InactiveContests();
@@ -106,6 +114,26 @@
             var contest = result.Model as PreviewContestViewModel;
 
             Assert.AreEqual("Test Title1 - Active", contest.Title);
+        }
+
+        [TestMethod]
+        public void UpdateContestWithInvalidIdShouldReturnHttpNotFound()
+        {
+            var contest = new UpdateContestBindingModel {Id = 100, Title = "New title"};
+
+            var result = this.fakeContestsController.UpdateContest(contest);
+
+            Assert.IsInstanceOfType(result, typeof(HttpNotFoundResult));
+        }
+
+        [TestMethod]
+        public void UpdateExistingContestFromNonOrganizatorShouldReturnErrorMessage()
+        {
+            var contest = new UpdateContestBindingModel {Id = 1, Title = "New title"};
+
+            var result = this.fakeContestsController.UpdateContest(contest);
+
+            Assert.IsInstanceOfType(result, typeof(JsonResult));
         }
 
     }
