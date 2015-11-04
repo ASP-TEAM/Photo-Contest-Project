@@ -27,6 +27,5 @@
             var contests = this.service.GetTopNewestContests(Top3NewstContests).ToList();
             return this.View(contests);
         }
-
     }
 }
