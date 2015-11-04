@@ -2,5 +2,5 @@
 
 @foreach (var strategy in Model)
 {
-    <option value="@strategy.Id" data-description="@strategy.Description">@strategy.Name</option>
+    <option value="@strategy.Id" data-description="@strategy.Description" min="1">@strategy.Name</option>
 }

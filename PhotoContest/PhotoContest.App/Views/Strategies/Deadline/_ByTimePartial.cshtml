@@ -3,7 +3,7 @@
 <div class="form-group">
     @Html.LabelFor(c => c.SubmissionDeadline, new { @class = "col-lg-2 control-label" })
     <div class="col-lg-10">
-        @Html.TextBoxFor(c => c.SubmissionDeadline, new { @class = "form-control", type = "date" })
+        @Html.TextBoxFor(c => c.SubmissionDeadline, new { @class = "form-control strategy-date", type = "date" })
         @Html.ValidationMessageFor(c => c.SubmissionDeadline, string.Empty, new { @class = "text-danger" })
         <div id="DeadlineStrategyPartial">
         </div>

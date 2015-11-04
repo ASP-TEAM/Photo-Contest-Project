@@ -9,6 +9,9 @@
     padding-right: 15px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+}
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -24,21 +27,23 @@ textarea {
 }
 
 a:hover {
-    text-decoration: none
+    text-decoration: none;
 }
 
 #upload-picture {
     width: 30%;
 }
+
 .picture {
-    display: inline-block; 
-    width: 150px; 
-    height: 150px;
-}
-.picture > img {
+    display: inline-block;
     width: 150px;
     height: 150px;
 }
+
+    .picture > img {
+        width: 150px;
+        height: 150px;
+    }
 
 .contests {
     display: block;
@@ -53,20 +58,24 @@ a:hover {
 }
 
 .picturePreview {
-    height: 200px;
+    max-width: 240px;
+    max-height: 200px;
 }
 
 #suggestions {
     margin-left: 1%;
     width: 30%;
 }
-#suggestions > li {
-    padding: 5px;
-}
-#suggestions>li:hover {
-    background-color: rgb(237, 238, 255);
-    cursor: pointer;
-}
+
+    #suggestions > li {
+        padding: 5px;
+    }
+
+        #suggestions > li:hover {
+            background-color: rgb(237, 238, 255);
+            cursor: pointer;
+        }
+
 #invite-user-username {
     display: inline-block;
 }
@@ -74,6 +83,7 @@ a:hover {
 #usernameCheckResult, #emailCheckResult {
     color: #ff0000;
 }
+
 #notifications {
     position: fixed;
     display: none;
@@ -89,6 +99,7 @@ a:hover {
 .contest-panel {
     height: 142px;
     max-height: 150px;
+    box-shadow: 2px 2px 2px #697075;
 }
 
 .invitation {
@@ -104,4 +115,38 @@ a:hover {
 .manage-picture {
     max-width: 180px;
     max-height: 180px;
+}
+
+
+.strategy-number {
+    margin-top: 2%;
+    margin-left: 5%;
+    width: 20%;
+}
+
+.strategy-date {
+    margin-left: 10%;
+    margin-top: 2%;
+}
+
+
+/*Upload btn style*/
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }

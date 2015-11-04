@@ -3,71 +3,75 @@
 @{
     ViewBag.Title = "NewContest";
 }
-
-@using (Html.BeginForm("CreateContest", "Contests", new {}, FormMethod.Post, new { @class = "form-horizontal" }))
-{
-    @Html.AntiForgeryToken()
-    <fieldset>
-        <legend>New Contest</legend>
-        <div class="form-group">
-            @Html.LabelFor(c => c.Title, new { @class = "col-lg-2 control-label" })
-            <div class="col-lg-10">
-                @Html.TextBoxFor(c => c.Title, new { @class = "form-control"})
-                @Html.ValidationMessageFor(c => c.Title, string.Empty, new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(c => c.Description, new { @class = "col-lg-2 control-label" })
-            <div class="col-lg-10">
-                @Html.TextAreaFor(c => c.Description, new { @class = "form-control"})
-                @Html.ValidationMessageFor(c => c.Description, string.Empty, new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="RewardStrategyId" class="col-lg-2 control-label">Reward Strategy</label>
-            <div class="col-lg-10">
-                <select class="form-control" id="RewardStrategyId" name="RewardStrategyId">
-                    @Html.Partial("_StrategyPartial", Model.RewardStrategies);
-                </select>
-                <div id="RewardStrategyPartial">
-
+<h1 class="text-center">New Contest</h1>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2 well bs-component">
+        @using (Html.BeginForm("CreateContest", "Contests", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            <fieldset>
+                <legend></legend>
+                <div class="form-group">
+                    @Html.LabelFor(c => c.Title, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(c => c.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(c => c.Title, string.Empty, new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="VotingStrategyId" class="col-lg-2 control-label">Voting Strategy</label>
-            <div class="col-lg-10">
-                <select class="form-control" id="VotingStrategyId" name="VotingStrategyId">
-                    @Html.Partial("_StrategyPartial", Model.VotingStrategies);
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="ParticipationStrategyId" class="col-lg-2 control-label">Participation Strategy</label>
-            <div class="col-lg-10">
-                <select class="form-control" id="ParticipationStrategyId" name="ParticipationStrategyId">
-                    @Html.Partial("_StrategyPartial", Model.ParticipationStrategies);
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="DeadlineStrategyId" class="col-lg-2 control-label">Deadline Strategy</label>
-            <div class="col-lg-10">
-                <select class="form-control" id="DeadlineStrategyId" name="DeadlineStrategyId">
-                    @Html.Partial("_StrategyPartial", Model.DeadlineStrategies);
-                </select>
-                <div id="DeadlineStrategyPartial">
-                    
+                <div class="form-group">
+                    @Html.LabelFor(c => c.Description, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextAreaFor(c => c.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(c => c.Description, string.Empty, new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
-                <input type="submit" class="btn btn-primary" value="Create" />
-            </div>
-        </div>
-    </fieldset>
-}
+                <div class="form-group">
+                    <label for="RewardStrategyId" class="col-lg-2 control-label">Reward Strategy</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="RewardStrategyId" name="RewardStrategyId">
+                            @Html.Partial("_StrategyPartial", Model.RewardStrategies);
+                        </select>
+                        <div id="RewardStrategyPartial">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="VotingStrategyId" class="col-lg-2 control-label">Voting Strategy</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="VotingStrategyId" name="VotingStrategyId">
+                            @Html.Partial("_StrategyPartial", Model.VotingStrategies);
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ParticipationStrategyId" class="col-lg-2 control-label">Participation Strategy</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="ParticipationStrategyId" name="ParticipationStrategyId">
+                            @Html.Partial("_StrategyPartial", Model.ParticipationStrategies);
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="DeadlineStrategyId" class="col-lg-2 control-label">Deadline Strategy</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="DeadlineStrategyId" name="DeadlineStrategyId">
+                            @Html.Partial("_StrategyPartial", Model.DeadlineStrategies);
+                        </select>
+                        <div id="DeadlineStrategyPartial">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <input type="submit" class="btn btn-success btn" value="Create contest" />
+                    </div>
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
