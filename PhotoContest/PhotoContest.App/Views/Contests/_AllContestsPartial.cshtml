@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<PhotoContest.Infrastructure.Models.ViewModels.Contest.ContestViewModel>
  
-<h2>All Contests</h2>
-<div class="row">
+<h2 class="text-center">All Contests</h2>
+<div class="row jumbotron">
     @foreach (var contest in Model)
     {
-        <div class="col-md-4">
+        <div class="col-md-6">
             @Html.Partial("_AllContestPartial", contest)
         </div>
     }

@@ -11,15 +11,16 @@
 
         @if (Model.IsOpenForSubmissions && Model.CanUpload)
         {
-            <div class="row">
+            <div class="row well">
                 @using (Html.BeginForm("Upload", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
-                    <input type="file" multiple name="files[]" id="uploadPictureInput" />
-                    <input type='submit' id='upload-files' value='Upload' />
-                    <div class="container" id="contestUploadPicturesContainer">
-
-                    </div>
+                    <span class="btn btn-default btn-file">
+                        Add images to contest<input type="file" multiple name="files[]" id="uploadPictureInput" />
+                    </span>
+                    <input type='submit' id='upload-files' value='Upload' class="btn btn-success"/>
+                    <hr/>
+                    <div id="contestUploadPicturesContainer"></div>
                 }
             </div>
         }

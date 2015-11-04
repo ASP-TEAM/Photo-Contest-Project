@@ -267,7 +267,7 @@ namespace PhotoContest.App.Controllers
             if (messages.Count > 0)
             {
                 this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = string.Join("\n", messages) });
+                return this.Json(new { ErrorMessage = string.Join("\n", messages) }, JsonRequestBehavior.AllowGet);
             }
 
             return this.RedirectToAction("PreviewContest", new { id = contest.Id });

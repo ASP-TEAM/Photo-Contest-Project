@@ -1,15 +1,16 @@
 ﻿@model PhotoContest.Infrastructure.Models.ViewModels.Contest.ContestViewModel
 
-<div class="panel panel-default contest-panel">
+<div class="panel panel-warning contest-panel">
     <div class="panel-heading">
+        <div class="pull-right">@Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary btn-manage" })</div>
         <h4>
+            <span class="label label-warning">Title: </span>
+
             @Html.ActionLink(@Model.Title, "PreviewContest", "Contests", new { id = @Model.Id }, null)
         </h4>
     </div>
     <div class="panel-body">
-        @Model.Description
-    </div>
-    <div>
-        @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        <span class="label label-warning">Description: </span>
+        <p>@Model.Description</p>
     </div>
 </div>

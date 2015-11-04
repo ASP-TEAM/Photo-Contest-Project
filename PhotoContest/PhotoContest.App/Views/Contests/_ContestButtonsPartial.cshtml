@@ -1,5 +1,5 @@
 ﻿@model PhotoContest.Infrastructure.Models.ViewModels.Contest.ContestViewModel
-    
+
 @if (Request.IsAuthenticated)
 {
     <div>
@@ -10,7 +10,8 @@
 
         @if (Model.CanManage)
         {
-            @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary  btn-manage" })
         }
+
     </div>
 }

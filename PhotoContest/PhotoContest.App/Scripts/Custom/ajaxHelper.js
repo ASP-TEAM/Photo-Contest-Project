@@ -95,7 +95,8 @@
 
     function onReceivedNotifications(data, status, xhr) {
         if (data.trim() === "") {
-            $("#notifications").html("<div class='alert alert-dismissible alert-info'><b>No new notifications</b></div>");
+            $("#notifications").html("<div class='alert alert-dismissible alert-info'><button type='button' class='close' data-dismiss='alert'>×</button><b>No new notifications</b></div>");
+
         }
     }
 

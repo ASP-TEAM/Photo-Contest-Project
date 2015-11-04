@@ -1,13 +1,15 @@
 ﻿@model PhotoContest.Infrastructure.Models.ViewModels.Contest.ContestViewModel
 
-<div class="panel panel-default contest-panel">
+<div class="panel panel-success contest-panel">
     <div class="panel-heading">
+        <div class="pull-right">@Html.Partial("_ContestButtonsPartial", Model)</div>
         <h4>
+            <span class="label label-success">Title: </span>
             @Html.ActionLink(@Model.Title, "PreviewContest", "Contests", new { id = @Model.Id }, null)
         </h4>
     </div>
     <div class="panel-body">
-        @Model.Description
+        <span class="label label-info">Description: </span>
+        <p>@Model.Description</p>
     </div>
-    @Html.Partial("_ContestButtonsPartial", Model)
 </div>

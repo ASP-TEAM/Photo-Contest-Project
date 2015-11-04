@@ -36,7 +36,7 @@
             bundles.Add(
                 new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js", "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css", "~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.slate.css", "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/kendo").Include(
                     "~/Content/kendo/kendo.common.core.min.css",

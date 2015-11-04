@@ -4,7 +4,7 @@
     @Html.LabelFor(c => c.TopNPlaces, new { @class = "col-lg-2 control-label" })
     <div class="col-lg-10">
         @Html.TextBoxFor(c => c.TopNPlaces,
-                new { @class = "form-control", type = "number" })
+                new { @class = "form-control strategy-number", type = "number", min=1 })
         @Html.ValidationMessageFor(c => c.TopNPlaces, string.Empty, new { @class = "text-danger" })
     </div>
 </div>

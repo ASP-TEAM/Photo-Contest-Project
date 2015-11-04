@@ -12,18 +12,14 @@
             <div class="col-md-4">
                 <strong>Uploaded by: </strong>
                 <span class="glyphicon glyphicon-user">@picture.UserName</span>
-                <img src="@picture.Url" alt="alt" class="img-rounded manage-picture" />
+                <div>
+                    <img src="@picture.Url" alt="alt" class="img-rounded manage-picture"/>
+                </div>
                 <span class="badge">Votes @picture.VotesCount</span>
                 <div>
-                    @Ajax.ActionLink("Delete", "DeletePictureFromContest", "Admin", new { id = picture.Id },
-                   new AjaxOptions
-                   {
-                       HttpMethod = "GET",
-                       OnSuccess = "adminManager.onPictureRemovedSuccessfully",
-                       OnFailure = "adminManager.onPictureNotRemoved",
-                       Confirm = "Are you sure you want to delete this picture?"
-                   }, new { @class = "btn btn-danger" })
+                    @Ajax.ActionLink("Delete", "DeletePictureFromContest", "Admin", new { id = picture.Id }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "adminManager.onPictureRemovedSuccessfully", OnFailure = "adminManager.onPictureNotRemoved", Confirm = "Are you sure you want to delete this picture?" }, new { @class = "btn btn-danger" })
                 </div>
+                <hr />
             </div>
         }
     </div>

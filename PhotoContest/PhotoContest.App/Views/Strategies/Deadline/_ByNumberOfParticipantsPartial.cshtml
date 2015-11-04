@@ -4,7 +4,7 @@
     @Html.LabelFor(c => c.ParticipantsLimit, new { @class = "col-lg-2 control-label" })
     <div class="col-lg-10">
         @Html.TextBoxFor(c => c.ParticipantsLimit,
-                new { @class = "form-control", type = "number" })
+                new { @class = "form-control strategy-number", type = "number", min = 1 })
         @Html.ValidationMessageFor(c => c.ParticipantsLimit, string.Empty, new { @class = "text-danger" })
     </div>
 </div>
