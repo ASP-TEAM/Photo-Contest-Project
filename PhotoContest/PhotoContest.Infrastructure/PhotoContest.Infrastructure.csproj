@@ -92,13 +92,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\ContestService.cs" />
-    <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\StrategyService.cs" />
     <Compile Include="Services\UsersService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PhotoContest.Common\PhotoContest.Common.csproj">
-      <Project>{44b531ea-5c70-4422-8419-759c0b3fce40}</Project>
+      <Project>{44B531EA-5C70-4422-8419-759C0B3FCE40}</Project>
       <Name>PhotoContest.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\PhotoContest.Data\PhotoContest.Data.csproj">
