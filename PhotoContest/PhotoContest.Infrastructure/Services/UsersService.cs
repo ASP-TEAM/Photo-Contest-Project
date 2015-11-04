@@ -10,8 +10,15 @@
     using AutoMapper;
     using System.IdentityModel;
 
+    using PhotoContest.Data.Interfaces;
+
     public class UsersService : BaseService, IUsersService
     {
+        public UsersService(IPhotoContestData data)
+            : base(data)
+        {
+        }
+
         public IEnumerable<NotificationViewModel> GetNotifications(string userId)
         {
             var user = this.Data.Users.Find(userId);

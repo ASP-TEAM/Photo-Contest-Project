@@ -7,11 +7,6 @@
     {
         private IPhotoContestData _data;
 
-        protected BaseService()
-            :this(new PhotoContestData())
-        {
-        }
-
         protected BaseService(IPhotoContestData data)
         {
             this.Data = data;
