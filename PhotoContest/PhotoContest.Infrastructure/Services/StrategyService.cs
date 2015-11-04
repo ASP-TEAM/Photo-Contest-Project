@@ -1,12 +1,19 @@
 ﻿namespace PhotoContest.Infrastructure.Services
 {
     using System;
+
+    using PhotoContest.Data.Interfaces;
     using PhotoContest.Infrastructure.Interfaces;
     using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline;
     using PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward;
 
     public class StrategyService : BaseService, IStrategyService
     {
+        public StrategyService(IPhotoContestData data)
+            : base(data)
+        {
+        }
+
         public AbstractDeadlineStrategyViewModel GetDeadlineStrategyOptions(int id)
         {
             var strategy = this.Data.DeadlineStrategies.Find(id);

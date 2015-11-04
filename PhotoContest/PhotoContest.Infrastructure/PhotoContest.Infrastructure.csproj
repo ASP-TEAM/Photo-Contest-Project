@@ -95,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\ContestService.cs" />
+    <Compile Include="Services\HomeService.cs" />
     <Compile Include="Services\StrategyService.cs" />
     <Compile Include="Services\UsersService.cs" />
   </ItemGroup>

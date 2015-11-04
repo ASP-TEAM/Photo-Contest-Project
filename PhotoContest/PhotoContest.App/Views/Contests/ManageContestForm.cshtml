@@ -21,7 +21,8 @@
                 {
                     HttpMethod = "POST",
                     OnSuccess = "ajaxHelper.onSuccess",
-                    OnFailure = "ajaxHelper.onError"
+                    OnFailure = "ajaxHelper.onError",
+                    Confirm = "Are you sure you want to Finalize this contest?"
                 },
                 new { @class = "btn btn-success" })
 
@@ -30,7 +31,8 @@
                 {
                     HttpMethod = "POST",
                     OnSuccess = "ajaxHelper.onSuccess",
-                    OnFailure = "ajaxHelper.onError"
+                    OnFailure = "ajaxHelper.onError",
+                    Confirm = "Are you sure you want to Dismiss this contest?"
                 },
                 new { @class = "btn btn-danger" })
         </div>
