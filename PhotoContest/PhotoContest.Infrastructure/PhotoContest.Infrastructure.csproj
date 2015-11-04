@@ -61,9 +61,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\BadRequestException.cs" />
-    <Compile Include="Exceptions\NotFoundException.cs" />
-    <Compile Include="Exceptions\UnauthorizedException.cs" />
     <Compile Include="Interfaces\IStrategyService.cs" />
     <Compile Include="Mapping\AutoMapperConfig.cs" />
     <Compile Include="Mapping\IHaveCustomMappings.cs" />
@@ -100,6 +97,10 @@
     <Compile Include="Services\UsersService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PhotoContest.Common\PhotoContest.Common.csproj">
+      <Project>{44b531ea-5c70-4422-8419-759c0b3fce40}</Project>
+      <Name>PhotoContest.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PhotoContest.Data\PhotoContest.Data.csproj">
       <Project>{A9D027BD-FFE7-42F5-845C-19CCA215FD2C}</Project>
       <Name>PhotoContest.Data</Name>
