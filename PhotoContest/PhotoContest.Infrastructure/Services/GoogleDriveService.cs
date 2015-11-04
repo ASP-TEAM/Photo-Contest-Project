@@ -1,4 +1,4 @@
-﻿namespace PhotoContest.App.Services
+﻿namespace PhotoContest.Infrastructure.Services
 {
     using Google.Apis.Auth.OAuth2;
     using Google.Apis.Drive.v2;

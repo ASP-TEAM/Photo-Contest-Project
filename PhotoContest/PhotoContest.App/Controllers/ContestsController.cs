@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Infrastructure.Services;
+
+namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -17,7 +19,6 @@
     using System.Linq;
 
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
 
     using Microsoft.AspNet.SignalR;
 
@@ -32,7 +33,6 @@
     using PhotoContest.Infrastructure.Models.ViewModels.Reward;
     using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
 
-    using PhotoContest.App.Services;
     using PhotoContest.Common.Exceptions;
     using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
 
@@ -42,14 +42,14 @@
     {
         private const string GoogleDrivePicturesBaseLink = "http://docs.google.com/uc?export=open&id=";
 
-        private PicturesService _picturesService;
+        private PictureService _picturesService;
 
         private IContestsService _service;
 
         public ContestsController(IPhotoContestData data, IContestsService service)
             : base(data)
         {
-            this._picturesService = new PicturesService();
+            this._picturesService = new PictureService(data);
             this._service = service;
         }
 
@@ -131,35 +131,7 @@
         [HttpGet]
         public ActionResult NewContest()
         {
-            var viewModel = new CreateContestViewModel();
-
-            viewModel.RewardStrategies = this.Data.RewardStrategies.All()
-                .Select(r => new StrategyViewModel()
-                {
-                    Id = r.Id, Description = r.Description, Name = r.Name,
-                })
-                .ToList();
-
-            viewModel.ParticipationStrategies = this.Data.ParticipationStrategies.All()
-                .Select(p => new StrategyViewModel()
-                {
-                    Id = p.Id, Description = p.Description, Name = p.Name,
-                })
-                .ToList();
-
-            viewModel.VotingStrategies = this.Data.VotingStrategies.All()
-                .Select(v => new StrategyViewModel()
-                {
-                    Id = v.Id, Description = v.Description, Name = v.Name,
-                })
-                .ToList();
-
-            viewModel.DeadlineStrategies = this.Data.DeadlineStrategies.All()
-                .Select(dl => new StrategyViewModel()
-                {
-                    Id = dl.Id, Description = dl.Description, Name = dl.Name,
-                })
-                .ToList();
+            var viewModel = this._service.GetCreateContest();
 
             return this.View("NewContestForm", viewModel);
         }
@@ -195,14 +167,40 @@
         }
 
         [System.Web.Mvc.Authorize]
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Join(int id)
         {
+            if (this.Request.Files.Count < 1)
+            {
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = "You must upload atleast one picture to participate" });
+            }
+
+            var files = new List<HttpPostedFileBase>();
+
+            for (int i = 0; i < this.Request.Files.Count; i++)
+            {
+                var result = this._picturesService.ValidateImageData(this.Request.Files[i]);
+
+                if (result != null)
+                {
+                    this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return this.Json(new { ErrorMessage = result });
+                }
+
+                files.Add(this.Request.Files[i]);
+            }
+
             try
             {
-                var contestId = this._service.JoinContest(id, this.User.Identity.GetUserId());
+                var contestId = this._service.JoinContest(id, files, this.User.Identity.GetUserId());
 
                 return this.RedirectToAction("PreviewContest", new { id = contestId });
+            }
+            catch (NotFoundException exception)
+            {
+                return this.HttpNotFound(exception.Message);
             }
             catch (BadRequestException exception)
             {
@@ -233,89 +231,6 @@
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        [System.Web.Mvc.Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Upload(int id)
-        {
-            if (this.Request.Files.Count < 1)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "No file data" });
-            }
-
-            var files = new List<HttpPostedFileBase>();
-
-            for (int i = 0; i < this.Request.Files.Count; i++)
-            {
-                var result = this._picturesService.ValidateImageData(this.Request.Files[i]);
-
-                if (result != null)
-                {
-                    this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                    return this.Json(new { ErrorMessage = result });
-                }
-
-                files.Add(this.Request.Files[i]);
-            }
-
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
-            {
-                throw new HttpException(404, "Contest with such id does not exists");
-            }
-
-            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            try
-            {
-                if (contest.Committee.Contains(user) || !contest.Participants.Contains(user)
-                    || contest.OrganizatorId == user.Id)
-                {
-                    throw new InvalidOperationException("You are either organizator of this contest or in the committee or you don't not participate in it");
-                }
-
-                var deadlineStrategy = StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
-
-                deadlineStrategy.CheckDeadline(this.Data, contest, user);
-
-                foreach (var file in files)
-                {
-                    var result = this._picturesService.UploadImageToGoogleDrive(file, file.FileName, file.ContentType);
-
-                    if (result[0] != "success")
-                    {
-                        this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                        return this.Content(result[1]);
-                    }
-
-                    Picture picture = new Picture
-                    {
-                        UserId = user.Id,
-                        Url = GoogleDrivePicturesBaseLink + result[1],
-                        GoogleFileId = result[1],
-                        ContestId = contest.Id
-                    };
-
-                    this.Data.Pictures.Add(picture);
-                }
-
-                this.Data.SaveChanges();
-
-                this.Response.StatusCode = (int)HttpStatusCode.OK;
-
-                return RedirectToAction("PreviewContest", new { id = contest.Id });
-            }
-            catch (InvalidOperationException e)
-            {
-                this.TempData["message"] = e.Message;
-            }
-
-            this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return this.Json(new { ErrorMessage = this.TempData["message"] });
-        }
-
         [HttpGet]
         public ActionResult PreviewContest(int id)
         {
@@ -333,24 +248,21 @@
         [HttpGet]
         public ActionResult ManageContest(int id)
         {
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
+            try
             {
-                return this.HttpNotFound("The selected contest does not exist");
+                var viewModel = this._service.GetManageContest(id, this.User.Identity.GetUserId());
+
+                return this.View("ManageContestForm", viewModel);
             }
-
-            var loggedUserId = this.User.Identity.GetUserId();
-
-            if (contest.OrganizatorId != loggedUserId)
+            catch (NotFoundException exception)
+            {
+                return this.HttpNotFound(exception.Message);
+            }
+            catch (UnauthorizedException exception)
             {
                 this.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
-                return this.Json(new { ErrorMessage =  "Logged user is not the contest organizator" });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            var contestBindingModel = Mapper.Map<UpdateContestBindingModel>(contest);
-
-            return this.View("ManageContestForm", contestBindingModel);
         }
 
         [System.Web.Mvc.Authorize]
@@ -375,7 +287,6 @@
                 int contestId = this._service.UpdateContest(model, this.User.Identity.GetUserId());
 
                 return this.RedirectToAction("PreviewContest", new { id = contestId });
-
             }
             catch (NotFoundException exception)
             {

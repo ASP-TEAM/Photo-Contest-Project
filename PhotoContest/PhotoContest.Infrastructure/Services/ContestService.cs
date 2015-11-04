@@ -1,5 +1,7 @@
-﻿namespace PhotoContest.Infrastructure.Services
+namespace PhotoContest.Infrastructure.Services
 {
+    using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
+
     using PhotoContest.Infrastructure.Interfaces;
     using System.Linq;
     using System.Collections.Generic;
@@ -9,6 +11,7 @@
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Models.Enums;
     using System;
+    using System.Web;
 
     using PhotoContest.Common.Exceptions;
     using PhotoContest.Data.Strategies;
@@ -18,13 +21,16 @@
     using AutoMapper;
     using PhotoContest.Infrastructure.Models.BindingModels.Reward;
 
-    using BadRequestException = System.IdentityModel.BadRequestException;
-
     public class ContestService : BaseService, IContestsService
     {
+        private const string GoogleDrivePicturesBaseLink = "http://docs.google.com/uc?export=open&id=";
+
+        private PictureService _pictureService;
+
         public ContestService(IPhotoContestData data)
             :base(data)
         {
+            this._pictureService = new PictureService(data);
         }
 
         public IQueryable<ContestViewModel> GetTopNewestContests(int takeCount)
@@ -87,6 +93,25 @@
             return allContests;
         }
 
+        public UpdateContestBindingModel GetManageContest(int id, string userId)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new NotFoundException("The selected contest does not exist");
+            }
+
+            var loggedUserId = userId;
+
+            if (contest.OrganizatorId != loggedUserId)
+            {
+                throw new UnauthorizedException("Logged user is not the contest organizator");
+            }
+
+            return Mapper.Map<UpdateContestBindingModel>(contest);
+        }
+
         public BaseContestViewModel GetPreviewContest(int id, string userId = null)
         {
             var contest = this.Data.Contests.Find(id);
@@ -122,11 +147,6 @@
                 }
                 else
                 {
-                    if (!contest.Committee.Contains(user) && contest.Participants.Contains(user) && contest.IsOpenForSubmissions)
-                    {
-                        contestViewModel.CanUpload = true;
-                    }
-
                     if (contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed
                         && !user.InContests.Any(c => c.Id == contest.Id)
                         && !user.CommitteeInContests.Any(c => c.Id == contest.Id))
@@ -137,6 +157,47 @@
             }
 
             return contestViewModel;
+        }
+
+        public CreateContestViewModel GetCreateContest()
+        {
+            var viewModel = new CreateContestViewModel
+            {
+                RewardStrategies = this.Data.RewardStrategies.All()
+                    .Select(r => new StrategyViewModel()
+                    {
+                        Id = r.Id,
+                        Description = r.Description,
+                        Name = r.Name,
+                    })
+                    .ToList(),
+                ParticipationStrategies = this.Data.ParticipationStrategies.All()
+                    .Select(p => new StrategyViewModel()
+                    {
+                        Id = p.Id,
+                        Description = p.Description,
+                        Name = p.Name,
+                    })
+                    .ToList(),
+                VotingStrategies = this.Data.VotingStrategies.All()
+                    .Select(v => new StrategyViewModel()
+                    {
+                        Id = v.Id,
+                        Description = v.Description,
+                        Name = v.Name,
+                    })
+                    .ToList(),
+                DeadlineStrategies = this.Data.DeadlineStrategies.All()
+                    .Select(dl => new StrategyViewModel()
+                    {
+                        Id = dl.Id,
+                        Description = dl.Description,
+                        Name = dl.Name,
+                    })
+                    .ToList()
+            };
+
+            return viewModel;
         }
 
         public bool DismissContest(int id, string userId)
@@ -324,14 +385,21 @@
             return contest.Id;
         }
 
-        public int JoinContest(int id, string userId)
+        public int JoinContest(int id, IEnumerable<HttpPostedFileBase> files, string userId)
         {
-            var user = this.Data.Users.Find(userId);
             var contest = this.Data.Contests.Find(id);
 
-            if (contest.OrganizatorId == user.Id)
+            if (contest == null)
             {
-                throw new BadRequestException("You cannot join contest created by you");
+                throw new NotFoundException("Contest with such id does not exists");
+            }
+
+            var user = this.Data.Users.Find(userId);
+
+            if (contest.Committee.Contains(user) || contest.Participants.Contains(user)
+                || contest.OrganizatorId == user.Id)
+            {
+                throw new BadRequestException("You are either organizator of this contest or in the committee or you already participate in it");
             }
 
             var deadlineStrategy =
@@ -352,6 +420,26 @@
             if (contest.Committee.Contains(user))
             {
                 throw new UnauthorizedException("You cannot participate in this contest, you are in the committee");
+            }
+
+            foreach (var file in files)
+            {
+                var result = this._pictureService.UploadImageToGoogleDrive(file, file.FileName, file.ContentType);
+
+                if (result[0] != "success")
+                {
+                    throw new BadRequestException(result[1]);
+                }
+
+                Picture picture = new Picture
+                {
+                    UserId = user.Id,
+                    Url = GoogleDrivePicturesBaseLink + result[1],
+                    GoogleFileId = result[1],
+                    ContestId = contest.Id
+                };
+
+                this.Data.Pictures.Add(picture);
             }
 
             contest.Participants.Add(user);

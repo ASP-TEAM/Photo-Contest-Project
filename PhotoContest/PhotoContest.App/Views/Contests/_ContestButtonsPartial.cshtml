@@ -5,7 +5,7 @@
     <div>
         @if (Model.CanParticipate)
         {
-            @Html.ActionLink("Participate", "Join", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })
+            @Html.ActionLink("Participate", "PreviewContest", "Contests", new { @Model.Id }, new { @class = "btn btn-sm btn-success" })
         }
 
         @if (Model.CanManage)

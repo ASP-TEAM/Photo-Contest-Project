@@ -12,7 +12,6 @@
         {
             this.CanParticipate = false;
             this.CanManage = false;
-            this.CanUpload = false;
         }
 
         public int Id { get; set; }
@@ -30,8 +29,6 @@
         public bool CanParticipate { get; set; }
 
         public bool CanManage { get; set; }
-
-        public bool CanUpload { get; set; }
 
         public void CreateMappings(IConfiguration configuration)
         {

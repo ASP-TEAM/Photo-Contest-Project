@@ -1,5 +1,6 @@
-﻿namespace PhotoContest.App.Services
+﻿namespace PhotoContest.Infrastructure.Services
 {
+    using PhotoContest.Data.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -7,9 +8,12 @@
     using Google.Apis.Drive.v2;
     using Google.Apis.Drive.v2.Data;
     using File = Google.Apis.Drive.v2.Data.File;
-
-    public class PicturesService
+    public class PictureService : BaseService
     {
+        public PictureService(IPhotoContestData data) : base(data)
+        {
+        }
+
         private const int MaxImageSize = 1000000;
         private const string GoogleDriveFolderId = "0By2WSCXLYL1JNVJacmZvcXROeVk";
 

@@ -9,25 +9,20 @@
             @Html.ActionLink("Manage", "ManageContest", new { id = Model.Id }, new { @class = "btn btn-primary" })
         }
 
-        @if (Model.IsOpenForSubmissions && Model.CanUpload)
+        @if (Model.IsOpenForSubmissions && Model.CanParticipate)
         {
             <div class="row well">
-                @using (Html.BeginForm("Upload", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("Join", "Contests", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     <span class="btn btn-default btn-file">
                         Add images to contest<input type="file" multiple name="files[]" id="uploadPictureInput" />
                     </span>
-                    <input type='submit' id='upload-files' value='Upload' class="btn btn-success"/>
+                    <input type='submit' id='upload-files' value='Participate' class="btn btn-success"/>
                     <hr/>
                     <div id="contestUploadPicturesContainer"></div>
                 }
             </div>
-        }
-
-        @if (Model.CanParticipate)
-        {
-            @Html.ActionLink("Participate", "Join", new { id = Model.Id }, new { @class = "btn btn-success" })
         }
 
         <div class="row">

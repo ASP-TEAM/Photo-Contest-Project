@@ -1,4 +1,5 @@
-﻿using PhotoContest.Models.Enums;
+﻿using PhotoContest.Infrastructure.Services;
+using PhotoContest.Models.Enums;
 
 namespace PhotoContest.App.Areas.Administration.Controllers
 {
@@ -19,7 +20,6 @@ namespace PhotoContest.App.Areas.Administration.Controllers
     using Microsoft.AspNet.Identity.EntityFramework;
 
     using PhotoContest.App.Areas.Administration.Models.BindingModels;
-    using PhotoContest.App.Services;
     using PhotoContest.App.Areas.Administration.Models.ViewModels;
     using PhotoContest.Data;
     using PhotoContest.Data.Interfaces;
@@ -27,12 +27,12 @@ namespace PhotoContest.App.Areas.Administration.Controllers
 
     public class AdminController : BaseAdminController
     {
-        private PicturesService _picturesService;
+        private PictureService _picturesService;
 
         public AdminController(IPhotoContestData data)
             : base(data)
         {
-            this._picturesService = new PicturesService();
+            this._picturesService = new PictureService(data);
         }
 
         public ActionResult ManageContestPictures()

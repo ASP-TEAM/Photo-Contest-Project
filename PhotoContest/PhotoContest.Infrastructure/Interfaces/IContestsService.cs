@@ -1,4 +1,5 @@
-﻿using PhotoContest.Infrastructure.Models.BindingModels.Reward;
+﻿using System.Web;
+using PhotoContest.Infrastructure.Models.BindingModels.Reward;
 
 namespace PhotoContest.Infrastructure.Interfaces
 {
@@ -21,7 +22,11 @@ namespace PhotoContest.Infrastructure.Interfaces
 
         IEnumerable<ContestViewModel> GetAllContests(string userId);
 
+        UpdateContestBindingModel GetManageContest(int id, string userId);
+
         BaseContestViewModel GetPreviewContest(int id, string userId = null);
+
+        CreateContestViewModel GetCreateContest();
 
         bool DismissContest(int id, string userId);
 
@@ -33,7 +38,7 @@ namespace PhotoContest.Infrastructure.Interfaces
 
         int CreateContest(CreateContestBindingModel model, string userId);
 
-        int JoinContest(int id, string userId);
+        int JoinContest(int id, IEnumerable<HttpPostedFileBase> files, string userId);
 
         int UpdateContest(UpdateContestBindingModel model, string userId);
 
