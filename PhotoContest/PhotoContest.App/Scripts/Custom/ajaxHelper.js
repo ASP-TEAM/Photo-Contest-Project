@@ -100,11 +100,16 @@
         }
     }
 
+    function toggleModal(id) {
+        $('#modal-' + id).modal('toggle');
+    }
+
     return {
         onSuccess: onSuccess,
         onError: onError,
         autoComplete: autoComplete,
-        onReceivedNotifications: onReceivedNotifications
+        onReceivedNotifications: onReceivedNotifications,
+        toggleModal: toggleModal,
     }
 
 })();

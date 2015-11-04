@@ -48,6 +48,7 @@
                                                                 ParticipationStrategyType = ParticipationStrategyType
                                                                     .Closed
                                                             },
+                                                    
                                                     Status = ContestStatus.Active,
                                                     EndDate = DateTime.Now,
                                                     IsOpenForSubmissions = false,
@@ -56,11 +57,21 @@
                                         };
 
         public Mock<IRepository<Contest>> ContestsRepositoryMock;
+        public Mock<IRepository<ContestWinners>> ContestsWinnersRepositoryMock;
 
         public void SetupMocks()
         {
             this.ContestsRepositoryMock = new Mock<IRepository<Contest>>();
+            this.ContestsWinnersRepositoryMock = new Mock<IRepository<ContestWinners>>();
+
             this.ContestsRepositoryMock.Setup(r => r.All()).Returns(fakeContests.AsQueryable());
+            this.ContestsRepositoryMock.Setup(r => r.Find(It.IsAny<int>())).Returns(
+                (int id) =>
+                    {
+                        return fakeContests.FirstOrDefault(c => c.Id == id);
+                    });
+            this.ContestsWinnersRepositoryMock.Setup(cw => cw.All())
+                .Returns(new List<ContestWinners>().AsQueryable());
         }
     }
 }
