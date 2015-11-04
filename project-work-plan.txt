@@ -3,8 +3,8 @@
 Project Skeleton + Strategies (done)
 
 Design
-	-Select a bootstrap theme to be used by all developers
-	-Design/graph web page layout ( headers/ footers/ asides/ body ...)
+	[done]-Select a bootstrap theme to be used by all developers
+	[done]-Design/graph web page layout ( headers/ footers/ asides/ body ...)
 
 Contests
 	[done]-Create a contest
@@ -12,9 +12,9 @@ Contests
 	[done]-List active contests
 	[done]-List not active contests
 	[done]-Update a contest (if they are the owners)
-	-Dismiss a contest – stop the contest and select no winners
-	-Finalize a contest – initialize the end of the contest and choose a winner / winners in accordance with its voting strategy
-	-Show contest results (winners/votes)
+	[done]-Dismiss a contest – stop the contest and select no winners
+	[done]-Finalize a contest – initialize the end of the contest and choose a winner / winners in accordance with its voting strategy
+	[done]-Show contest results (winners/votes)
 	
 Users
 	[done]-Register for a contest
@@ -30,9 +30,9 @@ Pictures
 	[done]-Vote for a picture
 
 Administration
-	-All above
-	-Delete picture from contest
-	-Manage other users profiles (excluding their own profile, and excluding usernames)
+	[done]-All above
+	[done]-Delete picture from contest
+	[done]-Manage other users profiles (excluding their own profile, and excluding usernames)
 	
 Unit testing
 	-Controllers
