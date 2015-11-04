@@ -1,7 +1,4 @@
-﻿using PhotoContest.Common.Exceptions;
-using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     #region
     using System;
@@ -36,6 +33,8 @@ namespace PhotoContest.App.Controllers
     using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
 
     using PhotoContest.App.Services;
+    using PhotoContest.Common.Exceptions;
+    using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
 
     #endregion
 
@@ -110,40 +109,22 @@ namespace PhotoContest.App.Controllers
                 return this.Json(new {ErrorMessage = "Missing data"});
             }
 
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
+            try
             {
-                return this.HttpNotFound("Contest not found");
-            }
+                this._service.AddRewards(id, model, this.User.Identity.GetUserId());
 
-            if (contest.Status != ContestStatus.Active)
+                return this.RedirectToAction("PreviewContest", new { id = id });
+
+            }
+            catch (NotFoundException exception)
+            {
+                return this.HttpNotFound(exception.Message);
+            }
+            catch (BadRequestException exception)
             {
                 this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return this.Json(new {ErrorMessage = "Cannot add reward to inactive contest."});
+                return this.Json(new {ErrorMessage = exception.Message});
             }
-
-            for (int i = 0; i < model.Name.Length; i++)
-            {
-                if (model.Place[i] < 1 || (contest.TopNPlaces != null && model.Place[i] > contest.TopNPlaces))
-                {
-                    this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                    return this.Json(new { ErrorMessage = "Reward for unknown place" });
-                }
-
-                contest.Rewards.Add(new Reward()
-                {
-                    ContestId = contest.Id,
-                    Name = model.Name[i],
-                    Description = model.Description[i],
-                    Place = model.Place[i],
-                    ImageUrl = model.ImageUrl[i]
-                });
-            }
-
-            this.Data.SaveChanges();
-
-            return this.RedirectToAction("PreviewContest", new {id = id});
         }
 
         [System.Web.Mvc.Authorize]
@@ -239,34 +220,15 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult JoinCommittee(int id)
         {
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest.Status != ContestStatus.Active)
+            try
             {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "The contest is not active" });
+                this._service.JoinContestCommittee(id, this.User.Identity.GetUserId());
             }
-
-            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            var invitation = contest.Organizator.SendedInvitations.FirstOrDefault(i => i.ContestId == contest.Id && i.InvitedId == user.Id && i.Type == InvitationType.Committee);
-
-            if (invitation == null)
+            catch (BadRequestException exception)
             {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "You don't have an invitation" });
+                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return this.Json(new {ErrorMessage = exception.Message});
             }
-
-            if (invitation.Status != InvitationStatus.Neutral)
-            {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = "You already have responded to the invitation" });
-            }
-
-            invitation.Status = InvitationStatus.Accepted;
-            contest.Committee.Add(user);
-
-            this.Data.SaveChanges();
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
@@ -357,50 +319,14 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult PreviewContest(int id)
         {
-            var contest = this.Data.Contests.Find(id);
+            var contestViewModel = this._service.GetPreviewContest(id, this.User.Identity.GetUserId());
 
-            if (contest == null)
+            if (contestViewModel.Status != ContestStatus.Active)
             {
-                return this.HttpNotFound("The selected contest no longer exists");
+                return this.View("PreviewInactiveContest", (PreviewInactiveContestViewModel) contestViewModel);
             }
 
-            if (contest.Status != ContestStatus.Active)
-            {
-                var contestWinners =
-                    this.Data.ContestWinners.All()
-                    .Where(c => c.ContestId == contest.Id)
-                    .ProjectTo<ContestWinnerViewModel>()
-                    .ToList();
-
-                return this.View("PreviewInactiveContest", contestWinners);
-            }
-
-            var contestViewModel = Mapper.Map<PreviewContestViewModel>(contest);
-
-            if (this.User.Identity.GetUserId() != null)
-            {
-                var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-                if (contest.OrganizatorId == user.Id)
-                {
-                    contestViewModel.CanManage = true;
-                }
-                else
-                {
-                    if (!contest.Committee.Contains(user) && contest.Participants.Contains(user))
-                    {
-                        contestViewModel.CanUpload = true;
-                    }
-
-                    if (!contest.Committee.Contains(user) && !contest.Participants.Contains(user))
-                    {
-                        contestViewModel.CanParticipate = true;
-                    }
-                }
-
-            }
-
-            return this.View(contestViewModel);
+            return this.View((PreviewContestViewModel)contestViewModel);
         }
 
         [System.Web.Mvc.Authorize]
@@ -444,40 +370,22 @@ namespace PhotoContest.App.Controllers
                 return this.Json(this.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
 
-            var contest = this.Data.Contests.Find(model.Id);
-
-            if (contest == null)
+            try
             {
-                return this.HttpNotFound("The selected contest does not exist");
+                int contestId = this._service.UpdateContest(model, this.User.Identity.GetUserId());
+
+                return this.RedirectToAction("PreviewContest", new { id = contestId });
+
             }
-
-            var loggedUserId = this.User.Identity.GetUserId();
-
-            if (contest.OrganizatorId != loggedUserId)
+            catch (NotFoundException exception)
             {
-                this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                return this.Json(new { ErrorMessage = "Logged user is not the contest organizator" });
+                return this.HttpNotFound(exception.Message);
             }
-
-            if (!string.IsNullOrWhiteSpace(model.Title))
+            catch (UnauthorizedException exception)
             {
-                contest.Title = model.Title;
+                this.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            if (!string.IsNullOrWhiteSpace(model.Description))
-            {
-                contest.Description = model.Description;
-            }
-
-            if (model.EndDate != default(DateTime))
-            {
-                contest.EndDate = model.EndDate;
-            }
-
-            this.Data.Contests.Update(contest);
-            this.Data.SaveChanges();
-
-            return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
         [System.Web.Mvc.Authorize]

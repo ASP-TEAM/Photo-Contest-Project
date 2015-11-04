@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Contest
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Contest
 {
     using PhotoContest.Models;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
 
     public class ContestWinnerViewModel : IMapFrom<ContestWinners>, IHaveCustomMappings
     {

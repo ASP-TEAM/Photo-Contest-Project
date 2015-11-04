@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Contest
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Contest
 {
     using System.Collections.Generic;
     using PhotoContest.Infrastructure.Models.ViewModels.Picture;
     using PhotoContest.Infrastructure.Models.ViewModels.User;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
 
-    public class PreviewContestViewModel : IMapFrom<PhotoContest.Models.Contest>, IHaveCustomMappings
+    public class PreviewContestViewModel : BaseContestViewModel, IMapFrom<PhotoContest.Models.Contest>, IHaveCustomMappings
     {
         public PreviewContestViewModel()
         {

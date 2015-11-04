@@ -15,6 +15,8 @@
     using PhotoContest.Infrastructure.Models.BindingModels.Contest;
     using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
     using PhotoContest.Models;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Models.BindingModels.Reward;
 
     using BadRequestException = System.IdentityModel.BadRequestException;
 
@@ -29,6 +31,7 @@
         {
             var topContests =
                 this.Data.Contests.All()
+                    .Where(c => c.Status == ContestStatus.Active)
                     .OrderByDescending(c => c.StartDate)
                     .Take(takeCount)
                     .Project()
@@ -82,6 +85,58 @@
             this.ApplyRights(allContests, userId);
 
             return allContests;
+        }
+
+        public BaseContestViewModel GetPreviewContest(int id, string userId = null)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new NotFoundException("The selected contest no longer exists");
+            }
+
+            if (contest.Status != ContestStatus.Active)
+            {
+                var viewModel = new PreviewInactiveContestViewModel
+                {
+                    Winners = this.Data.ContestWinners.All()
+                        .Where(c => c.ContestId == contest.Id)
+                        .ProjectTo<ContestWinnerViewModel>()
+                        .ToList(),
+                    Status = contest.Status
+                };
+
+                return viewModel;
+            }
+
+            var contestViewModel = Mapper.Map<PreviewContestViewModel>(contest);
+
+            if (userId != null)
+            {
+                var user = this.Data.Users.Find(userId);
+
+                if (contest.OrganizatorId == user.Id)
+                {
+                    contestViewModel.CanManage = true;
+                }
+                else
+                {
+                    if (!contest.Committee.Contains(user) && contest.Participants.Contains(user) && contest.IsOpenForSubmissions)
+                    {
+                        contestViewModel.CanUpload = true;
+                    }
+
+                    if (contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed
+                        && !user.InContests.Any(c => c.Id == contest.Id)
+                        && !user.CommitteeInContests.Any(c => c.Id == contest.Id))
+                    {
+                        contestViewModel.CanParticipate = true;
+                    }
+                }
+            }
+
+            return contestViewModel;
         }
 
         public bool DismissContest(int id, string userId)
@@ -304,6 +359,109 @@
             this.Data.SaveChanges();
 
             return contest.Id;
+        }
+
+        public int UpdateContest(UpdateContestBindingModel model, string userId)
+        {
+            var contest = this.Data.Contests.Find(model.Id);
+
+            if (contest == null)
+            {
+                throw new NotFoundException("The selected contest does not exist");
+            }
+
+            var loggedUserId = userId;
+
+            if (contest.OrganizatorId != loggedUserId)
+            {
+                throw new UnauthorizedException("Logged user is not the contest organizator");
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Title))
+            {
+                contest.Title = model.Title;
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Description))
+            {
+                contest.Description = model.Description;
+            }
+
+            if (model.EndDate != default(DateTime))
+            {
+                contest.EndDate = model.EndDate;
+            }
+
+            this.Data.Contests.Update(contest);
+            this.Data.SaveChanges();
+
+            return contest.Id;
+        }
+
+        public int AddRewards(int id, CreateRewardsBindingModel model, string userId)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new NotFoundException("Contest not found");
+            }
+
+            if (contest.Status != ContestStatus.Active)
+            {
+                throw new BadRequestException("Cannot add reward to inactive contest.");
+            }
+
+            for (int i = 0; i < model.Name.Length; i++)
+            {
+                if (model.Place[i] < 1 || (contest.TopNPlaces != null && model.Place[i] > contest.TopNPlaces))
+                {
+                    throw new BadRequestException("Reward for unknown place");
+                }
+
+                contest.Rewards.Add(new Reward()
+                {
+                    ContestId = contest.Id,
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Place = model.Place[i],
+                    ImageUrl = model.ImageUrl[i]
+                });
+            }
+
+            this.Data.SaveChanges();
+
+            return contest.Id;
+        }
+
+        public bool JoinContestCommittee(int id, string userId)
+        {
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest.Status != ContestStatus.Active)
+            {
+                throw new BadRequestException("The contest is not active");
+            }
+
+            var user = this.Data.Users.Find(userId);
+
+            var invitation = contest.Organizator.SendedInvitations.FirstOrDefault(i => i.ContestId == contest.Id && i.InvitedId == user.Id && i.Type == InvitationType.Committee);
+
+            if (invitation == null)
+            {
+                throw new BadRequestException("You don't have an invitation");
+            }
+
+            if (invitation.Status != InvitationStatus.Neutral)
+            {
+                throw new BadRequestException("You already have responded to the invitation");
+            }
+
+            invitation.Status = InvitationStatus.Accepted;
+            contest.Committee.Add(user);
+
+            this.Data.SaveChanges();
+            return true;
         }
 
         private void ApplyRights(IList<ContestViewModel> contests, string userId = null)

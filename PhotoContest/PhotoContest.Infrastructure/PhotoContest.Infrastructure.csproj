@@ -69,10 +69,12 @@
     <Compile Include="Models\BindingModels\Contest\UpdateContestBindingModel.cs" />
     <Compile Include="Models\BindingModels\Invitation\CreateInvitationBindingModel.cs" />
     <Compile Include="Models\BindingModels\Reward\CreateRewardsBindingModel.cs" />
+    <Compile Include="Models\ViewModels\Contest\BaseContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\ContestWinnerViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\CreateContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Contest\PreviewContestViewModel.cs" />
+    <Compile Include="Models\ViewModels\Contest\PreviewInactiveContestViewModel.cs" />
     <Compile Include="Models\ViewModels\Invitation\InvitationViewModel.cs" />
     <Compile Include="Models\ViewModels\Invitation\NotificationViewModel.cs" />
     <Compile Include="Models\ViewModels\Picture\FullPictureViewModel.cs" />
