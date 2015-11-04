@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Data.Strategies.DeadlineStrategy
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.Data.Strategies.DeadlineStrategy
 {
     using System;
 
@@ -19,7 +21,7 @@
                     data.SaveChanges();
                 }
 
-                throw new InvalidOperationException("The contest is closed for submissions/registrations");
+                throw new BadRequestException("The contest is closed for submissions/registrations");
             }
         }
     }

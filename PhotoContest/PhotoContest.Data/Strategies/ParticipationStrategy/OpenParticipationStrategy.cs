@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Data.Strategies.ParticipationStrategy
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.Data.Strategies.ParticipationStrategy
 {
     using System;
 
@@ -11,7 +13,7 @@
         {
             if (!contest.IsOpenForSubmissions)
             {
-                throw new InvalidOperationException("The contest registration is closed.");
+                throw new BadRequestException("The contest registration is closed.");
             }
         }
     }

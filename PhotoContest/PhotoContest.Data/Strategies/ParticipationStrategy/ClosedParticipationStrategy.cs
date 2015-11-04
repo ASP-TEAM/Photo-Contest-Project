@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Data.Strategies.ParticipationStrategy
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.Data.Strategies.ParticipationStrategy
 {
     using System;
     using System.Linq;
@@ -13,12 +15,12 @@
         {
             if (!contest.IsOpenForSubmissions)
             {
-                throw new InvalidOperationException("The registration for this contest is closed.");
+                throw new BadRequestException("The registration for this contest is closed.");
             }
 
             if (!contest.InvitedUsers.Contains(user))
             {
-                throw new ArgumentException("The user is not selected to participate.");
+                throw new BadRequestException("The user is not selected to participate.");
             }
 
             var invitation = user.PendingInvitations.FirstOrDefault(i => i.ContestId == contest.Id);

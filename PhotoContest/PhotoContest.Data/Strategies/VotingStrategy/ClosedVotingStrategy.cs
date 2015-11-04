@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Data.Strategies.VotingStrategy
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.Data.Strategies.VotingStrategy
 {
     using System;
 
@@ -11,7 +13,7 @@
         {
             if (!contest.Committee.Contains(user))
             {
-                throw new InvalidOperationException("User is not in the voting committee.");
+                throw new BadRequestException("User is not in the voting committee.");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace PhotoContest.Infrastructure.Exceptions
+﻿namespace PhotoContest.Common.Exceptions
 {
     using System;
 

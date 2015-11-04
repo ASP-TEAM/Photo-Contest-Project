@@ -1,4 +1,4 @@
-﻿using PhotoContest.Infrastructure.Exceptions;
+﻿using PhotoContest.Common.Exceptions;
 using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
 
 namespace PhotoContest.App.Controllers

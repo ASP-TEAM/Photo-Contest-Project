@@ -1,10 +1,4 @@
-﻿using System;
-using System.Net;
-using PhotoContest.Data.Strategies;
-using PhotoContest.Infrastructure.Exceptions;
-using PhotoContest.Infrastructure.Models.BindingModels.Contest;
-using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
-using PhotoContest.Models;
+﻿using PhotoContest.Common.Exceptions;
 
 namespace PhotoContest.Infrastructure.Services
 {
@@ -16,6 +10,11 @@ namespace PhotoContest.Infrastructure.Services
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Models.Enums;
+    using System;
+    using PhotoContest.Data.Strategies;
+    using PhotoContest.Infrastructure.Models.BindingModels.Contest;
+    using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
+    using PhotoContest.Models;
 
     public class ContestService : BaseService, IContestsService
     {

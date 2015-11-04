@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Data.Strategies.VotingStrategy
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.Data.Strategies.VotingStrategy
 {
     using System;
 
@@ -11,7 +13,7 @@
         {
             if (contest.Participants.Contains(user))
             {
-                throw new InvalidOperationException("You cannot vote for contest that you currently participate in.");
+                throw new BadRequestException("You cannot vote for contest that you currently participate in.");
             }
         }
     }
