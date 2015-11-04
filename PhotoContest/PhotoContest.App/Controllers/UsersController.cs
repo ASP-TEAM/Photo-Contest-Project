@@ -1,6 +1,7 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.App.Controllers
 {
-    using System.IdentityModel;
     using System.Net;
 
     using System;
@@ -94,7 +95,7 @@
 
                 return this.View("Invitation", viewModel);
             }
-            catch (ArgumentException exception)
+            catch (NotFoundException exception)
             {
                 this.Response.StatusCode = (int) HttpStatusCode.NotFound;
                 return this.Json(new {ErrorMessage = exception.Message});

@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Infrastructure.Services
+﻿using PhotoContest.Common.Exceptions;
+
+namespace PhotoContest.Infrastructure.Services
 {
     using System.Linq;
     using PhotoContest.Infrastructure.Interfaces;
@@ -8,7 +10,6 @@
     using System.Collections.Generic;
     using System;
     using AutoMapper;
-    using System.IdentityModel;
 
     using PhotoContest.Data.Interfaces;
 
@@ -40,7 +41,7 @@
 
             if (notification == null)
             {
-                throw new ArgumentException("Notification not found");
+                throw new NotFoundException("Notification not found");
             }
 
             return Mapper.Map<NotificationViewModel>(notification);
@@ -101,7 +102,7 @@
 
             if (notification == null)
             {
-                throw new ArgumentException("Notification not found");
+                throw new NotFoundException("Notification not found");
             }
 
             return Mapper.Map<InvitationViewModel>(notification);
