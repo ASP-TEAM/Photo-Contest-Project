@@ -217,60 +217,22 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult Join(int id)
         {
-            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-            var contest = this.Data.Contests.Find(id);
-
-            var messages = new List<string>();
-
             try
             {
-                if (contest.OrganizatorId == user.Id)
-                {
-                    throw new InvalidOperationException("You cannot join contest created by you");
-                }
+                var contestId = this._service.JoinContest(id, this.User.Identity.GetUserId());
 
-                var deadlineStrategy =
-                    StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
-
-                deadlineStrategy.CheckDeadline(this.Data, contest, user);
-
-                var participationStrategy =
-                    StrategyFactory.GetParticipationStrategy(contest.ParticipationStrategy.ParticipationStrategyType);
-
-                participationStrategy.CheckPermission(this.Data, user, contest);
-
-                if (contest.Participants.Contains(user))
-                {
-                    throw new ArgumentException("You already participate in this contest");
-                }
-
-                if (contest.Committee.Contains(user))
-                {
-                    throw new ArgumentException("You cannot participate in this contest, you are in the committee");
-                }
-
-                contest.Participants.Add(user);
-                this.Data.Contests.Update(contest);
-                this.Data.SaveChanges();
+                return this.RedirectToAction("PreviewContest", new { id = contestId });
             }
-            catch (ArgumentException e)
+            catch (BadRequestException exception)
             {
-                messages.Add(e.Message);
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return this.Json(new { ErrorMessage = exception.Message }, JsonRequestBehavior.AllowGet);
             }
-            catch (InvalidOperationException e)
+            catch (UnauthorizedException exception)
             {
-                messages.Add(e.Message);
+                this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return this.Json(new { ErrorMessage = exception.Message }, JsonRequestBehavior.AllowGet);
             }
-
-            this.TempData["Messages"] = messages;
-
-            if (messages.Count > 0)
-            {
-                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = string.Join("\n", messages) }, JsonRequestBehavior.AllowGet);
-            }
-
-            return this.RedirectToAction("PreviewContest", new { id = contest.Id });
         }
 
         [System.Web.Mvc.Authorize]

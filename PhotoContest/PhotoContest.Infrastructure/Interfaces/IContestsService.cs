@@ -22,5 +22,7 @@
         int InviteUser(CreateInvitationBindingModel model, string loggedUserId);
 
         int CreateContest(CreateContestBindingModel model, string userId);
+
+        int JoinContest(int id, string userId);
     }
 }

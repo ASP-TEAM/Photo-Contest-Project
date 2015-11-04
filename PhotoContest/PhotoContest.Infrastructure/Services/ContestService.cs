@@ -257,6 +257,43 @@ namespace PhotoContest.Infrastructure.Services
             return contest.Id;
         }
 
+        public int JoinContest(int id, string userId)
+        {
+            var user = this.Data.Users.Find(userId);
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest.OrganizatorId == user.Id)
+            {
+                throw new BadRequestException("You cannot join contest created by you");
+            }
+
+            var deadlineStrategy =
+                StrategyFactory.GetDeadlineStrategy(contest.DeadlineStrategy.DeadlineStrategyType);
+
+            deadlineStrategy.CheckDeadline(this.Data, contest, user);
+
+            var participationStrategy =
+                StrategyFactory.GetParticipationStrategy(contest.ParticipationStrategy.ParticipationStrategyType);
+
+            participationStrategy.CheckPermission(this.Data, user, contest);
+
+            if (contest.Participants.Contains(user))
+            {
+                throw new BadRequestException("You already participate in this contest");
+            }
+
+            if (contest.Committee.Contains(user))
+            {
+                throw new UnauthorizedException("You cannot participate in this contest, you are in the committee");
+            }
+
+            contest.Participants.Add(user);
+            this.Data.Contests.Update(contest);
+            this.Data.SaveChanges();
+
+            return contest.Id;
+        }
+
         private void ApplyRights(IList<ContestViewModel> contests, string userId = null)
         {
             if (userId != null)
