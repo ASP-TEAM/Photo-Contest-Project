@@ -1,24 +1,18 @@
-﻿using PhotoContest.Infrastructure.Services;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     #region
-    using System;
     using System.Net;
     using System.Web;
-    using PhotoContest.Models;
 
     using System.Web.Mvc;
+    using PhotoContest.Infrastructure.Services;
 
     using Microsoft.AspNet.Identity;
 
     using PhotoContest.Data.Interfaces;
-    using PhotoContest.Data.Strategies;
 
     using System.Collections.Generic;
     using System.Linq;
-
-    using AutoMapper;
 
     using Microsoft.AspNet.SignalR;
 
@@ -31,7 +25,6 @@ namespace PhotoContest.App.Controllers
     using PhotoContest.Infrastructure.Models.BindingModels.Reward;
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Infrastructure.Models.ViewModels.Reward;
-    using PhotoContest.Infrastructure.Models.ViewModels.Strategy;
 
     using PhotoContest.Common.Exceptions;
     using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
@@ -40,8 +33,6 @@ namespace PhotoContest.App.Controllers
 
     public class ContestsController : BaseController
     {
-        private const string GoogleDrivePicturesBaseLink = "http://docs.google.com/uc?export=open&id=";
-
         private PictureService _picturesService;
 
         private IContestsService _service;

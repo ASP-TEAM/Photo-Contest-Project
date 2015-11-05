@@ -1,13 +1,12 @@
-﻿using PhotoContest.Infrastructure.Mapping;
-
-namespace PhotoContest.Infrastructure.Models.BindingModels.Contest
+﻿namespace PhotoContest.Infrastructure.Models.BindingModels.Contest
 {
     using System;
     using System.ComponentModel.DataAnnotations;
     using PhotoContest.Models;
     using PhotoContest.Models.Enums;
+    using PhotoContest.Infrastructure.Mapping;
 
-    public class UpdateContestBindingModel : IMapFrom<PhotoContest.Models.Contest>
+    public class UpdateContestBindingModel : IMapFrom<Contest>
     {
         [Required]
         public int Id { get; set; }

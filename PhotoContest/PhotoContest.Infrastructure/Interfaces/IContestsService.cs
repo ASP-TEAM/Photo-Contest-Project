@@ -1,7 +1,4 @@
-﻿using System.Web;
-using PhotoContest.Infrastructure.Models.BindingModels.Reward;
-
-namespace PhotoContest.Infrastructure.Interfaces
+﻿namespace PhotoContest.Infrastructure.Interfaces
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -9,6 +6,8 @@ namespace PhotoContest.Infrastructure.Interfaces
     using PhotoContest.Infrastructure.Models.ViewModels.Contest;
     using PhotoContest.Infrastructure.Models.BindingModels.Contest;
     using PhotoContest.Infrastructure.Models.BindingModels.Invitation;
+    using System.Web;
+    using PhotoContest.Infrastructure.Models.BindingModels.Reward;
 
     public interface IContestsService
     {

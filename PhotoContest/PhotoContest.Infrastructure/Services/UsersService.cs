@@ -1,5 +1,4 @@
-﻿using PhotoContest.Common.Exceptions;
-
+﻿
 namespace PhotoContest.Infrastructure.Services
 {
     using System.Linq;
@@ -8,8 +7,8 @@ namespace PhotoContest.Infrastructure.Services
     using AutoMapper.QueryableExtensions;
     using PhotoContest.Infrastructure.Models.ViewModels.Invitation;
     using System.Collections.Generic;
-    using System;
     using AutoMapper;
+    using PhotoContest.Common.Exceptions;
 
     using PhotoContest.Data.Interfaces;
 

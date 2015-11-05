@@ -1,6 +1,4 @@
-﻿using PhotoContest.Common.Exceptions;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     using System.Net;
 
@@ -14,6 +12,7 @@ namespace PhotoContest.App.Controllers
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models.Enums;
     using PhotoContest.Infrastructure.Interfaces;
+    using PhotoContest.Common.Exceptions;
 
     public class UsersController : BaseController
     {

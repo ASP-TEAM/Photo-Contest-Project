@@ -1,7 +1,6 @@
 ﻿namespace PhotoContest.Infrastructure.Services
 {
     using PhotoContest.Data.Interfaces;
-    using PhotoContest.Data.UnitOfWork;
 
     public class BaseService
     {

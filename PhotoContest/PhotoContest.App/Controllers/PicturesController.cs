@@ -1,62 +1,39 @@
 ﻿namespace PhotoContest.App.Controllers
 {
-    using System;
-    using System.Linq;
     using System.Web.Mvc;
 
     using Microsoft.AspNet.Identity;
 
     using PhotoContest.Data.Interfaces;
-    using PhotoContest.Data.Strategies;
-    using PhotoContest.Models;
-    using PhotoContest.Models.Enums;
     using System.Net;
+    using PhotoContest.Common.Exceptions;
+    using PhotoContest.Infrastructure.Services;
 
     public class PicturesController : BaseController
     {
+        private PictureService _service;
+
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
+            _service = new PictureService(data);
         }
 
         [Authorize]
         [HttpPost]
         public ActionResult Vote(int id)
         {
-            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-            var picture = this.Data.Pictures.Find(id);
-
             try
             {
-                if (picture.Contest.Status != ContestStatus.Active)
-                {
-                    throw new InvalidOperationException("The contest is closed.");
-                }
+                var votesCount = this._service.Vote(id, this.User.Identity.GetUserId());
 
-                var votingStrategy =
-                    StrategyFactory.GetVotingStrategy(picture.Contest.VotingStrategy.VotingStrategyType);
-
-                votingStrategy.CheckPermission(this.Data, user, picture.Contest);
-
-                if (picture.Votes.Any(v => v.UserId == user.Id))
-                {
-                    throw new InvalidOperationException("You have already voted for this picture.");
-                }
-
-                var vote = new Vote { PictureId = picture.Id, UserId = user.Id };
-
-                this.Data.Votes.Add(vote);
-                this.Data.SaveChanges();
+                return this.Content(votesCount.ToString());
             }
-            catch (InvalidOperationException e)
+            catch (BadRequestException exception)
             {
-                this.TempData["message"] = e.Message;
-
                 this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return this.Json(new { ErrorMessage = e.ToString() });
+                return this.Json(new { ErrorMessage = exception.Message });
             }
-
-            return this.Content(picture.Votes.Select(p => p.Id).Count().ToString());
         }
     }
 }

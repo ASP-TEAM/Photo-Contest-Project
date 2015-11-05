@@ -8,7 +8,14 @@
     using Google.Apis.Drive.v2;
     using Google.Apis.Drive.v2.Data;
     using File = Google.Apis.Drive.v2.Data.File;
-    public class PictureService : BaseService
+    using System.Linq;
+    using PhotoContest.Common.Exceptions;
+    using PhotoContest.Data.Strategies;
+    using PhotoContest.Infrastructure.Interfaces;
+    using PhotoContest.Models;
+    using PhotoContest.Models.Enums;
+
+    public class PictureService : BaseService, IPictureService
     {
         public PictureService(IPhotoContestData data) : base(data)
         {
@@ -91,6 +98,34 @@
             file.InputStream.Read(fileBuffer, 0, file.ContentLength);
 
             return Convert.ToBase64String(fileBuffer);
+        }
+
+        public int Vote(int id, string userId)
+        {
+            var user = this.Data.Users.Find(userId);
+            var picture = this.Data.Pictures.Find(id);
+
+            if (picture.Contest.Status != ContestStatus.Active)
+            {
+                throw new BadRequestException("The contest is closed.");
+            }
+
+            var votingStrategy =
+                StrategyFactory.GetVotingStrategy(picture.Contest.VotingStrategy.VotingStrategyType);
+
+            votingStrategy.CheckPermission(this.Data, user, picture.Contest);
+
+            if (picture.Votes.Any(v => v.UserId == user.Id))
+            {
+                throw new BadRequestException("You have already voted for this picture.");
+            }
+
+            var vote = new Vote { PictureId = picture.Id, UserId = user.Id };
+
+            this.Data.Votes.Add(vote);
+            this.Data.SaveChanges();
+
+            return picture.Votes.Select(p => p.Id).Count();
         }
     }
 }
