@@ -37,10 +37,10 @@
 
         int CreateContest(CreateContestBindingModel model, string userId);
 
-        int JoinContest(int id, IEnumerable<HttpPostedFileBase> files, string userId);
+        bool JoinContest(int id, IEnumerable<HttpPostedFileBase> files, string userId);
 
-        int UpdateContest(UpdateContestBindingModel model, string userId);
+        bool UpdateContest(UpdateContestBindingModel model, string userId);
 
-        int AddRewards(int id, CreateRewardsBindingModel model, string userId);
+        bool AddRewards(int id, CreateRewardsBindingModel model, string userId);
     }
 }

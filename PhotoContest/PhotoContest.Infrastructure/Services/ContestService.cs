@@ -147,9 +147,9 @@ namespace PhotoContest.Infrastructure.Services
                 }
                 else
                 {
-                    if (contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed
-                        && !user.InContests.Any(c => c.Id == contest.Id)
-                        && !user.CommitteeInContests.Any(c => c.Id == contest.Id))
+                    if ((contest.ParticipationStrategy.ParticipationStrategyType != ParticipationStrategyType.Closed || (contest.ParticipationStrategy.ParticipationStrategyType == ParticipationStrategyType.Closed && user.PendingInvitations.Any(i => i.ContestId == contest.Id && i.Status == InvitationStatus.Neutral)))
+                        && (!user.InContests.Any(c => c.Id == contest.Id)
+                        && !user.CommitteeInContests.Any(c => c.Id == contest.Id)))
                     {
                         contestViewModel.CanParticipate = true;
                     }
@@ -385,7 +385,7 @@ namespace PhotoContest.Infrastructure.Services
             return contest.Id;
         }
 
-        public int JoinContest(int id, IEnumerable<HttpPostedFileBase> files, string userId)
+        public bool JoinContest(int id, IEnumerable<HttpPostedFileBase> files, string userId)
         {
             var contest = this.Data.Contests.Find(id);
 
@@ -446,10 +446,10 @@ namespace PhotoContest.Infrastructure.Services
             this.Data.Contests.Update(contest);
             this.Data.SaveChanges();
 
-            return contest.Id;
+            return true;
         }
 
-        public int UpdateContest(UpdateContestBindingModel model, string userId)
+        public bool UpdateContest(UpdateContestBindingModel model, string userId)
         {
             var contest = this.Data.Contests.Find(model.Id);
 
@@ -483,10 +483,10 @@ namespace PhotoContest.Infrastructure.Services
             this.Data.Contests.Update(contest);
             this.Data.SaveChanges();
 
-            return contest.Id;
+            return true;
         }
 
-        public int AddRewards(int id, CreateRewardsBindingModel model, string userId)
+        public bool AddRewards(int id, CreateRewardsBindingModel model, string userId)
         {
             var contest = this.Data.Contests.Find(id);
 
@@ -519,7 +519,7 @@ namespace PhotoContest.Infrastructure.Services
 
             this.Data.SaveChanges();
 
-            return contest.Id;
+            return true;
         }
 
         public bool JoinContestCommittee(int id, string userId)

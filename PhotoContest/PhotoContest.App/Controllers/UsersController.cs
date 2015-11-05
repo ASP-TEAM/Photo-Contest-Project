@@ -112,7 +112,7 @@
                 switch ((InvitationType) invitationResult["Type"])
                 {
                     case InvitationType.ClosedContest:
-                        return RedirectToAction("Join", "Contests", new { id = invitationResult["ContestId"] });
+                        return RedirectToAction("PreviewContest", "Contests", new { id = invitationResult["ContestId"] });
                     case InvitationType.Committee:
                         return RedirectToAction("JoinCommittee", "Contests", new { id = invitationResult["ContestId"] });
                 }
@@ -140,7 +140,7 @@
                 return this.Json(new {ErrorMessage = exception.Message}, JsonRequestBehavior.AllowGet);
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return this.RedirectToAction("Contests", "Contests");
         }
     }
 }

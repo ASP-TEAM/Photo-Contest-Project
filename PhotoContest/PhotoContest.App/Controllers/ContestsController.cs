@@ -185,9 +185,9 @@
 
             try
             {
-                var contestId = this._service.JoinContest(id, files, this.User.Identity.GetUserId());
+                this._service.JoinContest(id, files, this.User.Identity.GetUserId());
 
-                return this.RedirectToAction("PreviewContest", new { id = contestId });
+                return this.RedirectToAction("PreviewContest", new { id = id });
             }
             catch (NotFoundException exception)
             {
@@ -275,9 +275,9 @@
 
             try
             {
-                int contestId = this._service.UpdateContest(model, this.User.Identity.GetUserId());
+                this._service.UpdateContest(model, this.User.Identity.GetUserId());
 
-                return this.RedirectToAction("PreviewContest", new { id = contestId });
+                return this.RedirectToAction("PreviewContest", new { id = model.Id });
             }
             catch (NotFoundException exception)
             {
