@@ -2,13 +2,18 @@
 @{ var picId = "pictureVotes" + Model.Id;}
 <div class="picture">
     <a href="#" onclick="ajaxHelper.toggleModal(@Model.Id)">
-        <img src="@Model.Url" class="img-thumbnail"/>
+        <img src="@Model.Url" class="img-thumbnail" />
         @Html.Partial("_PictureModalPartial")
     </a>
     <p><strong>Uploader: </strong> @Model.UserName</p>
     <span class="badge">Votes </span>
     <span class="badge" id="@picId">@Model.Votes</span>
 
-    @Ajax.ActionLink("Vote", "Vote", "Pictures", new { Area = "", id = @Model.Id }, new AjaxOptions { UpdateTargetId = "pictureVotes" + @Model.Id, InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnComplete = "ajaxHelper.OnFailure" }, new { @class = "btn btn-success" })
+    @Ajax.ActionLink("Vote", "Vote", "Pictures", new { Area = "", id = @Model.Id }, new AjaxOptions
+{
+    UpdateTargetId = "pictureVotes" + @Model.Id,
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnComplete = "ajaxHelper.OnError",
+}, new { @class = "btn btn-success" })
 </div>
-<hr />

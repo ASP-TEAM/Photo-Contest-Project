@@ -1,12 +1,6 @@
 ﻿@model PhotoContest.Infrastructure.Models.BindingModels.Contest.UpdateContestBindingModel
 
-@using (Ajax.BeginForm("UpdateContest", "Contests", null,
-                            new AjaxOptions
-                            {
-                                HttpMethod = "PATCH",
-                                OnSuccess = "ajaxHelper.onSuccess",
-                                OnFailure = "ajaxHelper.onError"
-                            }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("UpdateContest", "Contests", new { id = Model.Id }, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     <fieldset>

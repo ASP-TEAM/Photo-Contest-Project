@@ -219,7 +219,7 @@
                 return this.Json(new {ErrorMessage = exception.Message});
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return this.RedirectToAction("PreviewContest", new {id = id});
         }
 
         [HttpGet]
@@ -257,7 +257,7 @@
         }
 
         [System.Web.Mvc.Authorize]
-        [HttpPatch]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateContest(UpdateContestBindingModel model)
         {
@@ -277,7 +277,7 @@
             {
                 this._service.UpdateContest(model, this.User.Identity.GetUserId());
 
-                return this.RedirectToAction("PreviewContest", new { id = model.Id });
+                return this.RedirectToAction("ManageContest", new { id = model.Id });
             }
             catch (NotFoundException exception)
             {
@@ -353,7 +353,7 @@
                 return this.Json(new { ErrorMessage = exception.Message });
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return this.RedirectToAction("PreviewContest", new { id = id });
         }
 
         [System.Web.Mvc.Authorize]
@@ -380,7 +380,7 @@
                 return this.Json(new { ErrorMessage = exception.Message });
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return this.RedirectToAction("PreviewContest", new { id = id });
         }
     }
 }

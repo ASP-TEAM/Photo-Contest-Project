@@ -382,7 +382,6 @@
     <Content Include="Views\Shared\EditorTemplates\TextField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\NumberField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
-    <Content Include="Views\Contests\_PicturePartial.cshtml" />
     <Content Include="Views\Contests\_ActiveContestsPartial.cshtml" />
     <Content Include="Views\Contests\_ActiveContest.cshtml" />
     <Content Include="Views\Contests\_MyContestsPartial.cshtml" />
@@ -410,9 +409,7 @@
     <Content Include="Views\Strategies\Reward\_TopNPrizesPartial.cshtml" />
     <Content Include="Views\Strategies\Deadline\_ByTimePartial.cshtml" />
     <Content Include="Views\Strategies\Deadline\_ByNumberOfParticipantsPartial.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\DateTimeNullable.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextFieldReadonly.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\KendoDateTime.cshtml" />
     <Content Include="Views\Rewards\_AddPartial.cshtml" />
     <Content Include="Views\Home\_NewestContestPartial.cshtml" />
     <Content Include="Views\Contests\_PictureModalPartial.cshtml" />

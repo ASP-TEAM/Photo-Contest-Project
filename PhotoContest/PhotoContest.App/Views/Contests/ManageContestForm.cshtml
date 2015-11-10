@@ -16,25 +16,11 @@
             @Html.Partial("_InviteUsersFormPartial")
         }
         <div class="finish-contest pull-right">
-            @Ajax.ActionLink("Finalize", "FinalizeContest", "Contests", new { id = Model.Id },
-                new AjaxOptions
-                {
-                    HttpMethod = "POST",
-                    OnSuccess = "ajaxHelper.onSuccess",
-                    OnFailure = "ajaxHelper.onError",
-                    Confirm = "Are you sure you want to Finalize this contest?"
-                },
-                new { @class = "btn btn-success" })
+            @Html.ActionLink("Finalize", "FinalizeContest", "Contests", new { id = Model.Id },
+                new { onclick = "return confirm('Are you sure you want to finalize this contest?');", @class = "btn btn-success" })
 
-            @Ajax.ActionLink("Dismiss", "DismissContest", "Contests", new { id = Model.Id },
-                new AjaxOptions
-                {
-                    HttpMethod = "POST",
-                    OnSuccess = "ajaxHelper.onSuccess",
-                    OnFailure = "ajaxHelper.onError",
-                    Confirm = "Are you sure you want to Dismiss this contest?"
-                },
-                new { @class = "btn btn-danger" })
+            @Html.ActionLink("Dismiss", "DismissContest", "Contests", new { id = Model.Id },
+                new { onclick = "return confirm('Are you sure you want to dismiss this contest?');", @class = "btn btn-danger" })
         </div>
     </div>
     <div class="col-sm-4">
@@ -44,15 +30,14 @@
                 @using (Html.BeginForm("AddRewards", "Contests", new { id = Model.Id }, FormMethod.Post, new { @class = "form-horizontal" }))
                 {
                     <h2 class="text-center">Manage rewards</h2>
-                    <div >
+                    <div>
                         @Ajax.ActionLink("Add reward", "GetRewardPartial", "Contests", new AjaxOptions() { HttpMethod = "GET", InsertionMode = InsertionMode.InsertAfter, UpdateTargetId = "manageRewardsContainer", }, new { @class = "btn btn-danger" })
-                        <input type="submit" value="Save Rewards" class="btn btn-info pull-right"/>
+                        <input type="submit" value="Save Rewards" class="btn btn-info pull-right" />
                     </div>
-                    <hr/>
+                    <hr />
                     <div id="manageRewardsContainer"></div>
                 }
             </div>
-
         }
     </div>
 </div>

@@ -16,7 +16,7 @@
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
-            _service = new PictureService(data);
+            this._service = new PictureService(data);
         }
 
         [Authorize]

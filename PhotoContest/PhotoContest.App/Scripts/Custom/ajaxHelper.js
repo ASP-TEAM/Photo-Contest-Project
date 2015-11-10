@@ -86,11 +86,11 @@
     }
 
     function onSuccess(data, status, xhr) {
-        notificationHelper.showSuccessMessage("Operation successfull");
+        notificationHelper.showSuccessMessage(JSON.parse(xhr.responseText).SuccessFulMessage);
     }
 
     function onError(xhr, status, error) {
-        notificationHelper.showErrorMessage(xhr.responseText);
+        notificationHelper.showErrorMessage(JSON.parse(xhr.responseText).ErrorMessage);
     }
 
     function onReceivedNotifications(data, status, xhr) {

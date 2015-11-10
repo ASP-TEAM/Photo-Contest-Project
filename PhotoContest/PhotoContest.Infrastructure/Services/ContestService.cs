@@ -305,6 +305,16 @@ namespace PhotoContest.Infrastructure.Services
                 throw new NotFoundException(string.Format("User with username {0} not found", model.Username));
             }
 
+            if (contest.Participants.Contains(userToInvite))
+            {
+                throw new BadRequestException("You cannot invite user who already participates in the contest");
+            }
+
+            if (contest.Committee.Contains(userToInvite))
+            {
+                throw new BadRequestException("You cannot invite user who already is in the contest committee");
+            }
+
             if (userToInvite.UserName == loggedUser.UserName)
             {
                 throw new BadRequestException("Users cannot invite themselves.");
