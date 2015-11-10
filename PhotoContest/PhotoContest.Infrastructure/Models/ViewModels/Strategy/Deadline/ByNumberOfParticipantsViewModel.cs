@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Strategy.Deadline
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class ByNumberOfParticipantsViewModel : AbstractDeadlineStrategyViewModel
     {
         [Required]

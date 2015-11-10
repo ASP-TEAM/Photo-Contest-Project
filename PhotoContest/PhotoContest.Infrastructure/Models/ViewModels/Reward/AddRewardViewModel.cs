@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Reward
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Reward
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class AddRewardViewModel
     {
         [Required]

@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Invitation
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Invitation
 {
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
+
     public class NotificationViewModel : IMapFrom<PhotoContest.Models.Invitation>, IHaveCustomMappings
     {
         public int InvitationId { get; set; }

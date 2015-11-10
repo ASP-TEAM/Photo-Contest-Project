@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Strategy.Reward
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class TopNPrizesViewModel : AbstractRewardStrategyViewModel
     {
         [Required]

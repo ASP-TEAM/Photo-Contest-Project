@@ -1,12 +1,12 @@
-﻿using System;
-using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-using PhotoContest.Infrastructure.Models.ViewModels.Contest;
-using PhotoContest.Infrastructure.Models.ViewModels.User;
-using PhotoContest.Models.Enums;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Invitation
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Invitation
 {
+    using System;
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
+    using PhotoContest.Infrastructure.Models.ViewModels.Contest;
+    using PhotoContest.Infrastructure.Models.ViewModels.User;
+    using PhotoContest.Models.Enums;
+
     public class InvitationViewModel : IMapFrom<PhotoContest.Models.Invitation>, IHaveCustomMappings
     {
         public int Id { get; set; }

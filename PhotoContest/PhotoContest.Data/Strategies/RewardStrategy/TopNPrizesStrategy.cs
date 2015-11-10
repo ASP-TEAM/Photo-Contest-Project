@@ -7,11 +7,11 @@
 
     public class TopNPrizesStrategy : IRewardStrategy
     {
-        private int topNPrizes;
+        private int _topNPrizes;
 
         public TopNPrizesStrategy(int topNPrizes = 3)
         {
-            this.topNPrizes = topNPrizes;
+            this._topNPrizes = topNPrizes;
         }
 
         public void ApplyReward(IPhotoContestData data, Contest contest)
@@ -20,7 +20,7 @@
                         .Participants
                         .OrderByDescending(u => u.Pictures.Where(p => p.ContestId == contest.Id).Sum(p => p.Votes.Count))
                         .ThenBy(u => u.Pictures.Count)
-                        .Take(this.topNPrizes)
+                        .Take(this._topNPrizes)
                         .ToList();
 
             if (winners.Any())

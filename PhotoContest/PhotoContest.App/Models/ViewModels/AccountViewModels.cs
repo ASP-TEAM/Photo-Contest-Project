@@ -1,11 +1,10 @@
-﻿using System.Web.Mvc;
-
-namespace PhotoContest.App.Models.ViewModels
+﻿namespace PhotoContest.App.Models.ViewModels
 {
     #region
 
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     #endregion
 
@@ -92,7 +91,7 @@ namespace PhotoContest.App.Models.ViewModels
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.Web.Mvc.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -111,7 +110,7 @@ namespace PhotoContest.App.Models.ViewModels
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.Web.Mvc.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

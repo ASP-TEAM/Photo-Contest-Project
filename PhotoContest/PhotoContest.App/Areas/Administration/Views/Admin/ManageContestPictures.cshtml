@@ -14,7 +14,7 @@
     null))
 {
     @Html.AntiForgeryToken()
-        @(Html.Kendo()
+        @*@(Html.Kendo()
             .DropDownList()
             .Name("contestPictures")
             .DataTextField("Title")
@@ -24,7 +24,7 @@
                 source.Read(read =>
                 { read.Action("GetActiveContests", "Admin"); });
             })
-        )
+        )*@
 
     @Html.Hidden("Id", "", new {id= "Id", @class="hidden" })
 

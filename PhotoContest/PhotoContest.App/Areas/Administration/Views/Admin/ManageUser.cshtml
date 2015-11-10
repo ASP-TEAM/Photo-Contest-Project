@@ -22,9 +22,9 @@
         @Html.EditorFor(x => x.FullName)<br />
         @Html.EditorFor(x => x.RegisteredAt)<br />
         @Html.Label("", "Organized Contests")<br />
-        @(Html.Kendo()
+        @*@(Html.Kendo()
             .DropDownList().Name("productDropDownList").DataTextField("Title").DataValueField("Id").BindTo(Model.OrganizedContests)
-        )
+        )*@
 
         <input type="submit" value="Ban user" class="btn btn-danger" />
     }

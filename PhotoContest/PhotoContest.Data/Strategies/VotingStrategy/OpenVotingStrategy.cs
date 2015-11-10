@@ -1,11 +1,9 @@
-﻿using PhotoContest.Common.Exceptions;
-
-namespace PhotoContest.Data.Strategies.VotingStrategy
+﻿namespace PhotoContest.Data.Strategies.VotingStrategy
 {
-    using System;
-
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
+
+    using PhotoContest.Common.Exceptions;
 
     public class OpenVotingStrategy : IVotingStrategy
     {

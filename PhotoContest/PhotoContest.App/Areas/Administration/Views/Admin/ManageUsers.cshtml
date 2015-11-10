@@ -8,7 +8,7 @@
 <div class="row">
     @using (Html.BeginForm("GetUserDetails", "Admin", FormMethod.Post))
     {
-        @(Html.Kendo()
+        @*@(Html.Kendo()
     .AutoComplete()
     .Name("searchUsers")
     .Placeholder("Search by username...")
@@ -19,7 +19,7 @@
         dataSource
             .Read(x => x.Action("SearchByUsername", "Admin")
             .Data("adminManager.onUserSearchData"))
-            .ServerFiltering(true);
+            .ServerFiltering(true);*@
     }))
 
         <input type="submit" value="View Details" class="btn btn-primary"/>

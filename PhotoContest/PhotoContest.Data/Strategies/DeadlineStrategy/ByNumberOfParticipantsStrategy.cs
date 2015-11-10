@@ -1,11 +1,11 @@
-﻿using PhotoContest.Common.Exceptions;
-
-namespace PhotoContest.Data.Strategies.DeadlineStrategy
+﻿namespace PhotoContest.Data.Strategies.DeadlineStrategy
 {
     using System;
     using PhotoContest.Data.Interfaces;
 
     using PhotoContest.Models;
+
+    using PhotoContest.Common.Exceptions;
 
     public class ByNumberOfParticipantsStrategy : IDeadlineStrategy
     {

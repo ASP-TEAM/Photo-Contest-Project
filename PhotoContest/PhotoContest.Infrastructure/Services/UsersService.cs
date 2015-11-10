@@ -1,5 +1,4 @@
-﻿
-namespace PhotoContest.Infrastructure.Services
+﻿namespace PhotoContest.Infrastructure.Services
 {
     using System.Linq;
     using PhotoContest.Infrastructure.Interfaces;

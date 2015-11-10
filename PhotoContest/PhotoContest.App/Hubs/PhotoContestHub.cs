@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.SignalR;
-
-namespace PhotoContest.App.Hubs
+﻿namespace PhotoContest.App.Hubs
 {
-    using System.Collections.Concurrent;
-    using System.Threading.Tasks;
-
     using Microsoft.Ajax.Utilities;
     using Microsoft.AspNet.SignalR.Hubs;
+    using Microsoft.AspNet.SignalR;
 
     [HubName("PhotoContestHub")]
     public class PhotoContestHub : Hub

@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using PhotoContest.Infrastructure.Mapping;
-using PhotoContest.Infrastructure.Models.ViewModels.Contest;
-
-namespace PhotoContest.Infrastructure.Models.ViewModels.Picture
+﻿namespace PhotoContest.Infrastructure.Models.ViewModels.Picture
 {
+    using AutoMapper;
+    using PhotoContest.Infrastructure.Mapping;
+    using PhotoContest.Infrastructure.Models.ViewModels.Contest;
+
     public class FullPictureViewModel : IMapFrom<PhotoContest.Models.Picture>, IHaveCustomMappings
     {
         public int Id { get; set; }

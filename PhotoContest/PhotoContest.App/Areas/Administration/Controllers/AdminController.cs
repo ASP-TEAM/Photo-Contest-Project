@@ -13,9 +13,6 @@ namespace PhotoContest.App.Areas.Administration.Controllers
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
-    using Kendo.Mvc.Extensions;
-    using Kendo.Mvc.UI;
-
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -56,17 +53,16 @@ namespace PhotoContest.App.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public ActionResult ReadContests([DataSourceRequest]DataSourceRequest request)
+        public ActionResult ReadContests(int request)
         {
             var ads =
-                this.GetContestsData()
-                .ToDataSourceResult(request);
+                this.GetContestsData();
 
             return this.Json(ads);
         }
 
         [HttpPost]
-        public ActionResult DestroyContest([DataSourceRequest]DataSourceRequest request, DeleteContestBindingModel model)
+        public ActionResult DestroyContest(int request, DeleteContestBindingModel model)
         {
             if (model != null && this.ModelState.IsValid)
             {
@@ -77,11 +73,11 @@ namespace PhotoContest.App.Areas.Administration.Controllers
                 this.Data.SaveChanges();
             }
 
-            return this.Json(new[] { model }.ToDataSourceResult(request, this.ModelState));
+            return this.Json(new[] { model });
         }
 
         [HttpPost]
-        public ActionResult EditContest([DataSourceRequest]DataSourceRequest request, ManageContestViewModel model)
+        public ActionResult EditContest(int request, ManageContestViewModel model)
         {
             var contest = this.Data.Contests.Find(model.Id);
             contest.Status = model.Status;
@@ -94,7 +90,7 @@ namespace PhotoContest.App.Areas.Administration.Controllers
             this.Data.Contests.Update(contest);
             this.Data.SaveChanges();
 
-            return this.Json(new[] { model }.ToDataSourceResult(request, this.ModelState));
+            return this.Json(new[] { model });
         }
 
         [HttpGet]
@@ -110,7 +106,7 @@ namespace PhotoContest.App.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetUserDetails([DataSourceRequest] DataSourceRequest request, string searchUsers)
+        public ActionResult GetUserDetails(int request, string searchUsers)
         {
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == searchUsers);
             var model = Mapper.Map<ManageUserViewModel>(user);
@@ -126,7 +122,7 @@ namespace PhotoContest.App.Areas.Administration.Controllers
             await manager.SetLockoutEndDateAsync(model.Id, DateTime.Now.AddDays(14));
             return this.Json(
                 string.Format("Successfully locked user {0}", model.UserName),
-                JsonRequestBehavior.AllowGet); 
+                JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -177,7 +173,7 @@ namespace PhotoContest.App.Areas.Administration.Controllers
 
             if (googleDeleteResult[0] != "success")
             {
-                this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return this.Json(googleDeleteResult[1], JsonRequestBehavior.AllowGet);
             }
 

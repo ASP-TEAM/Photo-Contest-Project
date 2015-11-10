@@ -1,11 +1,9 @@
-﻿using PhotoContest.Common.Exceptions;
-
-namespace PhotoContest.Data.Strategies.ParticipationStrategy
+﻿namespace PhotoContest.Data.Strategies.ParticipationStrategy
 {
-    using System;
-
     using PhotoContest.Data.Interfaces;
     using PhotoContest.Models;
+
+    using PhotoContest.Common.Exceptions;
 
     public class OpenParticipationStrategy : IParticipationStrategy
     {
